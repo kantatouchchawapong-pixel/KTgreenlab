@@ -1,58 +1,372 @@
-<!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Arsenic Thailand</title>
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KT Green Lab | Arsenic Thailand</title>
+
 <style>
-body{font-family:system-ui,sans-serif;margin:0;padding:16px;background:#111;color:#eee}
-h1{font-size:20px;margin:0 0 10px}
-.s{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.b{background:#1e1e1e;border-radius:8px;padding:10px 14px}.b b{font-size:22px}
-input{padding:8px;border-radius:6px;border:0;width:100%;max-width:300px;margin-bottom:10px}
-table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #2a2a2a}
-th{cursor:pointer;color:#aaa}.w{color:#f44336;font-weight:700}.o{color:#4caf50}
-canvas{width:100%;height:160px;background:#1e1e1e;border-radius:8px;margin-bottom:10px}
-small{color:#999}
-</style></head><body>
-<h1>สารหนู (As) ทั่วไทย Real-time <small id="t"></small></h1>
-<div class="s"><div class="b">จังหวัดเกินเกณฑ์<br><b id="n1">0</b></div><div class="b">ค่าเฉลี่ยประเทศ<br><b id="n2">0</b> µg/L</div><div class="b">สูงสุด<br><b id="n3">-</b></div></div>
-<canvas id="cv" width="900" height="160"></canvas>
-<input id="q" placeholder="ค้นหาจังหวัด...">
-<table><thead><tr><th onclick="srt='n';render()">จังหวัด</th><th onclick="srt='v';render()">µg/L</th><th>สถานะ</th></tr></thead><tbody id="tb"></tbody></table>
-<small>เกณฑ์ <span id="th"></span> µg/L · <span id="mode"></span></small>
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #111;
+  color: #eee;
+}
+
+header { margin-bottom: 20px; }
+
+h1 { font-size: 22px; margin: 0 0 8px; }
+
+small { color: #999; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card {
+  background: #1e1e1e;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.card b {
+  display: block;
+  font-size: 23px;
+  margin-top: 5px;
+}
+
+canvas {
+  width: 100%;
+  height: 180px;
+  background: #1e1e1e;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+input {
+  width: 100%;
+  max-width: 350px;
+  padding: 11px;
+  border-radius: 7px;
+  border: 1px solid #444;
+  background: #222;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 320px;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+th { color: #aaa; cursor: pointer; }
+
+.warning { color: #ff5252; font-weight: bold; }
+.normal { color: #69d18b; }
+
+.status { margin: 12px 0; }
+
+footer {
+  margin-top: 20px;
+  color: #888;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>สารหนู (As) ทั่วประเทศไทย</h1>
+  <small>KT Green Lab · Environmental Monitoring Prototype</small>
+</header>
+
+<section class="stats">
+  <div class="card">
+    จังหวัดเกินเกณฑ์
+    <b id="n1">-</b>
+  </div>
+
+  <div class="card">
+    ค่าเฉลี่ยในชุดข้อมูล
+    <b id="n2">-</b>
+    <small>µg/L</small>
+  </div>
+
+  <div class="card">
+    ค่าสูงสุด
+    <b id="n3">-</b>
+  </div>
+</section>
+
+<canvas id="chart" width="900" height="180"></canvas>
+
+<div class="status">
+  <small id="status">กำลังเตรียมข้อมูล...</small>
+</div>
+
+<input id="search" type="search" placeholder="ค้นหาจังหวัด...">
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th onclick="sortBy('name')">จังหวัด ↕</th>
+  <th onclick="sortBy('value')">µg/L ↕</th>
+  <th>สถานะ</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<footer>
+  เกณฑ์อ้างอิงที่ตั้งไว้ในต้นแบบ: 10 µg/L
+  <br>
+  ข้อมูลนี้เป็นต้นแบบเพื่อการศึกษา ไม่ใช่ระบบตรวจวัดหรือแจ้งเตือนอย่างเป็นทางการ
+</footer>
+
 <script>
-// ===== ตั้งค่า (แก้ตรงนี้) =====
-const CFG={
-  threshold:10,      // µg/L (WHO น้ำดื่ม)
-  intervalMs:5000,
-  maxPoints:30,
-  apiUrl:""          // JSON: {"กรุงเทพมหานคร":3.2,"นครศรีธรรมราช":14.1,...} ว่าง=ข้อมูลจำลอง
+const CONFIG = {
+  threshold: 10,
+
+  // ใส่ URL API ที่ส่งข้อมูล JSON จริงตรงนี้
+  // เว้นว่างไว้ = ใช้ข้อมูลตัวอย่าง
+  apiUrl: "",
+
+  intervalMs: 5000,
+  maxPoints: 30
 };
-const P="กรุงเทพมหานคร,กระบี่,กาญจนบุรี,กาฬสินธุ์,กำแพงเพชร,ขอนแก่น,จันทบุรี,ฉะเชิงเทรา,ชลบุรี,ชัยนาท,ชัยภูมิ,ชุมพร,เชียงราย,เชียงใหม่,ตรัง,ตราด,ตาก,นครนายก,นครปฐม,นครพนม,นครราชสีมา,นครศรีธรรมราช,นครสวรรค์,นนทบุรี,นราธิวาส,น่าน,บึงกาฬ,บุรีรัมย์,ปทุมธานี,ประจวบคีรีขันธ์,ปราจีนบุรี,ปัตตานี,พระนครศรีอยุธยา,พะเยา,พังงา,พัทลุง,พิจิตร,พิษณุโลก,เพชรบุรี,เพชรบูรณ์,แพร่,ภูเก็ต,มหาสารคาม,มุกดาหาร,แม่ฮ่องสอน,ยโสธร,ยะลา,ร้อยเอ็ด,ระนอง,ระยอง,ราชบุรี,ลพบุรี,ลำปาง,ลำพูน,เลย,ศรีสะเกษ,สกลนคร,สงขลา,สตูล,สมุทรปราการ,สมุทรสงคราม,สมุทรสาคร,สระแก้ว,สระบุรี,สิงห์บุรี,สุโขทัย,สุพรรณบุรี,สุราษฎร์ธานี,สุรินทร์,หนองคาย,หนองบัวลำภู,อ่างทอง,อำนาจเจริญ,อุดรธานี,อุตรดิตถ์,อุทัยธานี,อุบลราชธานี".split(",");
-// ==============================
-let D={},srt="v",H=[];
-th.textContent=CFG.threshold;mode.textContent=CFG.apiUrl?"ข้อมูลจริง":"ข้อมูลจำลอง";
-P.forEach(p=>D[p]=Math.random()*12);
-async function get(){
-  if(CFG.apiUrl)return(await fetch(CFG.apiUrl)).json();
-  const o={};P.forEach(p=>o[p]=Math.max(0,D[p]+(Math.random()-.5)*1.5));return o;
+
+const provinces = [
+"กรุงเทพมหานคร","กระบี่","กาญจนบุรี","กาฬสินธุ์",
+"กำแพงเพชร","ขอนแก่น","จันทบุรี","ฉะเชิงเทรา",
+"ชลบุรี","ชัยนาท","ชัยภูมิ","ชุมพร","เชียงราย",
+"เชียงใหม่","ตรัง","ตราด","ตาก","นครนายก",
+"นครปฐม","นครพนม","นครราชสีมา","นครศรีธรรมราช",
+"นครสวรรค์","นนทบุรี","นราธิวาส","น่าน","บึงกาฬ",
+"บุรีรัมย์","ปทุมธานี","ประจวบคีรีขันธ์",
+"ปราจีนบุรี","ปัตตานี","พระนครศรีอยุธยา","พะเยา",
+"พังงา","พัทลุง","พิจิตร","พิษณุโลก","เพชรบุรี",
+"เพชรบูรณ์","แพร่","ภูเก็ต","มหาสารคาม","มุกดาหาร",
+"แม่ฮ่องสอน","ยโสธร","ยะลา","ร้อยเอ็ด","ระนอง",
+"ระยอง","ราชบุรี","ลพบุรี","ลำปาง","ลำพูน","เลย",
+"ศรีสะเกษ","สกลนคร","สงขลา","สตูล","สมุทรปราการ",
+"สมุทรสงคราม","สมุทรสาคร","สระแก้ว","สระบุรี",
+"สิงห์บุรี","สุโขทัย","สุพรรณบุรี","สุราษฎร์ธานี",
+"สุรินทร์","หนองคาย","หนองบัวลำภู","อ่างทอง",
+"อำนาจเจริญ","อุดรธานี","อุตรดิตถ์","อุทัยธานี",
+"อุบลราชธานี"
+];
+
+const $ = id => document.getElementById(id);
+
+let data = {};
+let history = [];
+let sortMode = "value";
+let demoValues = {};
+
+provinces.forEach(name => {
+  demoValues[name] = Math.random() * 12;
+});
+
+function getDemoData() {
+  const result = {};
+
+  provinces.forEach(name => {
+    result[name] = Math.max(
+      0,
+      demoValues[name] + (Math.random() - 0.5) * 1.5
+    );
+  });
+
+  return result;
 }
-function draw(){
-  const c=cv.getContext("2d"),W=cv.width,Hh=cv.height;c.clearRect(0,0,W,Hh);
-  const mx=Math.max(CFG.threshold*1.5,...H.flat());const y=v=>Hh-8-v/mx*(Hh-16);
-  c.strokeStyle="#f44336";c.setLineDash([6,4]);c.beginPath();c.moveTo(0,y(CFG.threshold));c.lineTo(W,y(CFG.threshold));c.stroke();c.setLineDash([]);
-  c.strokeStyle="#4fc3f7";c.beginPath();H.forEach((v,i)=>{const x=i/(CFG.maxPoints-1)*W;i?c.lineTo(x,y(v[1])):c.moveTo(x,y(v[1]))});c.stroke();
+
+async function getData() {
+  if (!CONFIG.apiUrl) {
+    return getDemoData();
+  }
+
+  const response = await fetch(CONFIG.apiUrl);
+
+  if (!response.ok) {
+    throw new Error("HTTP " + response.status);
+  }
+
+  const result = await response.json();
+
+  if (
+    !result ||
+    typeof result !== "object" ||
+    Array.isArray(result)
+  ) {
+    throw new Error("รูปแบบ JSON ไม่ถูกต้อง");
+  }
+
+  return result;
 }
-function render(){
-  const k=q.value.trim(),a=P.filter(p=>p.includes(k)).sort((x,y)=>srt=="n"?x.localeCompare(y,"th"):D[y]-D[x]);
-  tb.innerHTML=a.map(p=>{const w=D[p]>CFG.threshold;return`<tr><td>${p}</td><td>${D[p].toFixed(1)}</td><td class="${w?'w':'o'}">${w?'⚠ เกินเกณฑ์':'ปกติ'}</td></tr>`}).join("");
+
+function renderTable() {
+  const keyword = $("search").value.trim();
+
+  let rows = provinces
+    .filter(name => name.includes(keyword))
+    .filter(name => Number.isFinite(Number(data[name])));
+
+  rows.sort((a, b) => {
+    if (sortMode === "name") {
+      return a.localeCompare(b, "th");
+    }
+
+    return Number(data[b]) - Number(data[a]);
+  });
+
+  $("tableBody").innerHTML = rows.map(name => {
+    const value = Number(data[name]);
+    const over = value > CONFIG.threshold;
+
+    return `
+      <tr>
+        <td>${name}</td>
+        <td>${value.toFixed(1)}</td>
+        <td class="${over ? "warning" : "normal"}">
+          ${over ? "เกินเกณฑ์อ้างอิง" : "ไม่เกินเกณฑ์"}
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
-async function tick(){
-  try{D=await get();const v=P.map(p=>+D[p]||0),mxv=Math.max(...v);
-    n1.textContent=v.filter(x=>x>CFG.threshold).length;
-    const avg=v.reduce((a,b)=>a+b)/v.length;n2.textContent=avg.toFixed(1);
-    n3.textContent=P[v.indexOf(mxv)]+" "+mxv.toFixed(1);
-    H.push([0,avg]);if(H.length>CFG.maxPoints)H.shift();
-    draw();render();t.textContent=new Date().toLocaleTimeString("th-TH");
-  }catch(e){t.textContent="โหลดไม่ได้: "+e.message}
+
+function sortBy(mode) {
+  sortMode = mode;
+  renderTable();
 }
-q.oninput=render;tick();setInterval(tick,CFG.intervalMs);
-</script></body></html>
+
+function drawChart() {
+  const canvas = $("chart");
+  const ctx = canvas.getContext("2d");
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  ctx.clearRect(0, 0, width, height);
+
+  if (history.length === 0) return;
+
+  const maxValue = Math.max(
+    CONFIG.threshold * 1.5,
+    ...history
+  );
+
+  const y = value =>
+    height - 10 - (value / maxValue) * (height - 20);
+
+  ctx.strokeStyle = "#ff5252";
+  ctx.setLineDash([6, 5]);
+  ctx.beginPath();
+  ctx.moveTo(0, y(CONFIG.threshold));
+  ctx.lineTo(width, y(CONFIG.threshold));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.strokeStyle = "#4fc3f7";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+
+  history.forEach((value, index) => {
+    const x = history.length === 1
+      ? width
+      : index / (CONFIG.maxPoints - 1) * width;
+
+    if (index === 0) {
+      ctx.moveTo(x, y(value));
+    } else {
+      ctx.lineTo(x, y(value));
+    }
+  });
+
+  ctx.stroke();
+}
+
+async function update() {
+  try {
+    const result = await getData();
+
+    data = result;
+
+    const values = provinces
+      .map(name => Number(data[name]))
+      .filter(value => Number.isFinite(value));
+
+    if (values.length === 0) {
+      throw new Error("ไม่พบข้อมูลจังหวัด");
+    }
+
+    const average =
+      values.reduce((sum, value) => sum + value, 0)
+      / values.length;
+
+    const maximum = Math.max(...values);
+
+    $("n1").textContent = values.filter(
+      value => value > CONFIG.threshold
+    ).length;
+
+    $("n2").textContent = average.toFixed(2);
+
+    const highestProvince = provinces.find(
+      name => Number(data[name]) === maximum
+    );
+
+    $("n3").textContent =
+      highestProvince + " " + maximum.toFixed(1);
+
+    history.push(average);
+
+    if (history.length > CONFIG.maxPoints) {
+      history.shift();
+    }
+
+    drawChart();
+    renderTable();
+
+    $("status").textContent =
+      (CONFIG.apiUrl ? "ข้อมูลจาก API" : "ข้อมูลจำลอง") +
+      " · อัปเดตล่าสุด " +
+      new Date().toLocaleTimeString("th-TH");
+
+  } catch (error) {
+    $("status").textContent =
+      "โหลดข้อมูลไม่สำเร็จ: " + error.message;
+  }
+}
+
+$("search").addEventListener("input", renderTable);
+
+$("n1").textContent = "-";
+$("n2").textContent = "-";
+$("n3").textContent = "-";
+
+update();
+setInterval(update, CONFIG.intervalMs);
+</script>
+
+</body>
+</html>
