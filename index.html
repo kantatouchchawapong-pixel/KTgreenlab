@@ -1,60 +1,540 @@
 
-const NEWS_QUERY =
-  '(สารหนู OR arsenic) (ประเทศไทย OR Thailand OR แม่น้ำกก OR แม่น้ำสาย OR แม่น้ำรวก)';
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f7f8">
+<title>Arsenic Thailand | Environmental Intelligence</title>
 
-const FEED_URL =
-  'https://news.google.com/rss/search?q=' +
-  encodeURIComponent(NEWS_QUERY) +
-  '&hl=th&gl=TH&ceid=TH:th';
+<style>
+:root{
+ --bg:#f5f7f8;--white:#fff;--ink:#172b3a;
+ --muted:#71808c;--line:#e4e9ec;
+ --blue:#267c9d;--blue2:#e8f3f7;
+ --green:#378b70;--yellow:#bd8b36;--red:#bd5959;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Thai",sans-serif}
+header{background:white;border-bottom:1px solid var(--line);padding:17px 6%;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:10}
+.brand{font-size:19px;font-weight:800;letter-spacing:1px}
+.brand span{color:var(--blue)}
+.brand small{display:block;font-size:10px;color:var(--muted);font-weight:400;letter-spacing:2px}
+nav{display:flex;gap:20px;overflow-x:auto}
+nav a{font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
+nav a:hover{color:var(--blue)}
+main{max-width:1250px;margin:auto;padding:35px 5%}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden}
+.hero-text{padding:42px}
+.eyebrow{font-size:11px;letter-spacing:2px;color:var(--blue)}
+h1{font-size:35px;line-height:1.35;margin:15px 0}
+p{line-height:1.8}
+.muted{color:var(--muted)}
+.hero-art{background:#eaf3f5;min-height:280px}
+.hero-art svg{width:100%;height:100%;display:block}
+.btn{border:0;background:var(--blue);color:white;border-radius:6px;padding:11px 17px;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}
+.section{margin-top:45px;scroll-margin-top:90px}
+.section-title{font-size:21px;margin-bottom:5px}
+.section-desc{font-size:13px;color:var(--muted);margin-top:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-top:18px}
+.card{background:white;border:1px solid var(--line);border-radius:10px;padding:19px}
+.card small{color:var(--muted)}
+.big{font-size:25px;font-weight:700;margin:12px 0}
+.region{cursor:pointer;transition:.2s}
+.region:hover,.region.active{border-color:var(--blue);background:var(--blue2)}
+.region-icon{font-size:23px;margin-bottom:12px}
+.region-name{font-weight:700}
+.region-count{font-size:12px;color:var(--muted);margin-top:6px}
+.panel{background:white;border:1px solid var(--line);border-radius:11px;padding:22px;margin-top:15px}
+.tag{display:inline-block;background:var(--blue2);color:var(--blue);font-size:10px;padding:5px 9px;border-radius:4px}
+.status{font-size:12px;color:var(--yellow)}
+select,input{background:white;border:1px solid var(--line);border-radius:6px;padding:11px;color:var(--ink);width:100%;margin:7px 0;font:inherit;font-size:13px}
+label{font-size:12px;color:var(--muted)}
+.filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:650px}
+th,td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}
+th{color:var(--muted);font-weight:500}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.chart{height:170px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
+.source{font-size:12px;color:var(--blue);text-decoration:none}
+.source:hover{text-decoration:underline}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.news-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:15px}
+.news-status{font-size:12px;color:var(--muted);margin-top:8px}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px;margin-top:15px}
+.news-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;min-height:190px}
+.news-card h3{font-size:15px;line-height:1.6;margin:10px 0}
+.news-meta{font-size:11px;color:var(--muted)}
+.news-snippet{font-size:12px;color:var(--muted);line-height:1.7;flex:1;margin:8px 0 14px}
+.news-link{font-size:12px;color:var(--blue);text-decoration:none;font-weight:700}
+.news-link:hover{text-decoration:underline}
+.news-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:13px}
+footer{background:white;border-top:1px solid var(--line);padding:30px 6%;margin-top:60px;color:var(--muted);font-size:12px;text-align:center}
+@media(max-width:750px){
+ header{align-items:flex-start;flex-direction:column}
+ .hero{grid-template-columns:1fr}
+ .hero-text{padding:27px}
+ h1{font-size:27px}
+ .hero-art{min-height:210px}
+ .filters,.two{grid-template-columns:1fr}
+}
+</style>
+</head>
 
-export default {
-  async fetch(request) {
-    const headers = {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Content-Type': 'application/rss+xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=900'
-    };
+<body>
+<header>
+ <div class="brand">ARSENIC <span>THAILAND</span><small>ENVIRONMENTAL INTELLIGENCE</small></div>
+ <nav>
+  <a href="#overview">Overview</a>
+  <a href="#news">Latest News</a>
+  <a href="#regions">Regions</a>
+  <a href="#database">Database</a>
+  <a href="#analysis">Analysis</a>
+  <a href="#forecast">Forecast</a>
+  <a href="#sources">Sources</a>
+ </nav>
+</header>
 
-    if (request.method === 'OPTIONS') {
-      return new Response(null, { headers });
-    }
+<main>
 
-    if (request.method !== 'GET') {
-      return new Response('Method not allowed', {
-        status: 405,
-        headers
-      });
-    }
+<section class="hero" id="overview">
+ <div class="hero-text">
+  <div class="eyebrow">THAILAND ENVIRONMENTAL RESEARCH</div>
+  <h1>Understanding<br>Arsenic in Thailand</h1>
+  <p class="muted">แพลตฟอร์มรวบรวมข้อมูลสารหนู วิเคราะห์สถานการณ์ และประเมินแนวโน้มสิ่งแวดล้อมในประเทศไทย</p>
+  <p><span class="tag">RESEARCH & DATA ANALYSIS</span></p>
+  <a href="#regions"><button class="btn">Explore Data →</button></a>
+ </div>
+ <div class="hero-art">
+  <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
+   <rect width="600" height="360" fill="#eaf3f5"/>
+   <circle cx="465" cy="85" r="42" fill="#d4e7e7"/>
+   <path d="M0 210 Q130 120 240 215 T480 180 T650 205 V360 H0Z" fill="#c6dfe0"/>
+   <path d="M0 260 Q140 185 290 265 T600 235 V360 H0Z" fill="#92c4c6"/>
+   <path d="M0 300 Q140 235 270 300 T600 285 V360 H0Z" fill="#5c9fa9"/>
+   <path d="M0 320 Q140 285 300 325 T600 310" stroke="#dceff0" stroke-width="4" fill="none"/>
+   <g fill="#507e70">
+    <path d="M70 210 L100 100 L130 210Z"/>
+    <path d="M110 215 L155 80 L195 215Z"/>
+    <path d="M390 195 L430 85 L470 195Z"/>
+    <path d="M450 210 L495 120 L535 210Z"/>
+   </g>
+   <g fill="#fff" opacity=".85">
+    <rect x="230" y="145" width="105" height="100" rx="7"/>
+    <rect x="245" y="160" width="75" height="65" rx="3" fill="#d6e9ec"/>
+    <path d="M280 170 V208 M262 190 H298" stroke="#4b91a1" stroke-width="5"/>
+    <path d="M210 245 H355" stroke="#fff" stroke-width="5"/>
+   </g>
+   <g fill="#fff" opacity=".7">
+    <circle cx="90" cy="55" r="4"/>
+    <circle cx="180" cy="90" r="3"/>
+    <circle cx="350" cy="65" r="4"/>
+    <circle cx="550" cy="130" r="3"/>
+   </g>
+  </svg>
+ </div>
+</section>
 
-    try {
-      const response = await fetch(FEED_URL, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 ArsenicThailandNewsMonitor/1.0'
-        }
-      });
+<section class="section">
+ <h2 class="section-title">National Overview</h2>
+ <p class="section-desc">ภาพรวมฐานข้อมูลระดับประเทศ</p>
+ <div class="grid">
+  <div class="card"><small>REGIONS</small><div class="big">06</div><small>ภูมิภาคที่ครอบคลุม</small></div>
+  <div class="card"><small>PROVINCES</small><div class="big">77</div><small>จังหวัดในประเทศไทย</small></div>
+  <div class="card"><small>VERIFIED RECORDS</small><div class="big" id="totalRecords">0</div><small>รายการข้อมูลที่บันทึกในเครื่องนี้</small></div>
+  <div class="card"><small>FORECAST MODEL</small><div class="big">Pending</div><small>รอข้อมูลสำหรับพัฒนาแบบจำลอง</small></div>
+ </div>
+</section>
 
-      if (!response.ok) {
-        return new Response('Google News RSS error: ' + response.status, {
-          status: 502,
-          headers
-        });
-      }
+<!-- NEWS -->
+<section class="section" id="news">
+ <h2 class="section-title">Live Arsenic News Monitor</h2>
+ <p class="section-desc">ติดตามข่าวและประกาศเกี่ยวกับสารหนูในประเทศไทยจาก Google News</p>
+ <div class="panel">
+  <div class="news-toolbar">
+   <div>
+    <span class="tag">GOOGLE NEWS RSS</span>
+    <div class="news-status" id="newsStatus" aria-live="polite">กำลังเตรียมโหลดข่าว...</div>
+   </div>
+   <button class="btn" id="refreshNews" type="button">↻ Refresh News</button>
+  </div>
+  <div class="news-grid" id="newsGrid">
+   <div class="empty">กำลังโหลดข่าวล่าสุด...</div>
+  </div>
+  <p class="news-note">ระบบค้นหาข่าวผ่าน Google News RSS ผ่าน Cloudflare Worker โดยรีเฟรชอัตโนมัติทุก 30 นาที ข่าวเป็นข้อมูลจากสื่อ/หน่วยงานภายนอก ไม่ใช่ผลตรวจคุณภาพน้ำแบบเรียลไทม์</p>
+ </div>
+</section>
 
-      const xml = await response.text();
+<!-- REGIONS -->
+<section class="section" id="regions">
+ <h2 class="section-title">Regional Intelligence</h2>
+ <p class="section-desc">เลือกภูมิภาคเพื่อดูจังหวัดและข้อมูลที่เกี่ยวข้อง</p>
+ <div class="grid" id="regionGrid"></div>
+ <div class="panel">
+  <h3 id="selectedRegion">Thailand</h3>
+  <p class="muted" id="regionDescription">เลือกภูมิภาคเพื่อเริ่มสำรวจข้อมูล</p>
+  <label>เลือกจังหวัด</label>
+  <select id="provinceSelect"><option value="">เลือกจังหวัด</option></select>
+  <div id="provinceInfo" class="muted" style="font-size:13px;margin-top:12px">ยังไม่ได้เลือกจังหวัด</div>
+ </div>
+</section>
 
-      return new Response(xml, {
-        status: 200,
-        headers
-      });
+<!-- DATABASE -->
+<section class="section" id="database">
+ <h2 class="section-title">Historical Database</h2>
+ <p class="section-desc">ฐานข้อมูลผลตรวจจริงและข้อมูลย้อนหลัง</p>
+ <div class="panel">
+  <div class="filters">
+   <div><label>ภูมิภาค</label><select id="filterRegion"><option value="">ทุกภูมิภาค</option></select></div>
+   <div><label>ประเภทตัวอย่าง</label><select id="filterType"><option value="">ทุกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+   <div><label>ค้นหาจังหวัด</label><input id="searchProvince" placeholder="ค้นหาจังหวัด..."></div>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>วันที่เก็บตัวอย่าง</th><th>จังหวัด</th><th>ประเภทตัวอย่าง</th><th>ผลตรวจ (mg/L หรือ mg/kg)</th><th>แหล่งที่มา</th></tr></thead>
+    <tbody id="databaseBody"><tr><td colspan="5" class="empty">ยังไม่มีข้อมูลผลตรวจที่นำเข้า</td></tr></tbody>
+   </table>
+  </div>
+ </div>
+</section>
 
-    } catch (error) {
-      return new Response('RSS connection failed', {
-        status: 502,
-        headers
-      });
-    }
-  }
+<!-- ANALYSIS -->
+<section class="section" id="analysis">
+ <h2 class="section-title">Situation Analysis</h2>
+ <p class="section-desc">การวิเคราะห์ข้อมูลจากผลตรวจจริงและข้อมูลย้อนหลัง</p>
+ <div class="two">
+  <div class="panel"><span class="tag">DATA COMPARISON</span><h3>Historical Comparison</h3><div class="chart" id="comparisonChart">รอข้อมูลสำหรับสร้างกราฟเปรียบเทียบ</div><p class="muted" style="font-size:12px">เปรียบเทียบผลตรวจในพื้นที่เดียวกันและประเภทตัวอย่างเดียวกัน</p></div>
+  <div class="panel"><span class="tag">TREND ANALYSIS</span><h3>Environmental Trend</h3><div class="chart" id="trendChart">รอข้อมูลตามช่วงเวลา</div><p class="muted" style="font-size:12px">ตรวจสอบแนวโน้มการเปลี่ยนแปลงของข้อมูล</p></div>
+ </div>
+ <div class="panel">
+  <h3>Analysis Methodology</h3>
+  <p class="muted">1. ตรวจสอบความถูกต้องและแหล่งที่มาของข้อมูล<br>2. แยกข้อมูลตามประเภทตัวอย่างและพื้นที่<br>3. เปรียบเทียบผลตรวจในช่วงเวลาต่าง ๆ<br>4. พิจารณาปัจจัยทางสิ่งแวดล้อมที่เกี่ยวข้อง<br>5. สรุปแนวโน้มพร้อมระบุข้อจำกัด</p>
+ </div>
+</section>
+
+<!-- FORECAST -->
+<section class="section" id="forecast">
+ <h2 class="section-title">Risk Assessment & Forecast</h2>
+ <p class="section-desc">การประเมินความเสี่ยงและคาดการณ์สถานการณ์</p>
+ <div class="panel">
+  <span class="tag">FORECAST ENGINE</span>
+  <h3>Predictive Environmental Analysis</h3>
+  <p class="muted">ระบบจะประเมินแนวโน้มจากข้อมูลในอดีต โดยพิจารณาคุณภาพข้อมูล ช่วงเวลา และความเหมาะสมของแบบจำลอง</p>
+  <p class="status">● ยังไม่มีแบบจำลองที่ผ่านการตรวจสอบ</p>
+  <hr style="border:0;border-top:1px solid var(--line)">
+  <h3>Risk Assessment</h3>
+  <p class="muted">การประเมินจะพิจารณาค่าผลตรวจจริงเทียบกับมาตรฐานที่ตรงกับประเภทตัวอย่างและการใช้งาน ไม่ใช้เกณฑ์เดียวกับทุกประเภท</p>
+ </div>
+</section>
+
+<!-- SOURCES -->
+<section class="section" id="sources">
+ <h2 class="section-title">Research Sources</h2>
+ <p class="section-desc">แหล่งข้อมูลสำหรับการติดตามและตรวจสอบ</p>
+ <div class="grid">
+  <div class="card"><h3>กรมควบคุมมลพิษ</h3><p class="muted">ข้อมูลคุณภาพสิ่งแวดล้อมและรายงานผลตรวจ</p><a class="source" href="https://www.pcd.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมทรัพยากรน้ำบาดาล</h3><p class="muted">ข้อมูลด้านน้ำบาดาลและคุณภาพน้ำ</p><a class="source" href="https://www.dgr.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมอนามัย</h3><p class="muted">ข้อมูลด้านสุขภาพและคุณภาพน้ำ</p><a class="source" href="https://www.anamai.moph.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมทรัพยากรธรณี</h3><p class="muted">ข้อมูลธรณีวิทยาและแหล่งแร่</p><a class="source" href="https://www.dmr.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+ </div>
+</section>
+
+<!-- DATA ENTRY -->
+<section class="section">
+ <h2 class="section-title">Data Management</h2>
+ <p class="section-desc">แบบฟอร์มเพิ่มข้อมูลผลตรวจที่ผ่านการตรวจสอบแล้ว</p>
+ <div class="panel">
+  <form id="recordForm">
+   <div class="form-grid">
+    <div><label>วันที่เก็บตัวอย่าง</label><input type="date" id="sampleDate" required></div>
+    <div><label>จังหวัด</label><select id="recordProvince" required></select></div>
+    <div><label>ประเภทตัวอย่าง</label><select id="recordType" required><option value="">เลือกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+    <div><label>ผลตรวจ</label><input type="number" id="recordValue" step="any" min="0" placeholder="ค่าที่ตรวจพบ" required></div>
+   </div>
+   <label>หน่วย</label>
+   <select id="recordUnit"><option value="mg/L">mg/L</option><option value="mg/kg">mg/kg</option></select>
+   <label>ลิงก์แหล่งอ้างอิง</label>
+   <input type="url" id="recordSource" placeholder="https://..." required>
+   <button class="btn" type="submit">Add Verified Record</button>
+   <p class="muted" style="font-size:11px">บันทึกใน Local Storage ของเบราว์เซอร์นี้เท่านั้น ยังไม่มีระบบตรวจสอบเอกสารหรือฐานข้อมูลกลาง</p>
+  </form>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <b>ARSENIC THAILAND</b>
+ <p>Environmental Intelligence & Research Platform</p>
+ <p>Data-driven analysis · Historical records · Forecasting</p>
+ <p>© 2026 Arsenic Thailand</p>
+</footer>
+
+<script>
+const regions = {
+ "ภาคเหนือ":["เชียงใหม่","เชียงราย","ลำพูน","ลำปาง","แพร่","น่าน","พะเยา","แม่ฮ่องสอน","อุตรดิตถ์","ตาก","สุโขทัย","พิษณุโลก","พิจิตร","กำแพงเพชร","เพชรบูรณ์","นครสวรรค์","อุทัยธานี"],
+ "ภาคตะวันออกเฉียงเหนือ":["นครราชสีมา","ขอนแก่น","อุดรธานี","หนองคาย","เลย","สกลนคร","นครพนม","มุกดาหาร","กาฬสินธุ์","มหาสารคาม","ร้อยเอ็ด","ยโสธร","อำนาจเจริญ","อุบลราชธานี","ศรีสะเกษ","สุรินทร์","บุรีรัมย์","ชัยภูมิ","หนองบัวลำภู","บึงกาฬ"],
+ "ภาคกลาง":["กรุงเทพมหานคร","นนทบุรี","ปทุมธานี","พระนครศรีอยุธยา","อ่างทอง","สิงห์บุรี","ชัยนาท","ลพบุรี","สระบุรี","นครนายก","สุพรรณบุรี","นครปฐม","สมุทรปราการ","สมุทรสาคร","สมุทรสงคราม"],
+ "ภาคตะวันออก":["ชลบุรี","ระยอง","จันทบุรี","ตราด","ฉะเชิงเทรา","ปราจีนบุรี","สระแก้ว"],
+ "ภาคตะวันตก":["กาญจนบุรี","ราชบุรี","เพชรบุรี","ประจวบคีรีขันธ์"],
+ "ภาคใต้":["ชุมพร","ระนอง","สุราษฎร์ธานี","พังงา","ภูเก็ต","กระบี่","นครศรีธรรมราช","ตรัง","พัทลุง","สงขลา","สตูล","ปัตตานี","ยะลา","นราธิวาส"]
 };
 
+const icons=["◈","◇","⌁","◎","△","○"];
+let records=[];
+
+try {
+ records=JSON.parse(localStorage.getItem("arsenicRecords")||"[]");
+ if(!Array.isArray(records)) records=[];
+} catch(error) {
+ records=[];
+}
+
+const regionGrid=document.getElementById("regionGrid");
+const provinceSelect=document.getElementById("provinceSelect");
+const filterRegion=document.getElementById("filterRegion");
+const recordProvince=document.getElementById("recordProvince");
+
+Object.entries(regions).forEach(([name,provinces],i)=>{
+ const card=document.createElement("div");
+ card.className="card region";
+ card.innerHTML=`
+ <div class="region-icon">${icons[i]}</div>
+ <div class="region-name">${name}</div>
+ <div class="region-count">${provinces.length} จังหวัด</div>`;
+ card.onclick=()=>selectRegion(name,card);
+ regionGrid.appendChild(card);
+ filterRegion.add(new Option(name,name));
+});
+
+function fillProvinces(select,list){
+ select.innerHTML='<option value="">เลือกจังหวัด</option>';
+ list.forEach(p=>select.add(new Option(p,p)));
+}
+
+function selectRegion(name,card){
+ document.querySelectorAll(".region").forEach(x=>x.classList.remove("active"));
+ card.classList.add("active");
+ document.getElementById("selectedRegion").textContent=name;
+ document.getElementById("regionDescription").textContent="เลือกจังหวัดเพื่อเริ่มสำรวจข้อมูลภายใน"+name;
+ fillProvinces(provinceSelect,regions[name]);
+ provinceSelect.focus();
+}
+
+const allProvinces=Object.values(regions).flat();
+fillProvinces(recordProvince,allProvinces);
+
+provinceSelect.onchange=()=>{
+ const p=provinceSelect.value;
+ document.getElementById("provinceInfo").textContent=
+ p?"จังหวัด "+p+" : ยังไม่มีข้อมูลผลตรวจที่นำเข้าในฐานข้อมูล":"ยังไม่ได้เลือกจังหวัด";
+};
+
+function getRegion(province){
+ return Object.entries(regions).find(([r,ps])=>ps.includes(province))?.[0]||"";
+}
+
+function render(){
+ document.getElementById("totalRecords").textContent=records.length;
+ const body=document.getElementById("databaseBody");
+ const region=filterRegion.value;
+ const type=document.getElementById("filterType").value;
+ const search=document.getElementById("searchProvince").value.trim();
+
+ const filtered=records.filter(r=>
+ (!region||getRegion(r.province)===region)&&
+ (!type||r.type===type)&&
+ (!search||r.province.includes(search))
+ );
+
+ body.innerHTML="";
+ if(!filtered.length){
+  body.innerHTML='<tr><td colspan="5" class="empty">ไม่พบข้อมูลที่ตรงกับเงื่อนไข</td></tr>';
+ }else{
+  filtered.forEach(r=>{
+   const tr=document.createElement("tr");
+   [r.date,r.province,r.type,r.value+" "+r.unit].forEach(v=>{
+    const td=document.createElement("td");
+    td.textContent=v;
+    tr.appendChild(td);
+   });
+   const td=document.createElement("td");
+   const a=document.createElement("a");
+   a.href=r.source;a.target="_blank";a.rel="noopener noreferrer";
+   a.textContent="View Source";a.className="source";
+   td.appendChild(a);tr.appendChild(td);
+   body.appendChild(tr);
+  });
+ }
+}
+
+filterRegion.onchange=render;
+document.getElementById("filterType").onchange=render;
+document.getElementById("searchProvince").oninput=render;
+
+document.getElementById("recordForm").onsubmit=e=>{
+ e.preventDefault();
+ const province=recordProvince.value;
+ if(!province)return;
+
+ records.push({
+  date:document.getElementById("sampleDate").value,
+  province,
+  type:document.getElementById("recordType").value,
+  value:Number(document.getElementById("recordValue").value),
+  unit:document.getElementById("recordUnit").value,
+  source:document.getElementById("recordSource").value
+ });
+
+ try {
+  localStorage.setItem("arsenicRecords",JSON.stringify(records));
+ } catch(error) {
+  alert("ไม่สามารถบันทึกข้อมูลในเบราว์เซอร์ได้");
+  records.pop();
+  return;
+ }
+
+ e.target.reset();
+ render();
+ alert("บันทึกข้อมูลในเบราว์เซอร์แล้ว");
+};
+
+/* =====================================
+   GOOGLE NEWS RSS - CLOUDFLARE WORKER
+===================================== */
+
+// สำคัญ: เปลี่ยนเป็น URL Worker ของมึง
+const RSS_WORKER_URL =
+  'https://YOUR-WORKER.workers.dev';
+
+const newsGrid=document.getElementById("newsGrid");
+const newsStatus=document.getElementById("newsStatus");
+const refreshButton=document.getElementById("refreshNews");
+
+function cleanNewsText(html){
+ const doc=new DOMParser().parseFromString(html||"","text/html");
+ return (doc.body.textContent||"").replace(/\s+/g," ").trim();
+}
+
+function formatNewsDate(value){
+ const date=new Date(value);
+ if(Number.isNaN(date.getTime()))return "ไม่ระบุวันที่";
+ return date.toLocaleString("th-TH",{
+  dateStyle:"medium",
+  timeStyle:"short"
+ });
+}
+
+function createNewsCard(item){
+ const card=document.createElement("article");
+ card.className="news-card";
+
+ const meta=document.createElement("div");
+ meta.className="news-meta";
+ meta.textContent=(item.source||"Google News")+" · "+formatNewsDate(item.date);
+
+ const title=document.createElement("h3");
+ title.textContent=item.title||"ไม่มีหัวข้อข่าว";
+
+ const snippet=document.createElement("p");
+ snippet.className="news-snippet";
+ snippet.textContent=cleanNewsText(item.description)||"ไม่มีรายละเอียดข่าว";
+
+ const link=document.createElement("a");
+ link.className="news-link";
+ link.textContent="อ่านข่าวต้นฉบับ ↗";
+ link.href=item.link;
+ link.target="_blank";
+ link.rel="noopener noreferrer";
+
+ card.append(meta,title,snippet,link);
+ return card;
+}
+
+async function loadGoogleNews(){
+ if(refreshButton.disabled)return;
+
+ if(RSS_WORKER_URL.includes("YOUR-WORKER")){
+  newsStatus.textContent="ยังไม่ได้ตั้งค่า URL ของ Cloudflare Worker";
+  newsGrid.replaceChildren();
+  const message=document.createElement("div");
+  message.className="empty";
+  message.textContent="กรุณาใส่ URL Worker ก่อนใช้งานระบบข่าว";
+  newsGrid.appendChild(message);
+  return;
+ }
+
+ refreshButton.disabled=true;
+ newsStatus.textContent="กำลังค้นหาข่าวล่าสุด...";
+
+ try{
+  const response=await fetch(RSS_WORKER_URL,{cache:"no-store"});
+
+  if(!response.ok){
+   throw new Error("Worker ตอบกลับ HTTP "+response.status);
+  }
+
+  const xmlText=await response.text();
+  const xml=new DOMParser().parseFromString(xmlText,"application/xml");
+
+  if(xml.querySelector("parsererror")){
+   throw new Error("รูปแบบ RSS ไม่ถูกต้อง");
+  }
+
+  const items=Array.from(xml.querySelectorAll("item"))
+   .slice(0,12)
+   .map(item=>({
+    title:item.querySelector("title")?.textContent?.trim()||"",
+    link:item.querySelector("link")?.textContent?.trim()||"",
+    date:item.querySelector("pubDate")?.textContent?.trim()||"",
+    source:item.querySelector("source")?.textContent?.trim()||"Google News",
+    description:item.querySelector("description")?.textContent||""
+   }))
+   .filter(item=>{
+    try{
+     const url=new URL(item.link);
+     return url.protocol==="https:"||url.protocol==="http:";
+    }catch(error){
+     return false;
+    }
+   });
+
+  newsGrid.replaceChildren();
+
+  if(items.length===0){
+   const empty=document.createElement("div");
+   empty.className="empty";
+   empty.textContent="ไม่พบข่าวที่ตรงกับคำค้น";
+   newsGrid.appendChild(empty);
+  }else{
+   items.forEach(item=>newsGrid.appendChild(createNewsCard(item)));
+  }
+
+  newsStatus.textContent=
+   "อัปเดตล่าสุด "+new Date().toLocaleString("th-TH")+
+   " · "+items.length+" ข่าว";
+
+ }catch(error){
+  newsStatus.textContent="โหลดข่าวไม่สำเร็จ: "+error.message;
+
+  const message=document.createElement("div");
+  message.className="empty";
+  message.textContent="ไม่สามารถโหลดข่าวได้ ตรวจสอบ URL Worker และการเชื่อมต่อ";
+  newsGrid.replaceChildren(message);
+
+ }finally{
+  refreshButton.disabled=false;
+ }
+}
+
+refreshButton.addEventListener("click",loadGoogleNews);
+loadGoogleNews();
+setInterval(loadGoogleNews,30*60*1000);
+
+render();
+</script>
+</body>
+</html>
