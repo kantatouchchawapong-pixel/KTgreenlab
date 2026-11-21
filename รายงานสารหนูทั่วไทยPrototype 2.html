@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arsenic Thailand</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;padding:16px;background:#111;color:#eee}
+h1{font-size:20px;margin:0 0 10px}
+.s{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.b{background:#1e1e1e;border-radius:8px;padding:10px 14px}.b b{font-size:22px}
+input{padding:8px;border-radius:6px;border:0;width:100%;max-width:300px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #2a2a2a}
+th{cursor:pointer;color:#aaa}.w{color:#f44336;font-weight:700}.o{color:#4caf50}
+canvas{width:100%;height:160px;background:#1e1e1e;border-radius:8px;margin-bottom:10px}
+small{color:#999}
+</style></head><body>
+<h1>สารหนู (As) ทั่วไทย Real-time <small id="t"></small></h1>
+<div class="s"><div class="b">จังหวัดเกินเกณฑ์<br><b id="n1">0</b></div><div class="b">ค่าเฉลี่ยประเทศ<br><b id="n2">0</b> µg/L</div><div class="b">สูงสุด<br><b id="n3">-</b></div></div>
+<canvas id="cv" width="900" height="160"></canvas>
+<input id="q" placeholder="ค้นหาจังหวัด...">
+<table><thead><tr><th onclick="srt='n';render()">จังหวัด</th><th onclick="srt='v';render()">µg/L</th><th>สถานะ</th></tr></thead><tbody id="tb"></tbody></table>
+<small>เกณฑ์ <span id="th"></span> µg/L · <span id="mode"></span></small>
+<script>
+// ===== ตั้งค่า (แก้ตรงนี้) =====
+const CFG={
+  threshold:10,      // µg/L (WHO น้ำดื่ม)
+  intervalMs:5000,
+  maxPoints:30,
+  apiUrl:""          // JSON: {"กรุงเทพมหานคร":3.2,"นครศรีธรรมราช":14.1,...} ว่าง=ข้อมูลจำลอง
+};
+const P="กรุงเทพมหานคร,กระบี่,กาญจนบุรี,กาฬสินธุ์,กำแพงเพชร,ขอนแก่น,จันทบุรี,ฉะเชิงเทรา,ชลบุรี,ชัยนาท,ชัยภูมิ,ชุมพร,เชียงราย,เชียงใหม่,ตรัง,ตราด,ตาก,นครนายก,นครปฐม,นครพนม,นครราชสีมา,นครศรีธรรมราช,นครสวรรค์,นนทบุรี,นราธิวาส,น่าน,บึงกาฬ,บุรีรัมย์,ปทุมธานี,ประจวบคีรีขันธ์,ปราจีนบุรี,ปัตตานี,พระนครศรีอยุธยา,พะเยา,พังงา,พัทลุง,พิจิตร,พิษณุโลก,เพชรบุรี,เพชรบูรณ์,แพร่,ภูเก็ต,มหาสารคาม,มุกดาหาร,แม่ฮ่องสอน,ยโสธร,ยะลา,ร้อยเอ็ด,ระนอง,ระยอง,ราชบุรี,ลพบุรี,ลำปาง,ลำพูน,เลย,ศรีสะเกษ,สกลนคร,สงขลา,สตูล,สมุทรปราการ,สมุทรสงคราม,สมุทรสาคร,สระแก้ว,สระบุรี,สิงห์บุรี,สุโขทัย,สุพรรณบุรี,สุราษฎร์ธานี,สุรินทร์,หนองคาย,หนองบัวลำภู,อ่างทอง,อำนาจเจริญ,อุดรธานี,อุตรดิตถ์,อุทัยธานี,อุบลราชธานี".split(",");
+// ==============================
+let D={},srt="v",H=[];
+th.textContent=CFG.threshold;mode.textContent=CFG.apiUrl?"ข้อมูลจริง":"ข้อมูลจำลอง";
+P.forEach(p=>D[p]=Math.random()*12);
+async function get(){
+  if(CFG.apiUrl)return(await fetch(CFG.apiUrl)).json();
+  const o={};P.forEach(p=>o[p]=Math.max(0,D[p]+(Math.random()-.5)*1.5));return o;
+}
+function draw(){
+  const c=cv.getContext("2d"),W=cv.width,Hh=cv.height;c.clearRect(0,0,W,Hh);
+  const mx=Math.max(CFG.threshold*1.5,...H.flat());const y=v=>Hh-8-v/mx*(Hh-16);
+  c.strokeStyle="#f44336";c.setLineDash([6,4]);c.beginPath();c.moveTo(0,y(CFG.threshold));c.lineTo(W,y(CFG.threshold));c.stroke();c.setLineDash([]);
+  c.strokeStyle="#4fc3f7";c.beginPath();H.forEach((v,i)=>{const x=i/(CFG.maxPoints-1)*W;i?c.lineTo(x,y(v[1])):c.moveTo(x,y(v[1]))});c.stroke();
+}
+function render(){
+  const k=q.value.trim(),a=P.filter(p=>p.includes(k)).sort((x,y)=>srt=="n"?x.localeCompare(y,"th"):D[y]-D[x]);
+  tb.innerHTML=a.map(p=>{const w=D[p]>CFG.threshold;return`<tr><td>${p}</td><td>${D[p].toFixed(1)}</td><td class="${w?'w':'o'}">${w?'⚠ เกินเกณฑ์':'ปกติ'}</td></tr>`}).join("");
+}
+async function tick(){
+  try{D=await get();const v=P.map(p=>+D[p]||0),mxv=Math.max(...v);
+    n1.textContent=v.filter(x=>x>CFG.threshold).length;
+    const avg=v.reduce((a,b)=>a+b)/v.length;n2.textContent=avg.toFixed(1);
+    n3.textContent=P[v.indexOf(mxv)]+" "+mxv.toFixed(1);
+    H.push([0,avg]);if(H.length>CFG.maxPoints)H.shift();
+    draw();render();t.textContent=new Date().toLocaleTimeString("th-TH");
+  }catch(e){t.textContent="โหลดไม่ได้: "+e.message}
+}
+q.oninput=render;tick();setInterval(tick,CFG.intervalMs);
+</script></body></html>
