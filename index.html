@@ -13,16 +13,8 @@
  --green:#378b70;--yellow:#bd8b36;--red:#bd5959;
 }
 *{box-sizing:border-box}
-body{
- margin:0;background:var(--bg);color:var(--ink);
- font-family:Arial,"Noto Sans Thai",sans-serif;
-}
-header{
- background:white;border-bottom:1px solid var(--line);
- padding:17px 6%;display:flex;align-items:center;
- justify-content:space-between;gap:15px;
- position:sticky;top:0;z-index:10;
-}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Thai",sans-serif}
+header{background:white;border-bottom:1px solid var(--line);padding:17px 6%;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:10}
 .brand{font-size:19px;font-weight:800;letter-spacing:1px}
 .brand span{color:var(--blue)}
 .brand small{display:block;font-size:10px;color:var(--muted);font-weight:400;letter-spacing:2px}
@@ -30,11 +22,7 @@ nav{display:flex;gap:20px;overflow-x:auto}
 nav a{font-size:12px;color:var(--muted);text-decoration:none;white-space:nowrap}
 nav a:hover{color:var(--blue)}
 main{max-width:1250px;margin:auto;padding:35px 5%}
-.hero{
- display:grid;grid-template-columns:1.1fr .9fr;
- background:white;border:1px solid var(--line);
- border-radius:15px;overflow:hidden;
-}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;background:white;border:1px solid var(--line);border-radius:15px;overflow:hidden}
 .hero-text{padding:42px}
 .eyebrow{font-size:11px;letter-spacing:2px;color:var(--blue)}
 h1{font-size:35px;line-height:1.35;margin:15px 0}
@@ -42,68 +30,47 @@ p{line-height:1.8}
 .muted{color:var(--muted)}
 .hero-art{background:#eaf3f5;min-height:280px}
 .hero-art svg{width:100%;height:100%;display:block}
-.btn{
- border:0;background:var(--blue);color:white;
- border-radius:6px;padding:11px 17px;cursor:pointer;
-}
+.btn{border:0;background:var(--blue);color:white;border-radius:6px;padding:11px 17px;cursor:pointer}
+.btn:disabled{opacity:.6;cursor:wait}
 .section{margin-top:45px;scroll-margin-top:90px}
 .section-title{font-size:21px;margin-bottom:5px}
 .section-desc{font-size:13px;color:var(--muted);margin-top:0}
-.grid{
- display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
- gap:13px;margin-top:18px;
-}
-.card{
- background:white;border:1px solid var(--line);
- border-radius:10px;padding:19px;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-top:18px}
+.card{background:white;border:1px solid var(--line);border-radius:10px;padding:19px}
 .card small{color:var(--muted)}
 .big{font-size:25px;font-weight:700;margin:12px 0}
-.region{
- cursor:pointer;transition:.2s;
-}
+.region{cursor:pointer;transition:.2s}
 .region:hover,.region.active{border-color:var(--blue);background:var(--blue2)}
 .region-icon{font-size:23px;margin-bottom:12px}
 .region-name{font-weight:700}
 .region-count{font-size:12px;color:var(--muted);margin-top:6px}
-.panel{
- background:white;border:1px solid var(--line);
- border-radius:11px;padding:22px;margin-top:15px;
-}
-.tag{
- display:inline-block;background:var(--blue2);color:var(--blue);
- font-size:10px;padding:5px 9px;border-radius:4px;
-}
+.panel{background:white;border:1px solid var(--line);border-radius:11px;padding:22px;margin-top:15px}
+.tag{display:inline-block;background:var(--blue2);color:var(--blue);font-size:10px;padding:5px 9px;border-radius:4px}
 .status{font-size:12px;color:var(--yellow)}
-select,input{
- background:white;border:1px solid var(--line);
- border-radius:6px;padding:11px;color:var(--ink);
- width:100%;margin:7px 0;font:inherit;font-size:13px;
-}
+select,input{background:white;border:1px solid var(--line);border-radius:6px;padding:11px;color:var(--ink);width:100%;margin:7px 0;font:inherit;font-size:13px}
 label{font-size:12px;color:var(--muted)}
 .filters{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;min-width:650px}
-th,td{
- padding:13px 10px;border-bottom:1px solid var(--line);
- text-align:left;font-size:12px;
-}
+th,td{padding:13px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:12px}
 th{color:var(--muted);font-weight:500}
 .empty{text-align:center;color:var(--muted);padding:30px}
-.chart{
- height:170px;border-bottom:1px solid var(--line);
- display:flex;align-items:center;justify-content:center;
- color:var(--muted);font-size:12px;
-}
+.chart{height:170px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px}
 .source{font-size:12px;color:var(--blue);text-decoration:none}
 .source:hover{text-decoration:underline}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:15px}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-footer{
- background:white;border-top:1px solid var(--line);
- padding:30px 6%;margin-top:60px;color:var(--muted);
- font-size:12px;text-align:center;
-}
+.news-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:15px}
+.news-status{font-size:12px;color:var(--muted)}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px;margin-top:15px}
+.news-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;min-height:190px}
+.news-card h3{font-size:15px;line-height:1.6;margin:10px 0}
+.news-meta{font-size:11px;color:var(--muted)}
+.news-snippet{font-size:12px;color:var(--muted);line-height:1.7;flex:1;margin:8px 0 14px}
+.news-link{font-size:12px;color:var(--blue);text-decoration:none;font-weight:700}
+.news-link:hover{text-decoration:underline}
+.news-note{font-size:11px;color:var(--muted);line-height:1.7;margin-top:13px}
+footer{background:white;border-top:1px solid var(--line);padding:30px 6%;margin-top:60px;color:var(--muted);font-size:12px;text-align:center}
 @media(max-width:750px){
  header{align-items:flex-start;flex-direction:column}
  .hero{grid-template-columns:1fr}
@@ -114,15 +81,12 @@ footer{
 }
 </style>
 </head>
-
 <body>
-
 <header>
- <div class="brand">ARSENIC <span>THAILAND</span>
-  <small>ENVIRONMENTAL INTELLIGENCE</small>
- </div>
+ <div class="brand">ARSENIC <span>THAILAND</span><small>ENVIRONMENTAL INTELLIGENCE</small></div>
  <nav>
   <a href="#overview">Overview</a>
+  <a href="#news">Latest News</a>
   <a href="#regions">Regions</a>
   <a href="#database">Database</a>
   <a href="#analysis">Analysis</a>
@@ -132,16 +96,11 @@ footer{
 </header>
 
 <main>
-
-<!-- HERO -->
 <section class="hero" id="overview">
  <div class="hero-text">
   <div class="eyebrow">THAILAND ENVIRONMENTAL RESEARCH</div>
   <h1>Understanding<br>Arsenic in Thailand</h1>
-  <p class="muted">
-   แพลตฟอร์มรวบรวมข้อมูลสารหนู วิเคราะห์สถานการณ์
-   และประเมินแนวโน้มสิ่งแวดล้อมในประเทศไทย
-  </p>
+  <p class="muted">แพลตฟอร์มรวบรวมข้อมูลสารหนู วิเคราะห์สถานการณ์ และประเมินแนวโน้มสิ่งแวดล้อมในประเทศไทย</p>
   <p><span class="tag">RESEARCH & DATA ANALYSIS</span></p>
   <a href="#regions"><button class="btn">Explore Data →</button></a>
  </div>
@@ -166,110 +125,73 @@ footer{
     <path d="M210 245 H355" stroke="#fff" stroke-width="5"/>
    </g>
    <g fill="#fff" opacity=".7">
-    <circle cx="90" cy="55" r="4"/><circle cx="180" cy="90" r="3"/>
-    <circle cx="350" cy="65" r="4"/><circle cx="550" cy="130" r="3"/>
+    <circle cx="90" cy="55" r="4"/>
+    <circle cx="180" cy="90" r="3"/>
+    <circle cx="350" cy="65" r="4"/>
+    <circle cx="550" cy="130" r="3"/>
    </g>
   </svg>
  </div>
 </section>
 
-<!-- SUMMARY -->
 <section class="section">
  <h2 class="section-title">National Overview</h2>
  <p class="section-desc">ภาพรวมฐานข้อมูลระดับประเทศ</p>
  <div class="grid">
-  <div class="card">
-   <small>REGIONS</small>
-   <div class="big">06</div>
-   <small>ภูมิภาคที่ครอบคลุม</small>
+  <div class="card"><small>REGIONS</small><div class="big">06</div><small>ภูมิภาคที่ครอบคลุม</small></div>
+  <div class="card"><small>PROVINCES</small><div class="big">77</div><small>จังหวัดในประเทศไทย</small></div>
+  <div class="card"><small>VERIFIED RECORDS</small><div class="big" id="totalRecords">0</div><small>รายการข้อมูลที่บันทึกในเครื่องนี้</small></div>
+  <div class="card"><small>FORECAST MODEL</small><div class="big">Pending</div><small>รอข้อมูลสำหรับพัฒนาแบบจำลอง</small></div>
+ </div>
+</section>
+
+<!-- GOOGLE NEWS -->
+<section class="section" id="news">
+ <h2 class="section-title">Live Arsenic News Monitor</h2>
+ <p class="section-desc">ติดตามข่าวและประกาศเกี่ยวกับสารหนูในประเทศไทยจาก Google News</p>
+ <div class="panel">
+  <div class="news-toolbar">
+   <div>
+    <span class="tag">GOOGLE NEWS RSS</span>
+    <div class="news-status" id="newsStatus" aria-live="polite">กำลังเตรียมโหลดข่าว...</div>
+   </div>
+   <button class="btn" id="refreshNews" type="button">↻ Refresh News</button>
   </div>
-  <div class="card">
-   <small>PROVINCES</small>
-   <div class="big">77</div>
-   <small>จังหวัดในประเทศไทย</small>
+  <div class="news-grid" id="newsGrid">
+   <div class="empty">กำลังโหลดข่าวล่าสุด...</div>
   </div>
-  <div class="card">
-   <small>VERIFIED RECORDS</small>
-   <div class="big" id="totalRecords">0</div>
-   <small>รายการข้อมูลที่บันทึกในเครื่องนี้</small>
-  </div>
-  <div class="card">
-   <small>FORECAST MODEL</small>
-   <div class="big">Pending</div>
-   <small>รอข้อมูลสำหรับพัฒนาแบบจำลอง</small>
-  </div>
+  <p class="news-note">ระบบค้นหาข่าวผ่าน Google News RSS และตัวแปลง RSS เป็น JSON โดยรีเฟรชอัตโนมัติทุก 30 นาที ข่าวเป็นข้อมูลจากสื่อ/หน่วยงานภายนอก ไม่ใช่ผลตรวจคุณภาพน้ำแบบเรียลไทม์ และการอัปเดตขึ้นอยู่กับการเผยแพร่ข่าวกับผู้ให้บริการ RSS</p>
  </div>
 </section>
 
 <!-- REGIONS -->
 <section class="section" id="regions">
  <h2 class="section-title">Regional Intelligence</h2>
- <p class="section-desc">
-  เลือกภูมิภาคเพื่อดูจังหวัดและข้อมูลที่เกี่ยวข้อง
- </p>
+ <p class="section-desc">เลือกภูมิภาคเพื่อดูจังหวัดและข้อมูลที่เกี่ยวข้อง</p>
  <div class="grid" id="regionGrid"></div>
-
  <div class="panel">
   <h3 id="selectedRegion">Thailand</h3>
-  <p class="muted" id="regionDescription">
-   เลือกภูมิภาคเพื่อเริ่มสำรวจข้อมูล
-  </p>
+  <p class="muted" id="regionDescription">เลือกภูมิภาคเพื่อเริ่มสำรวจข้อมูล</p>
   <label>เลือกจังหวัด</label>
-  <select id="provinceSelect">
-   <option value="">เลือกจังหวัด</option>
-  </select>
-  <div id="provinceInfo" class="muted" style="font-size:13px;margin-top:12px">
-   ยังไม่ได้เลือกจังหวัด
-  </div>
+  <select id="provinceSelect"><option value="">เลือกจังหวัด</option></select>
+  <div id="provinceInfo" class="muted" style="font-size:13px;margin-top:12px">ยังไม่ได้เลือกจังหวัด</div>
  </div>
 </section>
 
 <!-- DATABASE -->
 <section class="section" id="database">
  <h2 class="section-title">Historical Database</h2>
- <p class="section-desc">
-  ฐานข้อมูลผลตรวจจริงและข้อมูลย้อนหลัง
- </p>
-
+ <p class="section-desc">ฐานข้อมูลผลตรวจจริงและข้อมูลย้อนหลัง</p>
  <div class="panel">
   <div class="filters">
-   <div>
-    <label>ภูมิภาค</label>
-    <select id="filterRegion">
-     <option value="">ทุกภูมิภาค</option>
-    </select>
-   </div>
-   <div>
-    <label>ประเภทตัวอย่าง</label>
-    <select id="filterType">
-     <option value="">ทุกประเภท</option>
-     <option>น้ำผิวดิน</option>
-     <option>น้ำบาดาล</option>
-     <option>ตะกอนดิน</option>
-     <option>ดิน</option>
-    </select>
-   </div>
-   <div>
-    <label>ค้นหาจังหวัด</label>
-    <input id="searchProvince" placeholder="ค้นหาจังหวัด...">
-   </div>
+   <div><label>ภูมิภาค</label><select id="filterRegion"><option value="">ทุกภูมิภาค</option></select></div>
+   <div><label>ประเภทตัวอย่าง</label><select id="filterType"><option value="">ทุกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+   <div><label>ค้นหาจังหวัด</label><input id="searchProvince" placeholder="ค้นหาจังหวัด..."></div>
   </div>
   <div class="table-wrap">
    <table>
-    <thead>
-     <tr>
-      <th>วันที่เก็บตัวอย่าง</th>
-      <th>จังหวัด</th>
-      <th>ประเภทตัวอย่าง</th>
-      <th>ผลตรวจ (mg/L หรือ mg/kg)</th>
-      <th>แหล่งที่มา</th>
-     </tr>
-    </thead>
-    <tbody id="databaseBody">
-     <tr><td colspan="5" class="empty">
-      ยังไม่มีข้อมูลผลตรวจที่นำเข้า
-     </td></tr>
-    </tbody>
+    <thead><tr><th>วันที่เก็บตัวอย่าง</th><th>จังหวัด</th><th>ประเภทตัวอย่าง</th><th>ผลตรวจ (mg/L หรือ mg/kg)</th><th>แหล่งที่มา</th></tr></thead>
+    <tbody id="databaseBody"><tr><td colspan="5" class="empty">ยังไม่มีข้อมูลผลตรวจที่นำเข้า</td></tr></tbody>
    </table>
   </div>
  </div>
@@ -278,147 +200,65 @@ footer{
 <!-- ANALYSIS -->
 <section class="section" id="analysis">
  <h2 class="section-title">Situation Analysis</h2>
- <p class="section-desc">
-  การวิเคราะห์ข้อมูลจากผลตรวจจริงและข้อมูลย้อนหลัง
- </p>
+ <p class="section-desc">การวิเคราะห์ข้อมูลจากผลตรวจจริงและข้อมูลย้อนหลัง</p>
  <div class="two">
-  <div class="panel">
-   <span class="tag">DATA COMPARISON</span>
-   <h3>Historical Comparison</h3>
-   <div class="chart" id="comparisonChart">
-    รอข้อมูลสำหรับสร้างกราฟเปรียบเทียบ
-   </div>
-   <p class="muted" style="font-size:12px">
-    เปรียบเทียบผลตรวจในพื้นที่เดียวกัน
-    และประเภทตัวอย่างเดียวกัน
-   </p>
-  </div>
-  <div class="panel">
-   <span class="tag">TREND ANALYSIS</span>
-   <h3>Environmental Trend</h3>
-   <div class="chart" id="trendChart">
-    รอข้อมูลตามช่วงเวลา
-   </div>
-   <p class="muted" style="font-size:12px">
-    ตรวจสอบแนวโน้มการเปลี่ยนแปลงของข้อมูล
-   </p>
-  </div>
+  <div class="panel"><span class="tag">DATA COMPARISON</span><h3>Historical Comparison</h3><div class="chart" id="comparisonChart">รอข้อมูลสำหรับสร้างกราฟเปรียบเทียบ</div><p class="muted" style="font-size:12px">เปรียบเทียบผลตรวจในพื้นที่เดียวกันและประเภทตัวอย่างเดียวกัน</p></div>
+  <div class="panel"><span class="tag">TREND ANALYSIS</span><h3>Environmental Trend</h3><div class="chart" id="trendChart">รอข้อมูลตามช่วงเวลา</div><p class="muted" style="font-size:12px">ตรวจสอบแนวโน้มการเปลี่ยนแปลงของข้อมูล</p></div>
  </div>
  <div class="panel">
   <h3>Analysis Methodology</h3>
-  <p class="muted">
-   1. ตรวจสอบความถูกต้องและแหล่งที่มาของข้อมูล<br>
-   2. แยกข้อมูลตามประเภทตัวอย่างและพื้นที่<br>
-   3. เปรียบเทียบผลตรวจในช่วงเวลาต่าง ๆ<br>
-   4. พิจารณาปัจจัยทางสิ่งแวดล้อมที่เกี่ยวข้อง<br>
-   5. สรุปแนวโน้มพร้อมระบุข้อจำกัด
-  </p>
+  <p class="muted">1. ตรวจสอบความถูกต้องและแหล่งที่มาของข้อมูล<br>2. แยกข้อมูลตามประเภทตัวอย่างและพื้นที่<br>3. เปรียบเทียบผลตรวจในช่วงเวลาต่าง ๆ<br>4. พิจารณาปัจจัยทางสิ่งแวดล้อมที่เกี่ยวข้อง<br>5. สรุปแนวโน้มพร้อมระบุข้อจำกัด</p>
  </div>
 </section>
 
 <!-- FORECAST -->
 <section class="section" id="forecast">
  <h2 class="section-title">Risk Assessment & Forecast</h2>
- <p class="section-desc">
-  การประเมินความเสี่ยงและคาดการณ์สถานการณ์
- </p>
+ <p class="section-desc">การประเมินความเสี่ยงและคาดการณ์สถานการณ์</p>
  <div class="panel">
   <span class="tag">FORECAST ENGINE</span>
   <h3>Predictive Environmental Analysis</h3>
-  <p class="muted">
-   ระบบจะประเมินแนวโน้มจากข้อมูลในอดีต
-   โดยพิจารณาคุณภาพข้อมูล ช่วงเวลา
-   และความเหมาะสมของแบบจำลอง
-  </p>
+  <p class="muted">ระบบจะประเมินแนวโน้มจากข้อมูลในอดีต โดยพิจารณาคุณภาพข้อมูล ช่วงเวลา และความเหมาะสมของแบบจำลอง</p>
   <p class="status">● ยังไม่มีแบบจำลองที่ผ่านการตรวจสอบ</p>
   <hr style="border:0;border-top:1px solid var(--line)">
   <h3>Risk Assessment</h3>
-  <p class="muted">
-   การประเมินจะพิจารณาค่าผลตรวจจริง
-   เทียบกับมาตรฐานที่ตรงกับประเภทตัวอย่าง
-   และการใช้งาน ไม่ใช้เกณฑ์เดียวกับทุกประเภท
-  </p>
+  <p class="muted">การประเมินจะพิจารณาค่าผลตรวจจริงเทียบกับมาตรฐานที่ตรงกับประเภทตัวอย่างและการใช้งาน ไม่ใช้เกณฑ์เดียวกับทุกประเภท</p>
  </div>
 </section>
 
 <!-- SOURCES -->
 <section class="section" id="sources">
  <h2 class="section-title">Research Sources</h2>
- <p class="section-desc">
-  แหล่งข้อมูลสำหรับการติดตามและตรวจสอบ
- </p>
+ <p class="section-desc">แหล่งข้อมูลสำหรับการติดตามและตรวจสอบ</p>
  <div class="grid">
-  <div class="card">
-   <h3>กรมควบคุมมลพิษ</h3>
-   <p class="muted">ข้อมูลคุณภาพสิ่งแวดล้อมและรายงานผลตรวจ</p>
-   <a class="source" href="https://www.pcd.go.th/" target="_blank">Official Website ↗</a>
-  </div>
-  <div class="card">
-   <h3>กรมทรัพยากรน้ำบาดาล</h3>
-   <p class="muted">ข้อมูลด้านน้ำบาดาลและคุณภาพน้ำ</p>
-   <a class="source" href="https://www.dgr.go.th/" target="_blank">Official Website ↗</a>
-  </div>
-  <div class="card">
-   <h3>กรมอนามัย</h3>
-   <p class="muted">ข้อมูลด้านสุขภาพและคุณภาพน้ำ</p>
-   <a class="source" href="https://www.anamai.moph.go.th/" target="_blank">Official Website ↗</a>
-  </div>
-  <div class="card">
-   <h3>กรมทรัพยากรธรณี</h3>
-   <p class="muted">ข้อมูลธรณีวิทยาและแหล่งแร่</p>
-   <a class="source" href="https://www.dmr.go.th/" target="_blank">Official Website ↗</a>
-  </div>
+  <div class="card"><h3>กรมควบคุมมลพิษ</h3><p class="muted">ข้อมูลคุณภาพสิ่งแวดล้อมและรายงานผลตรวจ</p><a class="source" href="https://www.pcd.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมทรัพยากรน้ำบาดาล</h3><p class="muted">ข้อมูลด้านน้ำบาดาลและคุณภาพน้ำ</p><a class="source" href="https://www.dgr.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมอนามัย</h3><p class="muted">ข้อมูลด้านสุขภาพและคุณภาพน้ำ</p><a class="source" href="https://www.anamai.moph.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
+  <div class="card"><h3>กรมทรัพยากรธรณี</h3><p class="muted">ข้อมูลธรณีวิทยาและแหล่งแร่</p><a class="source" href="https://www.dmr.go.th/" target="_blank" rel="noopener noreferrer">Official Website ↗</a></div>
  </div>
 </section>
 
 <!-- DATA ENTRY -->
 <section class="section">
  <h2 class="section-title">Data Management</h2>
- <p class="section-desc">
-  แบบฟอร์มเพิ่มข้อมูลผลตรวจที่ผ่านการตรวจสอบแล้ว
- </p>
+ <p class="section-desc">แบบฟอร์มเพิ่มข้อมูลผลตรวจที่ผ่านการตรวจสอบแล้ว</p>
  <div class="panel">
   <form id="recordForm">
    <div class="form-grid">
-    <div>
-     <label>วันที่เก็บตัวอย่าง</label>
-     <input type="date" id="sampleDate" required>
-    </div>
-    <div>
-     <label>จังหวัด</label>
-     <select id="recordProvince" required></select>
-    </div>
-    <div>
-     <label>ประเภทตัวอย่าง</label>
-     <select id="recordType" required>
-      <option value="">เลือกประเภท</option>
-      <option>น้ำผิวดิน</option>
-      <option>น้ำบาดาล</option>
-      <option>ตะกอนดิน</option>
-      <option>ดิน</option>
-     </select>
-    </div>
-    <div>
-     <label>ผลตรวจ</label>
-     <input type="number" id="recordValue" step="any" min="0" placeholder="ค่าที่ตรวจพบ" required>
-    </div>
+    <div><label>วันที่เก็บตัวอย่าง</label><input type="date" id="sampleDate" required></div>
+    <div><label>จังหวัด</label><select id="recordProvince" required></select></div>
+    <div><label>ประเภทตัวอย่าง</label><select id="recordType" required><option value="">เลือกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+    <div><label>ผลตรวจ</label><input type="number" id="recordValue" step="any" min="0" placeholder="ค่าที่ตรวจพบ" required></div>
    </div>
    <label>หน่วย</label>
-   <select id="recordUnit">
-    <option value="mg/L">mg/L</option>
-    <option value="mg/kg">mg/kg</option>
-   </select>
+   <select id="recordUnit"><option value="mg/L">mg/L</option><option value="mg/kg">mg/kg</option></select>
    <label>ลิงก์แหล่งอ้างอิง</label>
    <input type="url" id="recordSource" placeholder="https://..." required>
    <button class="btn" type="submit">Add Verified Record</button>
-   <p class="muted" style="font-size:11px">
-    บันทึกใน Local Storage ของเบราว์เซอร์นี้เท่านั้น
-    ยังไม่มีระบบตรวจสอบเอกสารหรือฐานข้อมูลกลาง
-   </p>
+   <p class="muted" style="font-size:11px">บันทึกใน Local Storage ของเบราว์เซอร์นี้เท่านั้น ยังไม่มีระบบตรวจสอบเอกสารหรือฐานข้อมูลกลาง</p>
   </form>
  </div>
 </section>
-
 </main>
 
 <footer>
@@ -430,39 +270,15 @@ footer{
 
 <script>
 const regions = {
- "ภาคเหนือ":[
- "เชียงใหม่","เชียงราย","ลำพูน","ลำปาง","แพร่","น่าน",
- "พะเยา","แม่ฮ่องสอน","อุตรดิตถ์","ตาก","สุโขทัย",
- "พิษณุโลก","พิจิตร","กำแพงเพชร","เพชรบูรณ์","นครสวรรค์","อุทัยธานี"
- ],
- "ภาคตะวันออกเฉียงเหนือ":[
- "นครราชสีมา","ขอนแก่น","อุดรธานี","หนองคาย","เลย",
- "สกลนคร","นครพนม","มุกดาหาร","กาฬสินธุ์","มหาสารคาม",
- "ร้อยเอ็ด","ยโสธร","อำนาจเจริญ","อุบลราชธานี",
- "ศรีสะเกษ","สุรินทร์","บุรีรัมย์","ชัยภูมิ","หนองบัวลำภู","บึงกาฬ"
- ],
- "ภาคกลาง":[
- "กรุงเทพมหานคร","นนทบุรี","ปทุมธานี","พระนครศรีอยุธยา",
- "อ่างทอง","สิงห์บุรี","ชัยนาท","ลพบุรี","สระบุรี",
- "นครนายก","สุพรรณบุรี","นครปฐม","สมุทรปราการ",
- "สมุทรสาคร","สมุทรสงคราม"
- ],
- "ภาคตะวันออก":[
- "ชลบุรี","ระยอง","จันทบุรี","ตราด","ฉะเชิงเทรา",
- "ปราจีนบุรี","สระแก้ว"
- ],
- "ภาคตะวันตก":[
- "กาญจนบุรี","ราชบุรี","เพชรบุรี","ประจวบคีรีขันธ์"
- ],
- "ภาคใต้":[
- "ชุมพร","ระนอง","สุราษฎร์ธานี","พังงา","ภูเก็ต",
- "กระบี่","นครศรีธรรมราช","ตรัง","พัทลุง","สงขลา",
- "สตูล","ปัตตานี","ยะลา","นราธิวาส"
- ]
+ "ภาคเหนือ":["เชียงใหม่","เชียงราย","ลำพูน","ลำปาง","แพร่","น่าน","พะเยา","แม่ฮ่องสอน","อุตรดิตถ์","ตาก","สุโขทัย","พิษณุโลก","พิจิตร","กำแพงเพชร","เพชรบูรณ์","นครสวรรค์","อุทัยธานี"],
+ "ภาคตะวันออกเฉียงเหนือ":["นครราชสีมา","ขอนแก่น","อุดรธานี","หนองคาย","เลย","สกลนคร","นครพนม","มุกดาหาร","กาฬสินธุ์","มหาสารคาม","ร้อยเอ็ด","ยโสธร","อำนาจเจริญ","อุบลราชธานี","ศรีสะเกษ","สุรินทร์","บุรีรัมย์","ชัยภูมิ","หนองบัวลำภู","บึงกาฬ"],
+ "ภาคกลาง":["กรุงเทพมหานคร","นนทบุรี","ปทุมธานี","พระนครศรีอยุธยา","อ่างทอง","สิงห์บุรี","ชัยนาท","ลพบุรี","สระบุรี","นครนายก","สุพรรณบุรี","นครปฐม","สมุทรปราการ","สมุทรสาคร","สมุทรสงคราม"],
+ "ภาคตะวันออก":["ชลบุรี","ระยอง","จันทบุรี","ตราด","ฉะเชิงเทรา","ปราจีนบุรี","สระแก้ว"],
+ "ภาคตะวันตก":["กาญจนบุรี","ราชบุรี","เพชรบุรี","ประจวบคีรีขันธ์"],
+ "ภาคใต้":["ชุมพร","ระนอง","สุราษฎร์ธานี","พังงา","ภูเก็ต","กระบี่","นครศรีธรรมราช","ตรัง","พัทลุง","สงขลา","สตูล","ปัตตานี","ยะลา","นราธิวาส"]
 };
 
 const icons=["◈","◇","⌁","◎","△","○"];
-let selected="";
 let records=JSON.parse(localStorage.getItem("arsenicRecords")||"[]");
 
 const regionGrid=document.getElementById("regionGrid");
@@ -479,7 +295,6 @@ Object.entries(regions).forEach(([name,provinces],i)=>{
  <div class="region-count">${provinces.length} จังหวัด</div>`;
  card.onclick=()=>selectRegion(name,card);
  regionGrid.appendChild(card);
-
  filterRegion.add(new Option(name,name));
 });
 
@@ -489,24 +304,21 @@ function fillProvinces(select,list){
 }
 
 function selectRegion(name,card){
- selected=name;
  document.querySelectorAll(".region").forEach(x=>x.classList.remove("active"));
  card.classList.add("active");
  document.getElementById("selectedRegion").textContent=name;
- document.getElementById("regionDescription").textContent=
- "เลือกจังหวัดเพื่อสำรวจข้อมูลภายใน"+name;
+ document.getElementById("regionDescription").textContent="เลือกจังหวัดเพื่อสำรวจข้อมูลภายใน"+name;
  fillProvinces(provinceSelect,regions[name]);
  provinceSelect.focus();
 }
 
-let allProvinces=Object.values(regions).flat();
+const allProvinces=Object.values(regions).flat();
 fillProvinces(recordProvince,allProvinces);
 
 provinceSelect.onchange=()=>{
  const p=provinceSelect.value;
  document.getElementById("provinceInfo").textContent=
- p ? "จังหวัด "+p+" : ยังไม่มีข้อมูลผลตรวจที่นำเข้าในฐานข้อมูล" :
- "ยังไม่ได้เลือกจังหวัด";
+ p?"จังหวัด "+p+" : ยังไม่มีข้อมูลผลตรวจที่นำเข้าในฐานข้อมูล":"ยังไม่ได้เลือกจังหวัด";
 };
 
 function getRegion(province){
@@ -540,8 +352,7 @@ function render(){
    const td=document.createElement("td");
    const a=document.createElement("a");
    a.href=r.source;a.target="_blank";a.rel="noopener noreferrer";
-   a.textContent="View Source";
-   a.className="source";
+   a.textContent="View Source";a.className="source";
    td.appendChild(a);tr.appendChild(td);
    body.appendChild(tr);
   });
@@ -565,11 +376,128 @@ document.getElementById("recordForm").onsubmit=e=>{
   unit:document.getElementById("recordUnit").value,
   source:document.getElementById("recordSource").value
  });
+
  localStorage.setItem("arsenicRecords",JSON.stringify(records));
  e.target.reset();
  render();
  alert("บันทึกข้อมูลในเบราว์เซอร์แล้ว");
 };
+
+/* =====================================
+   GOOGLE NEWS RSS - AUTO REFRESH
+===================================== */
+
+const NEWS_QUERY =
+ '(สารหนู OR arsenic) (ประเทศไทย OR Thailand OR แม่น้ำกก OR แม่น้ำสาย OR แม่น้ำรวก)';
+
+const NEWS_FEED =
+ 'https://news.google.com/rss/search?q=' +
+ encodeURIComponent(NEWS_QUERY) +
+ '&hl=th&gl=TH&ceid=TH:th';
+
+const RSS_API =
+ 'https://api.rss2json.com/v1/api.json?rss_url=' +
+ encodeURIComponent(NEWS_FEED);
+
+const newsGrid=document.getElementById("newsGrid");
+const newsStatus=document.getElementById("newsStatus");
+const refreshButton=document.getElementById("refreshNews");
+
+function cleanNewsText(html){
+ const doc=new DOMParser().parseFromString(html||"","text/html");
+ return (doc.body.textContent||"").replace(/\s+/g," ").trim();
+}
+
+function formatNewsDate(value){
+ const date=new Date(value);
+ if(Number.isNaN(date.getTime()))return "ไม่ระบุวันที่";
+ return date.toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"});
+}
+
+function createNewsCard(item){
+ const card=document.createElement("article");
+ card.className="news-card";
+
+ const meta=document.createElement("div");
+ meta.className="news-meta";
+ meta.textContent=(item.author||"Google News")+" · "+formatNewsDate(item.pubDate);
+
+ const title=document.createElement("h3");
+ title.textContent=item.title||"ไม่มีหัวข้อข่าว";
+
+ const snippet=document.createElement("p");
+ snippet.className="news-snippet";
+ snippet.textContent=cleanNewsText(item.description)||"ไม่มีรายละเอียดข่าว";
+
+ const link=document.createElement("a");
+ link.className="news-link";
+ link.textContent="อ่านข่าวต้นฉบับ ↗";
+ link.href=item.link;
+ link.target="_blank";
+ link.rel="noopener noreferrer";
+
+ card.append(meta,title,snippet,link);
+ return card;
+}
+
+async function loadGoogleNews(){
+ if(refreshButton.disabled)return;
+
+ refreshButton.disabled=true;
+ newsStatus.textContent="กำลังค้นหาข่าวล่าสุด...";
+
+ try{
+  const response=await fetch(RSS_API,{cache:"no-store"});
+  if(!response.ok)throw new Error("ไม่สามารถเชื่อมต่อ RSS ได้");
+
+  const data=await response.json();
+  if(data.status!=="ok"||!Array.isArray(data.items)){
+   throw new Error("ข้อมูลข่าวไม่ถูกต้อง");
+  }
+
+  const items=data.items.slice(0,12);
+  newsGrid.replaceChildren();
+
+  if(items.length===0){
+   const empty=document.createElement("div");
+   empty.className="empty";
+   empty.textContent="ไม่พบข่าวที่ตรงกับคำค้น";
+   newsGrid.appendChild(empty);
+  }else{
+   items.forEach(item=>{
+    try{
+     const url=new URL(item.link);
+     if(url.protocol==="https:"||url.protocol==="http:"){
+      newsGrid.appendChild(createNewsCard(item));
+     }
+    }catch(error){}
+   });
+  }
+
+  newsStatus.textContent=
+   "อัปเดตล่าสุด "+new Date().toLocaleString("th-TH")+
+   " · "+items.length+" ข่าว";
+
+ }catch(error){
+  newsStatus.textContent="โหลดข่าวไม่สำเร็จ: "+error.message;
+
+  const message=document.createElement("div");
+  message.className="empty";
+  message.textContent="ไม่สามารถโหลดข่าวได้ในขณะนี้ กด Refresh News เพื่อลองอีกครั้ง";
+  newsGrid.replaceChildren(message);
+
+ }finally{
+  refreshButton.disabled=false;
+ }
+}
+
+refreshButton.addEventListener("click",loadGoogleNews);
+
+// โหลดข่าวเมื่อเปิดหน้าเว็บ
+loadGoogleNews();
+
+// รีเฟรชข่าวทุก 30 นาที
+setInterval(loadGoogleNews,30*60*1000);
 
 render();
 </script>
