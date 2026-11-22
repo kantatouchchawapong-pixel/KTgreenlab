@@ -64,6 +64,15 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
 .weather-map-controls button{border:1px solid var(--border);background:white;color:var(--text);padding:7px 10px;border-radius:8px;font-size:11px}
 .weather-map-controls button.active{background:var(--light);border-color:#a9d2b5;color:var(--green)}
 #weatherMap{height:510px;width:100%;border-radius:12px;overflow:hidden;background:#e8f0eb}
+.map-search{display:flex;gap:8px;margin:10px 0 8px}
+.map-search input{flex:1;width:100%;min-width:0}
+.map-search button{flex:none}
+.map-search-results{display:none;background:white;border:1px solid var(--border);border-radius:11px;margin:0 0 10px;overflow:hidden;box-shadow:0 5px 18px #183d2912;max-height:260px;overflow-y:auto}
+.map-search-results.show{display:block}
+.map-search-result{display:block;width:100%;text-align:left;padding:11px 13px;background:white;border:0;border-bottom:1px solid var(--border);color:var(--text);font-size:12px;line-height:1.6}
+.map-search-result:last-child{border-bottom:0}
+.map-search-result:hover{background:var(--light);color:var(--green)}
+.map-search-message{padding:11px 13px;font-size:12px;color:var(--muted)}
 .map-legend{display:flex;gap:12px;flex-wrap:wrap;padding:10px 2px 0;font-size:10px;color:var(--muted)}
 .legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
 .weather-side{display:grid;gap:13px}.weather-current{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
@@ -84,7 +93,7 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
 .leaflet-popup-content{font-family:'Prompt',sans-serif;font-size:12px}
 @media(max-width:900px){.weather-layout{grid-template-columns:1fr}#weatherMap{height:420px}}
 @media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}nav{display:none;position:absolute;left:0;right:0;top:100%;background:white;padding:12px 18px;border-bottom:1px solid var(--border)}nav.open{display:grid;grid-template-columns:repeat(2,1fr)}.menu-toggle{display:block}}
-@media(max-width:600px){main{padding:16px 13px 40px}.hero{padding:25px 20px}.grid,.grid.two{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{padding:13px}.metric strong{font-size:22px}.header-inner{padding:12px 14px}#weatherMap{height:360px}.weather-map-card{padding:10px}}
+@media(max-width:600px){main{padding:16px 13px 40px}.hero{padding:25px 20px}.grid,.grid.two{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{padding:13px}.metric strong{font-size:22px}.header-inner{padding:12px 14px}#weatherMap{height:360px}.weather-map-card{padding:10px}.map-search{gap:6px}.map-search button{padding:10px 12px}}
 </style>
 </head>
 <body>
@@ -119,8 +128,8 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
 </section>
 
 <section class="page" id="weather">
-  <div class="section-head"><div><h2>🌦️ แผนที่อากาศแบบเจาะพื้นที่</h2><p>ซูมแผนที่ คลิกตำแหน่ง และดูความแตกต่างของอากาศแต่ละบริเวณ</p></div></div>
-  <div class="info">คลิกบนแผนที่เพื่อดูพยากรณ์ของพิกัดนั้น วงสีแสดงค่าพยากรณ์โดยประมาณในพื้นที่ใกล้เคียง ไม่ใช่ข้อมูลตรวจวัดจริงระดับถนน</div>
+  <div class="section-head"><div><h2>🌦️ แผนที่อากาศแบบเจาะพื้นที่</h2><p>ค้นหาถนน ซูมแผนที่ คลิกตำแหน่ง และดูความแตกต่างของอากาศแต่ละบริเวณ</p></div></div>
+  <div class="info">ค้นหาถนนหรือสถานที่จากช่องค้นหา หรือคลิกบนแผนที่เพื่อดูพยากรณ์ของพิกัดนั้น วงสีแสดงค่าพยากรณ์โดยประมาณ ไม่ใช่ข้อมูลตรวจวัดจริงระดับถนน</div>
   <div class="weather-layout">
     <div class="card weather-map-card">
       <div class="weather-map-head">
@@ -131,7 +140,15 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
           <button onclick="refreshWeatherMap()">รีเฟรช</button>
         </div>
       </div>
+
+      <div class="map-search">
+        <input id="mapSearchInput" type="search" placeholder="ค้นหาถนน สถานที่ เขต หรือจังหวัด..." autocomplete="off">
+        <button class="btn btn-green" onclick="searchMapPlace()">ค้นหา</button>
+      </div>
+      <div id="mapSearchResults" class="map-search-results"></div>
       <div id="weatherMap"></div>
+      <p class="small">ค้นหาด้วย OpenStreetMap · ผลการค้นหาอาจไม่ครอบคลุมทุกซอย</p>
+
       <div class="map-legend">
         <span><i class="legend-dot" style="background:#269b62"></i>อากาศทั่วไป</span>
         <span><i class="legend-dot" style="background:#e99b38"></i>อากาศร้อน</span>
@@ -206,7 +223,7 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
   <div class="section-head"><div><h2>📖 คู่มือการใช้งาน</h2><p>แนะนำสำหรับผู้ใช้ใหม่</p></div></div>
   <div class="card"><h3>เริ่มต้นใช้งาน KT Green Hub</h3>
     <div class="guide-step"><div class="guide-number">1</div><div><strong>เลือกเมนูที่ต้องการ</strong><p>ใช้แถบเมนูด้านบน หรือเลือกการ์ดจากหน้าแรก</p></div></div>
-    <div class="guide-step"><div class="guide-number">2</div><div><strong>เลือกพื้นที่หรือหมวดหมู่</strong><p>ในหน้าสภาพอากาศให้คลิกตำแหน่งบนแผนที่หรือเลือกจังหวัด</p></div></div>
+    <div class="guide-step"><div class="guide-number">2</div><div><strong>ค้นหาหรือเลือกพื้นที่</strong><p>ในหน้าสภาพอากาศสามารถค้นหาชื่อถนน สถานที่ เขต จังหวัด หรือคลิกตำแหน่งบนแผนที่ได้</p></div></div>
     <div class="guide-step"><div class="guide-number">3</div><div><strong>ดูข้อมูลพยากรณ์</strong><p>รอระบบดึงข้อมูลแบบจำลองของพิกัดที่เลือก</p></div></div>
     <div class="guide-step"><div class="guide-number">4</div><div><strong>ตรวจสอบแหล่งที่มาของข้อมูล</strong><p>ข้อมูลจากผู้ให้บริการภายนอกอาจมีเวลาล่าช้า ควรตรวจสอบวันเวลาและแหล่งอ้างอิง</p></div></div>
   </div>
@@ -222,6 +239,7 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
 const WORKER="https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev";
 const $=id=>document.getElementById(id);
 const safeText=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
 function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
@@ -281,12 +299,10 @@ function initWeatherMap(){
  if(weatherMap||!window.L)return;
  weatherMap=L.map("weatherMap",{scrollWheelZoom:true,minZoom:3,maxZoom:20,zoomControl:true}).setView([15.2,101],5);
 
- /* ถนนและแผนที่พื้นฐาน */
  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-  maxZoom:20,attribution:'&copy; OpenStreetMap contributors'
+  maxZoom:19,attribution:'&copy; OpenStreetMap contributors'
  }).addTo(weatherMap);
 
- /* คลิกตำแหน่งใดก็ได้เพื่อดูอากาศ */
  weatherMap.on("click",e=>{
   selectedLocation={lat:e.latlng.lat,lon:e.latlng.lng,name:"ตำแหน่งที่เลือก"};
   setSelectedMarker(e.latlng.lat,e.latlng.lng);
@@ -298,11 +314,126 @@ function initWeatherMap(){
  radarRefreshTimer=setInterval(loadRadar,10*60*1000);
  setTimeout(()=>weatherMap.invalidateSize(),200);
 }
+
 function setSelectedMarker(lat,lon){
  if(selectedMarker)weatherMap.removeLayer(selectedMarker);
  selectedMarker=L.marker([lat,lon]).addTo(weatherMap);
  selectedMarker.bindPopup("กำลังโหลดข้อมูลพยากรณ์...").openPopup();
 }
+
+/* ROAD AND PLACE SEARCH */
+let searchAbortController=null;
+let lastSearchTime=0;
+
+async function searchMapPlace(){
+ const input=$("mapSearchInput");
+ const results=$("mapSearchResults");
+ const query=input.value.trim();
+
+ if(!query){
+  results.innerHTML='<div class="map-search-message">กรุณาพิมพ์ชื่อถนนหรือสถานที่</div>';
+  results.classList.add("show");
+  return;
+ }
+
+ if(searchAbortController)searchAbortController.abort();
+ searchAbortController=new AbortController();
+
+ results.innerHTML='<div class="map-search-message">กำลังค้นหาสถานที่...</div>';
+ results.classList.add("show");
+
+ try{
+  const now=Date.now();
+  const wait=Math.max(0,1100-(now-lastSearchTime));
+  if(wait)await new Promise(resolve=>setTimeout(resolve,wait));
+  lastSearchTime=Date.now();
+
+  const params=new URLSearchParams({
+   q:query,
+   format:"jsonv2",
+   addressdetails:"1",
+   limit:"7",
+   countrycodes:"th",
+   "accept-language":"th"
+  });
+
+  const response=await fetch(
+   "https://nominatim.openstreetmap.org/search?"+params.toString(),
+   {
+    signal:searchAbortController.signal,
+    headers:{"Accept":"application/json"}
+   }
+  );
+
+  if(!response.ok)throw Error("HTTP "+response.status);
+
+  const places=await response.json();
+
+  if(!places.length){
+   results.innerHTML='<div class="map-search-message">ไม่พบสถานที่ ลองใช้ชื่อถนนหรือชื่อเขตอื่น</div>';
+   return;
+  }
+
+  results.innerHTML="";
+
+  places.forEach(place=>{
+   const button=document.createElement("button");
+   button.type="button";
+   button.className="map-search-result";
+
+   const name=document.createElement("strong");
+   name.textContent=place.name||"สถานที่ไม่ระบุชื่อ";
+
+   const detail=document.createElement("div");
+   detail.className="small";
+   detail.textContent=place.display_name||"";
+
+   button.appendChild(name);
+   button.appendChild(detail);
+   button.addEventListener("click",()=>selectMapSearchResult(place));
+   results.appendChild(button);
+  });
+
+ }catch(error){
+  if(error.name==="AbortError")return;
+  results.innerHTML='<div class="map-search-message">ค้นหาไม่สำเร็จ: '+safeText(error.message)+'</div>';
+ }
+}
+
+function selectMapSearchResult(place){
+ const lat=Number(place.lat);
+ const lon=Number(place.lon);
+
+ if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
+
+ const name=place.name||place.display_name||"สถานที่ที่ค้นหา";
+
+ selectedLocation={lat:lat,lon:lon,name:name};
+
+ weatherMap.setView([lat,lon],17,{animate:true});
+ setSelectedMarker(lat,lon);
+
+ $("mapSearchInput").value=name;
+ $("mapSearchResults").classList.remove("show");
+
+ loadWeatherAt(lat,lon,name);
+}
+
+$("mapSearchInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter"){
+  e.preventDefault();
+  searchMapPlace();
+ }
+});
+
+document.addEventListener("click",e=>{
+ const results=$("mapSearchResults");
+ const input=$("mapSearchInput");
+ if(!results.contains(e.target)&&e.target!==input){
+  results.classList.remove("show");
+ }
+});
+
 function toggleAreas(){
  areasEnabled=!areasEnabled;
  $("areaToggle").textContent="พื้นที่อากาศ: "+(areasEnabled?"เปิด":"ปิด");
@@ -334,7 +465,7 @@ async function loadRadar(){
  }
 }
 
-/* GRID WEATHER: sample multiple locations across Thailand */
+/* GRID WEATHER */
 function makeWeatherGrid(){
  const points=[];
  for(let lat=6.5;lat<=20.3;lat+=0.65){
@@ -367,8 +498,7 @@ async function loadAreaWeather(){
     if(!Number.isFinite(Number(c.temperature_2m)))return;
     const color=weatherColor(Number(c.weather_code),Number(c.temperature_2m),rainProb);
     const circle=L.circle([batch[i].lat,batch[i].lon],{
-     radius:26000,color:color,weight:0,fillColor:color,fillOpacity:.20,
-     interactive:true
+     radius:26000,color:color,weight:0,fillColor:color,fillOpacity:.20,interactive:true
     });
     circle.bindPopup(
      "<strong>พยากรณ์บริเวณนี้</strong><br>"+
@@ -395,7 +525,7 @@ function refreshWeatherMap(){
  loadWeatherAt(selectedLocation.lat,selectedLocation.lon,selectedLocation.name);
 }
 
-/* WEATHER DETAIL AT ANY COORDINATE */
+/* WEATHER DETAIL */
 function analyseWeather(d){
  const c=d.current||{},h=d.hourly||{},day=d.daily||{};
  let nowIndex=(h.time||[]).findIndex(t=>t>=c.time);if(nowIndex<0)nowIndex=0;
@@ -435,15 +565,18 @@ async function loadWeatherAt(lat,lon,name){
   $("weatherStatus").textContent=name+" · พิกัด "+lat.toFixed(4)+", "+lon.toFixed(4)+" · "+String(c.time||"").replace("T"," ")+" น.";
   $("weatherStatus").dataset.loaded="1";
   $("weatherInsight").textContent=analyseWeather(d);
+
   if(selectedMarker){
    selectedMarker.setPopupContent("<strong>"+safeText(name)+"</strong><br>"+weatherEmoji(Number(c.weather_code))+" "+weatherText(Number(c.weather_code))+"<br>อุณหภูมิ "+(c.temperature_2m??"—")+" °C<br>ฝน "+(c.precipitation??"—")+" มม.");
   }
+
   const h=d.hourly||{},times=h.time||[];
   let start=times.findIndex(t=>t>=c.time);if(start<0)start=0;
   $("hourly").innerHTML='<div class="hourly-strip">'+times.slice(start,start+12).map((t,n)=>{
    const i=start+n;
    return '<div class="hour-item"><strong>'+t.slice(11,16)+'</strong><div style="font-size:19px;margin:5px 0">'+weatherEmoji(Number(h.weather_code?.[i]))+'</div><b>'+(h.temperature_2m?.[i]??"—")+'°</b><span>ฝน '+(h.precipitation_probability?.[i]??"—")+'%</span></div>';
   }).join("")+'</div>';
+
   const daily=d.daily||{};
   $("dailyForecast").innerHTML=(daily.time||[]).map((date,i)=>{
    const dayName=new Date(date+"T12:00:00+07:00").toLocaleDateString("th-TH",{weekday:"short",day:"numeric",month:"short"});
