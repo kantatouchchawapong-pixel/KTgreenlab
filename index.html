@@ -4,758 +4,501 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f2f7f2">
+<meta name="theme-color" content="#edf5ee">
 <title>KT Green Hub | Thailand Environmental Hub</title>
-<meta name="description" content="KT Green Hub ศูนย์รวมข่าวสารและความรู้ด้านสิ่งแวดล้อมของประเทศไทย ครอบคลุมมลพิษ น้ำ อากาศ ขยะ ป่าไม้ และสภาพภูมิอากาศ">
-<meta name="keywords" content="KT Green Hub, Thailand Environmental Hub, สิ่งแวดล้อมไทย, สารหนู, มลพิษ, PM2.5, รีไซเคิล">
-<meta property="og:title" content="KT Green Hub | Thailand Environmental Hub">
-<meta property="og:description" content="ศูนย์รวมข้อมูลและความรู้ด้านสิ่งแวดล้อมของประเทศไทย">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://kantatouchchawapong-pixel.github.io/KTgreenlab/">
-<link rel="canonical" href="https://kantatouchchawapong-pixel.github.io/KTgreenlab/">
-
+<meta name="description" content="ศูนย์ข้อมูลสิ่งแวดล้อมประเทศไทย ติดตามสภาพอากาศ ปริมาณฝน สถานการณ์น้ำ ข่าว และความรู้">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root{
- --bg:#f3f7f2;--surface:#fff;--surface2:#eaf2e9;
- --ink:#183328;--muted:#718176;--line:#dfe9df;
- --green:#28784e;--green2:#3c9565;--accent:#d9eddd;
- --red:#bd5959;--yellow:#b98731;
- --shadow:0 8px 28px rgba(30,70,43,.06);
+ --bg:#f2f7f2;--surface:#fff;--surface2:#e8f1e8;
+ --ink:#19372a;--muted:#718176;--line:#dce8dd;
+ --green:#28784e;--red:#b94d4d;--amber:#a8751c
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:90px}
+html{scroll-behavior:smooth;scroll-padding-top:85px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Thai",sans-serif}
 a{color:var(--green);text-decoration:none}
 button,input,select{font:inherit}
-button{cursor:pointer}
-header{
- position:sticky;top:0;z-index:20;background:var(--surface);
- border-bottom:1px solid var(--line);padding:14px 5%;
- display:flex;align-items:center;justify-content:space-between;gap:20px
-}
-.brand{font-weight:900;font-size:20px;letter-spacing:.5px;white-space:nowrap}
+header{position:sticky;top:0;z-index:100;background:white;border-bottom:1px solid var(--line);padding:13px 5%;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{font-weight:900;font-size:20px;white-space:nowrap}
 .brand span{color:var(--green)}
 .brand small{display:block;font-size:9px;letter-spacing:2px;color:var(--muted);font-weight:500}
-nav{display:flex;gap:17px;overflow-x:auto}
+nav{display:flex;gap:15px;overflow:auto}
 nav a{font-size:12px;color:var(--muted);white-space:nowrap}
-nav a:hover{color:var(--green)}
-.theme-toggle,.menu-button{
- border:1px solid var(--line);background:var(--surface2);color:var(--ink);
- padding:10px 13px;border-radius:8px;min-height:42px
-}
-main{max-width:1250px;margin:auto;padding:30px 5%}
-.hero{
- display:grid;grid-template-columns:1.1fr .9fr;overflow:hidden;
- background:var(--surface);border:1px solid var(--line);
- border-radius:18px;box-shadow:var(--shadow)
-}
-.hero-content{padding:45px}
+main{max-width:1250px;margin:auto;padding:28px 5%}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.hero-copy{padding:40px}
 .eyebrow{font-size:11px;letter-spacing:2px;color:var(--green);font-weight:700}
-h1{font-size:38px;line-height:1.25;margin:16px 0}
-.hero p{color:var(--muted);line-height:1.8}
-.hero-art{
- min-height:310px;background:linear-gradient(145deg,#dcefe0,#a9d4b4);
- display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden
-}
-.hero-art:before,.hero-art:after{
- content:"";position:absolute;border-radius:50%;background:#fff5;
- width:300px;height:300px
-}
-.hero-art:after{width:180px;height:180px;background:#fff8}
-.hero-symbol{font-size:110px;z-index:1}
-.btn{
- border:0;background:var(--green);color:white;border-radius:8px;
- padding:12px 17px;min-height:43px;font-weight:700
-}
-.btn:hover{background:var(--green2)}
-.btn.secondary{background:var(--surface2);color:var(--green);border:1px solid var(--line)}
-.btn:disabled{opacity:.55;cursor:wait}
-.section{margin-top:43px;scroll-margin-top:90px}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap}
+h1{font-size:36px;line-height:1.25;margin:14px 0}
+.hero p,.desc{color:var(--muted);line-height:1.8;font-size:13px}
+.hero-art{min-height:270px;background:linear-gradient(145deg,#dcefe0,#a9d4b4);display:grid;place-items:center;font-size:100px}
+.btn{border:0;background:var(--green);color:white;border-radius:8px;padding:11px 16px;min-height:42px;font-weight:700;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:wait}
+.section{margin-top:38px;scroll-margin-top:90px}
 .section-title{font-size:22px;margin:0 0 6px}
-.section-desc{font-size:13px;color:var(--muted);margin:0;line-height:1.7}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-top:17px}
-.card,.panel{
- background:var(--surface);border:1px solid var(--line);
- border-radius:12px;padding:19px;box-shadow:var(--shadow)
-}
+.section-head,.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px;margin-top:15px}
+.card,.panel{background:white;border:1px solid var(--line);border-radius:12px;padding:18px}
 .card h3{font-size:16px;margin:8px 0}
 .card p{font-size:12px;color:var(--muted);line-height:1.7}
-.stat{font-size:27px;font-weight:800;color:var(--green);margin:10px 0}
-.icon{font-size:26px}
-.tag{
- display:inline-block;background:var(--accent);color:var(--green);
- border-radius:5px;padding:5px 9px;font-size:10px;font-weight:700
-}
-.panel{margin-top:15px}
-.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.status{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6}
-.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:13px;margin-top:16px}
-.news-card{
- background:var(--surface);border:1px solid var(--line);border-radius:11px;
- padding:17px;display:flex;flex-direction:column;min-height:205px
-}
-.news-card h3{font-size:15px;line-height:1.6;margin:10px 0}
-.news-meta{font-size:10px;color:var(--muted);line-height:1.6}
-.news-snippet{font-size:12px;color:var(--muted);line-height:1.7;flex:1}
-.news-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
-.score{font-size:10px;color:var(--green);background:var(--accent);padding:5px 7px;border-radius:5px}
-.news-link{font-size:12px;font-weight:700}
-.empty{padding:25px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:15px 0}
-input,select{
- width:100%;border:1px solid var(--line);border-radius:7px;
- background:var(--surface);color:var(--ink);padding:11px;font-size:13px
-}
-label{font-size:12px;color:var(--muted)}
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:600px}
-th,td{padding:12px 9px;border-bottom:1px solid var(--line);font-size:12px;text-align:left}
-th{color:var(--muted);font-weight:600}
-.region{cursor:pointer;transition:.2s}
-.region:hover,.region.active{border-color:var(--green);background:var(--surface2)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.source-list{display:grid;gap:9px;margin-top:12px}
-.source-item{padding:12px;border:1px solid var(--line);border-radius:8px}
-.source-item p{font-size:11px;color:var(--muted);margin:5px 0}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.form-field{display:grid;gap:5px}
-.note{font-size:11px;color:var(--muted);line-height:1.7}
-footer{margin-top:55px;padding:30px 5%;background:var(--surface);border-top:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px}
-.module-card{min-height:150px;display:flex;flex-direction:column}
-.module-card .btn{margin-top:auto;align-self:flex-start}
+.icon{font-size:25px}
+.stat{font-size:27px;font-weight:800;color:var(--green);margin:8px 0}
+.tag,.badge{display:inline-block;background:var(--surface2);color:var(--green);border-radius:20px;padding:6px 10px;font-size:10px;font-weight:700}
+.badge.warn{color:var(--amber);background:#fff2d5}
+.badge.err{color:var(--red);background:#fae5e5}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:14px 0}
+input,select{width:100%;border:1px solid var(--line);border-radius:7px;background:white;color:var(--ink);padding:11px;font-size:13px}
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}
+.live-layout{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.map{height:460px;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:var(--surface2)}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.statbox{background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:13px;min-height:96px}
+.statbox small{display:block;color:var(--muted);font-size:11px}
+.statbox strong{display:block;font-size:24px;color:var(--green);margin:7px 0}
+.statbox span{font-size:10px;color:var(--muted)}
+.hours{display:grid;grid-template-columns:repeat(6,100px);gap:8px;overflow-x:auto;padding:5px 0 10px}
+.hour{border:1px solid var(--line);border-radius:9px;padding:10px;background:white}
+.hour b{display:block;margin:6px 0}
+.hour small{font-size:10px;color:var(--muted)}
+.rows{display:grid;gap:8px;margin-top:12px}
+.rowitem{display:flex;justify-content:space-between;gap:12px;padding:11px;border:1px solid var(--line);border-radius:8px;font-size:12px}
+.rowitem span{color:var(--muted)}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:14px}
+.news{border:1px solid var(--line);border-radius:10px;padding:15px;background:white;display:flex;flex-direction:column;min-height:190px}
+.news h3{font-size:14px;line-height:1.6}
+.news p{font-size:12px;color:var(--muted);line-height:1.7;flex:1}
+.news small,.note,.status{font-size:11px;color:var(--muted);line-height:1.7}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:grid;gap:5px}
 .progress{height:8px;border-radius:10px;background:var(--surface2);overflow:hidden;margin:12px 0}
-.progress span{display:block;height:100%;background:var(--green);width:0}
-body[data-theme="dark"]{
- --bg:#101914;--surface:#19251d;--surface2:#25382a;
- --ink:#e9f2e9;--muted:#a0b2a3;--line:#34473a;
- --green:#78c995;--green2:#94d9aa;--accent:#294832;
- --shadow:0 8px 28px #0002;color-scheme:dark
-}
-body[data-theme="dark"] .hero-art{background:linear-gradient(145deg,#294832,#365f45)}
-body[data-theme="dark"] .news-card{background:var(--surface)}
-@media(max-width:760px){
- header{align-items:flex-start;flex-direction:column;gap:12px}
- nav{width:100%;padding-bottom:4px}
+.progress span{display:block;height:100%;width:0;background:var(--green)}
+footer{margin-top:45px;background:white;border-top:1px solid var(--line);padding:25px;text-align:center;color:var(--muted);font-size:12px}
+@media(max-width:780px){
+ header{align-items:flex-start;flex-direction:column}
+ nav{width:100%}
  .hero{grid-template-columns:1fr}
- .hero-content{padding:27px}
+ .hero-copy{padding:25px}
  h1{font-size:29px}
- .hero-art{min-height:190px}
- .two,.form-grid{grid-template-columns:1fr}
- main{padding:23px 4%}
+ .hero-art{min-height:160px}
+ .live-layout,.formgrid{grid-template-columns:1fr}
+ .map{height:350px}
+ main{padding:22px 4%}
 }
 </style>
 </head>
-
 <body>
 <header>
  <div class="brand">KT <span>GREEN HUB</span><small>THAILAND ENVIRONMENTAL HUB</small></div>
  <nav>
   <a href="#overview">หน้าหลัก</a>
-  <a href="#modules">ศูนย์ข้อมูล</a>
-  <a href="#news">ข่าวสิ่งแวดล้อม</a>
-  <a href="#water">น้ำและมลพิษ</a>
+  <a href="#live">แผนที่สด</a>
+  <a href="#news">ข่าว</a>
+  <a href="#centers">ศูนย์ข้อมูล</a>
+  <a href="#calculator">เครื่องคำนวณ</a>
   <a href="#database">ฐานข้อมูล</a>
-  <a href="#sources">แหล่งข้อมูล</a>
  </nav>
- <button class="theme-toggle" id="themeToggle" type="button">☾ Dark</button>
 </header>
 
 <main>
 <section class="hero" id="overview">
- <div class="hero-content">
+ <div class="hero-copy">
   <div class="eyebrow">THAILAND ENVIRONMENTAL INTELLIGENCE</div>
   <h1>KT Green Hub<br>Thailand Environmental Hub</h1>
-  <p>ศูนย์รวมข่าวสาร ความรู้ และข้อมูลด้านสิ่งแวดล้อมของประเทศไทย เพื่อให้ทุกคนเข้าถึงข้อมูลและเข้าใจปัญหาสิ่งแวดล้อมได้ง่ายขึ้น</p>
-  <p><span class="tag">ENVIRONMENT · DATA · KNOWLEDGE</span></p>
-  <a href="#modules"><button class="btn">Explore the Hub →</button></a>
+  <p>ศูนย์รวมข้อมูลสิ่งแวดล้อมประเทศไทย ติดตามสภาพอากาศ ปริมาณฝน สถานการณ์น้ำ ข่าว และความรู้จากแหล่งข้อมูลที่ตรวจสอบได้</p>
+  <span class="tag">ENVIRONMENT · LIVE DATA · KNOWLEDGE</span>
+  <p><a class="btn" href="#live">เปิดแผนที่ประเทศไทย →</a></p>
  </div>
- <div class="hero-art"><div class="hero-symbol">🌿</div></div>
+ <div class="hero-art">🌿</div>
 </section>
 
 <section class="section">
- <div class="section-head">
-  <div><h2 class="section-title">National Overview</h2><p class="section-desc">ภาพรวมระบบข้อมูลของ KT Green Hub</p></div>
- </div>
  <div class="grid">
-  <div class="card"><small class="muted">ENVIRONMENT MODULES</small><div class="stat">09</div><small class="muted">หมวดข้อมูลหลัก</small></div>
-  <div class="card"><small class="muted">THAI PROVINCES</small><div class="stat">77</div><small class="muted">จังหวัดในประเทศไทย</small></div>
-  <div class="card"><small class="muted">LOCAL RECORDS</small><div class="stat" id="totalRecords">0</div><small class="muted">รายการข้อมูลที่บันทึกในเบราว์เซอร์นี้</small></div>
-  <div class="card"><small class="muted">NEWS ENGINE</small><div class="stat" id="newsTotal">—</div><small class="muted">ข่าวที่ได้รับจาก API รอบล่าสุด</small></div>
+  <div class="card"><small>จังหวัดในระบบ</small><div class="stat">77</div><small>จังหวัดทั่วประเทศไทย</small></div>
+  <div class="card"><small>ข่าวล่าสุด</small><div class="stat" id="newsTotal">—</div><small>รายการจากระบบข่าว</small></div>
+  <div class="card"><small>ข้อมูลที่บันทึก</small><div class="stat" id="recordTotal">0</div><small>ในเบราว์เซอร์นี้</small></div>
+  <div class="card"><small>อัปเดตอากาศ</small><div class="stat" id="lastWeather">—</div><small>เวลาจาก API</small></div>
  </div>
 </section>
 
-<section class="section" id="modules">
- <h2 class="section-title">Environmental Centers</h2>
- <p class="section-desc">เลือกศูนย์ข้อมูลที่ต้องการศึกษา</p>
- <div class="grid">
-  <article class="card module-card"><div class="icon">♻️</div><h3>Waste Center</h3><p>ความรู้เรื่องขยะ การคัดแยก และการจัดการขยะ</p><a href="#waste" class="btn secondary">เปิดศูนย์ข้อมูล</a></article>
-  <article class="card module-card"><div class="icon">🔄</div><h3>Recycling Guide</h3><p>แนวทางการรีไซเคิลและใช้ทรัพยากรอย่างคุ้มค่า</p><a href="#recycling" class="btn secondary">เปิดคู่มือ</a></article>
-  <article class="card module-card"><div class="icon">🧮</div><h3>Waste Calculator</h3><p>เครื่องคำนวณปริมาณขยะจากข้อมูลที่กรอก</p><a href="#calculator" class="btn secondary">เปิดเครื่องคำนวณ</a></article>
-  <article class="card module-card"><div class="icon">💧</div><h3>Water & Pollution</h3><p>ข่าวสารและความรู้เกี่ยวกับน้ำและมลพิษ</p><a href="#water" class="btn secondary">เปิดศูนย์ข้อมูล</a></article>
-  <article class="card module-card"><div class="icon">🌫️</div><h3>Air Center</h3><p>ความรู้เรื่องฝุ่น PM2.5 และมลพิษทางอากาศ</p><a href="#air" class="btn secondary">เปิดศูนย์ข้อมูล</a></article>
-  <article class="card module-card"><div class="icon">🌳</div><h3>Forest & Wildlife</h3><p>ป่าไม้ ระบบนิเวศ และความหลากหลายทางชีวภาพ</p><a href="#forest" class="btn secondary">เปิดศูนย์ข้อมูล</a></article>
-  <article class="card module-card"><div class="icon">🌏</div><h3>Climate Center</h3><p>สภาพภูมิอากาศและการเปลี่ยนแปลงของโลก</p><a href="#climate" class="btn secondary">เปิดศูนย์ข้อมูล</a></article>
-  <article class="card module-card"><div class="icon">🏆</div><h3>Eco Challenge</h3><p>กิจกรรมเล็ก ๆ เพื่อช่วยลดผลกระทบต่อสิ่งแวดล้อม</p><a href="#challenge" class="btn secondary">เริ่มกิจกรรม</a></article>
-  <article class="card module-card"><div class="icon">🔬</div><h3>Science Corner</h3><p>ความรู้ทางวิทยาศาสตร์และสิ่งแวดล้อม</p><a href="#science" class="btn secondary">เปิดมุมวิทยาศาสตร์</a></article>
+<section class="section" id="live">
+ <div class="section-head">
+  <div><h2 class="section-title">Thailand Live Environment Map</h2><p class="desc">แผนที่ประเทศไทยแบบโต้ตอบ เลือกจังหวัดเพื่อดูสภาพอากาศและฝนคาดการณ์</p></div>
+  <span class="badge" id="overallStatus">รอข้อมูล</span>
+ </div>
+ <div class="panel">
+  <div class="filters">
+   <div><label for="province">เลือกจังหวัด</label><select id="province"></select></div>
+   <div style="display:flex;align-items:end"><button class="btn" id="refresh" style="width:100%">↻ อัปเดตข้อมูล</button></div>
+  </div>
+  <div class="live-layout">
+   <div>
+    <div id="map" class="map"></div>
+    <p class="note">แผนที่จาก OpenStreetMap · หมุดแสดงจังหวัดที่เลือก</p>
+   </div>
+   <div>
+    <h3>สภาพอากาศ — <span id="provinceName">กรุงเทพมหานคร</span></h3>
+    <div class="stats">
+     <div class="statbox"><small>อุณหภูมิ</small><strong id="temp">—</strong><span id="weatherText">รอข้อมูล</span></div>
+     <div class="statbox"><small>ความชื้นสัมพัทธ์</small><strong id="humidity">—</strong><span>เปอร์เซ็นต์</span></div>
+     <div class="statbox"><small>ความเร็วลม</small><strong id="wind">—</strong><span>กม./ชม.</span></div>
+     <div class="statbox"><small>ฝนคาดการณ์ 24 ชม.</small><strong id="rain">—</strong><span>มม. · แบบจำลอง</span></div>
+    </div>
+    <div class="toolbar" style="margin:15px 0 7px"><b>พยากรณ์รายชั่วโมง</b><span class="badge" id="weatherBadge">รอข้อมูล</span></div>
+    <div id="hours" class="hours">กำลังโหลด...</div>
+    <p class="note" id="weatherSource">Open-Meteo · ข้อมูลแบบจำลอง ไม่ใช่สถานีตรวจวัดภาคพื้นดิน</p>
+   </div>
+  </div>
+ </div>
+
+ <div class="live-layout">
+  <div class="panel">
+   <div class="toolbar"><b>Water Watch — สถานการณ์น้ำ</b><span class="badge" id="waterBadge">ตรวจสอบ</span></div>
+   <p class="status" id="waterStatus">กำลังตรวจสอบ API</p>
+   <div class="stats">
+    <div class="statbox"><small>ฝนสะสม 1 ชั่วโมงจาก API</small><strong id="rain1">—</strong><span>มิลลิเมตร</span></div>
+    <div class="statbox"><small>ฝนสะสม 24 ชั่วโมงจาก API</small><strong id="rain24">—</strong><span>มิลลิเมตร</span></div>
+   </div>
+   <div class="rows" id="waterRows"></div>
+   <p class="note">ระบบจะไม่สร้างตัวเลขระดับน้ำขึ้นเอง หาก API ไม่พร้อมใช้งานจะแสดงสถานะตามจริง ระดับน้ำต้องมีชื่อสถานีและเวลาอัปเดต</p>
+  </div>
+  <div class="panel">
+   <b>ความหมายของสถานะ</b>
+   <div class="rows">
+    <div class="rowitem"><b>LIVE / OBSERVED</b><span>ตรวจวัดจากสถานีจริง</span></div>
+    <div class="rowitem"><b>RECENT</b><span>ข้อมูลล่าสุด อาจล่าช้า</span></div>
+    <div class="rowitem"><b>FORECAST / MODEL</b><span>ค่าพยากรณ์ ไม่ใช่ผลวัดจริง</span></div>
+    <div class="rowitem"><b>UNAVAILABLE</b><span>ต้นทางไม่ตอบหรือไม่มีสิทธิ์</span></div>
+   </div>
+   <p class="note">อากาศ: Open-Meteo · น้ำ: SWOC กรมชลประทาน · แผนที่: OpenStreetMap</p>
+   <p class="note"><a href="https://swoc-api-service.rid.go.th/api/docs/" target="_blank">เอกสาร API น้ำ SWOC ↗</a> · <a href="https://open-meteo.com/en/docs" target="_blank">เอกสารอากาศ ↗</a></p>
+  </div>
  </div>
 </section>
 
 <section class="section" id="news">
- <div class="section-head">
-  <div><h2 class="section-title">Environmental News Intelligence</h2><p class="section-desc">ระบบรวบรวมข่าวสิ่งแวดล้อมจาก Google News RSS และ GDELT ผ่าน Worker</p></div>
-  <span class="tag">NEWS ENGINE 2.0</span>
- </div>
+ <div class="section-head"><div><h2 class="section-title">Environmental News Intelligence</h2><p class="desc">ข่าวสิ่งแวดล้อมจากระบบ Worker</p></div><button class="btn" id="refreshNews">↻ โหลดข่าว</button></div>
  <div class="panel">
-  <div class="toolbar">
-   <div><b>News Monitor</b><div class="status" id="newsStatus" aria-live="polite">กำลังเชื่อมต่อระบบข่าว...</div></div>
-   <button class="btn" id="refreshNews">↻ Refresh News</button>
-  </div>
+  <p class="status" id="newsStatus">กำลังเชื่อมต่อ...</p>
   <div class="filters">
-   <div><label for="newsCategory">หมวดข่าว</label>
-    <select id="newsCategory">
-     <option value="">ทุกหมวด</option>
-     <option value="arsenic">สารหนูและโลหะหนัก</option>
-     <option value="water">น้ำและมลพิษทางน้ำ</option>
-     <option value="air">อากาศและ PM2.5</option>
-     <option value="waste">ขยะและรีไซเคิล</option>
-     <option value="forest">ป่าไม้และสัตว์ป่า</option>
-     <option value="climate">สภาพภูมิอากาศ</option>
-    </select>
-   </div>
-   <div><label for="newsSearch">ค้นหาข่าว</label><input id="newsSearch" placeholder="พิมพ์คำค้น เช่น สารหนู"></div>
+   <div><label for="newsCategory">หมวดข่าว</label><select id="newsCategory"><option value="">ทุกหมวด</option><option value="arsenic">สารหนู</option><option value="water">น้ำ</option><option value="air">อากาศ</option><option value="waste">ขยะ</option><option value="forest">ป่าไม้</option><option value="climate">ภูมิอากาศ</option></select></div>
+   <div><label for="newsSearch">ค้นหาข่าว</label><input id="newsSearch" placeholder="พิมพ์คำค้น"></div>
   </div>
-  <div class="news-grid" id="newsGrid"><div class="empty">กำลังโหลดข่าว...</div></div>
-  <div class="note" id="newsErrors"></div>
-  <div id="officialSources" class="source-list"></div>
-  <p class="note">หมายเหตุ: ข่าวเป็นข้อมูลจากสื่อและระบบค้นหา ไม่ใช่ผลตรวจวัดสิ่งแวดล้อมแบบเรียลไทม์ ข่าวที่ไม่พบไม่ได้หมายความว่าไม่มีปัญหา และข้อมูลผลตรวจต้องตรวจสอบจากเอกสารต้นฉบับของหน่วยงาน</p>
+  <div class="news-grid" id="newsGrid"></div>
  </div>
 </section>
 
-<section class="section" id="water">
- <h2 class="section-title">Water & Pollution Center</h2>
- <p class="section-desc">ความรู้และแหล่งข้อมูลเกี่ยวกับคุณภาพน้ำและมลพิษ</p>
+<section class="section" id="centers">
+ <h2 class="section-title">Environmental Centers</h2><p class="desc">ศูนย์ข้อมูลสิ่งแวดล้อม</p>
  <div class="grid">
-  <div class="card"><div class="icon">🧪</div><h3>Arsenic Thailand</h3><p>ติดตามข่าวและเอกสารเกี่ยวกับสารหนูและโลหะหนักในประเทศไทย</p><a href="#news">ดูข่าวที่เกี่ยวข้อง →</a></div>
-  <div class="card"><div class="icon">💧</div><h3>Water Quality</h3><p>ศึกษาแหล่งน้ำ คุณภาพน้ำ และปัจจัยที่มีผลต่อระบบนิเวศ</p><a href="#sources">ดูแหล่งข้อมูล →</a></div>
-  <div class="card"><div class="icon">🏭</div><h3>Pollution Sources</h3><p>เรียนรู้แหล่งกำเนิดมลพิษและแนวทางป้องกัน</p><a href="#science">เรียนรู้เพิ่มเติม →</a></div>
- </div>
-</section>
-
-<section class="section" id="waste">
- <h2 class="section-title">Waste Center</h2>
- <p class="section-desc">การคัดแยกขยะเบื้องต้นช่วยให้จัดการทรัพยากรได้เหมาะสมขึ้น</p>
- <div class="grid">
-  <div class="card"><div class="icon">🟦</div><h3>ขยะรีไซเคิล</h3><p>เช่น กระดาษสะอาด ขวดพลาสติก และกระป๋อง ควรแยกตามชนิดและทำให้สะอาดตามแนวทางของพื้นที่</p></div>
-  <div class="card"><div class="icon">🟩</div><h3>ขยะอินทรีย์</h3><p>เช่น เศษผัก ผลไม้ และเศษอาหารบางชนิด สามารถนำไปจัดการเป็นปุ๋ยได้เมื่อเหมาะสม</p></div>
-  <div class="card"><div class="icon">🟥</div><h3>ขยะอันตราย</h3><p>เช่น ถ่านไฟฉายและหลอดไฟ ควรแยกจากขยะทั่วไปและส่งจุดรับทิ้งที่กำหนด</p></div>
-  <div class="card"><div class="icon">⬛</div><h3>ขยะทั่วไป</h3><p>ขยะที่ไม่สามารถรีไซเคิลหรือจัดการแบบอินทรีย์ได้ง่าย ให้ทิ้งตามระบบของท้องถิ่น</p></div>
- </div>
-</section>
-
-<section class="section" id="recycling">
- <h2 class="section-title">Recycling Guide</h2>
- <p class="section-desc">แนวทางง่าย ๆ ก่อนส่งวัสดุเข้าสู่กระบวนการรีไซเคิล</p>
- <div class="panel">
-  <ol style="line-height:2;color:var(--muted);font-size:13px">
-   <li>ตรวจสอบชนิดวัสดุและสัญลักษณ์บนบรรจุภัณฑ์</li>
-   <li>เทของเหลวและเศษอาหารออกจากภาชนะ</li>
-   <li>ล้างหรือทำความสะอาดเมื่อจำเป็น แล้วปล่อยให้แห้ง</li>
-   <li>แยกวัสดุต่างชนิดออกจากกัน</li>
-   <li>ตรวจสอบว่าจุดรับรีไซเคิลในพื้นที่รับวัสดุนั้นหรือไม่</li>
-  </ol>
+  <article class="card"><div class="icon">♻️</div><h3>Waste Center</h3><p>ความรู้เรื่องขยะ การคัดแยก และการจัดการขยะ</p></article>
+  <article class="card"><div class="icon">🔄</div><h3>Recycling Guide</h3><p>แยกวัสดุและเตรียมส่งรีไซเคิล</p></article>
+  <article class="card"><div class="icon">💧</div><h3>Water & Pollution</h3><p>ข้อมูลน้ำ มลพิษ และสารปนเปื้อน</p></article>
+  <article class="card"><div class="icon">🌫️</div><h3>Air Center</h3><p>ความรู้เรื่อง PM2.5 และคุณภาพอากาศ</p></article>
+  <article class="card"><div class="icon">🌳</div><h3>Forest & Wildlife</h3><p>ป่าไม้ ระบบนิเวศ และความหลากหลายทางชีวภาพ</p></article>
+  <article class="card"><div class="icon">🌏</div><h3>Climate Center</h3><p>สภาพภูมิอากาศและการเปลี่ยนแปลงของโลก</p></article>
+  <article class="card"><div class="icon">🔬</div><h3>Science Corner</h3><p>หลักวิทยาศาสตร์และการอ่านข้อมูลสิ่งแวดล้อม</p></article>
  </div>
 </section>
 
 <section class="section" id="calculator">
- <h2 class="section-title">Waste Calculator</h2>
- <p class="section-desc">คำนวณน้ำหนักขยะโดยประมาณจากข้อมูลที่กรอกเอง</p>
+ <h2 class="section-title">Waste Calculator</h2><p class="desc">คำนวณปริมาณขยะเฉลี่ยต่อวัน</p>
  <div class="panel">
-  <div class="form-grid">
-   <div class="form-field"><label for="wasteWeight">น้ำหนักขยะ (กิโลกรัม)</label><input type="number" id="wasteWeight" min="0" step="0.1" placeholder="เช่น 2.5"></div>
-   <div class="form-field"><label for="wasteDays">จำนวนวัน</label><input type="number" id="wasteDays" min="1" step="1" value="7"></div>
+  <div class="formgrid">
+   <div><label for="wasteWeight">น้ำหนักขยะ (กก.)</label><input id="wasteWeight" type="number" min="0" step="0.1" placeholder="เช่น 3.5"></div>
+   <div><label for="wasteDays">จำนวนวัน</label><input id="wasteDays" type="number" min="1" step="1" value="7"></div>
   </div>
-  <button class="btn" id="calculateWaste" style="margin-top:12px">คำนวณ</button>
-  <div id="wasteResult" class="status" aria-live="polite">กรอกข้อมูลเพื่อเริ่มคำนวณ</div>
-  <p class="note">ผลลัพธ์เป็นการคำนวณจากข้อมูลที่ผู้ใช้กรอก ไม่ใช่ค่ามาตรฐานการผลิตขยะของประชากร</p>
- </div>
-</section>
-
-<section class="section" id="air">
- <h2 class="section-title">Air Center</h2>
- <p class="section-desc">ความรู้เรื่องคุณภาพอากาศและฝุ่นละออง</p>
- <div class="two">
-  <div class="card"><div class="icon">🌫️</div><h3>PM2.5 คืออะไร?</h3><p>ฝุ่นละอองขนาดเล็กไม่เกิน 2.5 ไมโครเมตร สามารถเข้าสู่ระบบทางเดินหายใจได้ ควรติดตามข้อมูลจากหน่วยงานที่ตรวจวัดจริง</p></div>
-  <div class="card"><div class="icon">📡</div><h3>ติดตามคุณภาพอากาศ</h3><p>ตรวจสอบค่าล่าสุดและคำแนะนำด้านสุขภาพจากแหล่งข้อมูลที่เชื่อถือได้</p><a href="https://air4thai.pcd.go.th/" target="_blank" rel="noopener noreferrer">Air4Thai ↗</a></div>
- </div>
-</section>
-
-<section class="section" id="forest">
- <h2 class="section-title">Forest & Wildlife</h2>
- <p class="section-desc">ระบบนิเวศ ป่าไม้ และความหลากหลายทางชีวภาพ</p>
- <div class="grid">
-  <div class="card"><div class="icon">🌳</div><h3>ป่าไม้</h3><p>ป่าช่วยรักษาความหลากหลายทางชีวภาพ เป็นแหล่งต้นน้ำ และช่วยกักเก็บคาร์บอน</p></div>
-  <div class="card"><div class="icon">🦜</div><h3>สัตว์ป่า</h3><p>การอนุรักษ์ถิ่นอาศัยช่วยให้สัตว์ป่าสามารถดำรงชีวิตและรักษาสมดุลระบบนิเวศ</p></div>
-  <div class="card"><div class="icon">🔥</div><h3>ไฟป่า</h3><p>ไฟป่าส่งผลต่อระบบนิเวศ คุณภาพอากาศ และชุมชนโดยรอบ</p></div>
- </div>
-</section>
-
-<section class="section" id="climate">
- <h2 class="section-title">Climate Center</h2>
- <p class="section-desc">ความรู้เรื่องภูมิอากาศและการเปลี่ยนแปลงของโลก</p>
- <div class="panel">
-  <h3>Climate Change</h3>
-  <p class="section-desc">การเปลี่ยนแปลงสภาพภูมิอากาศเกี่ยวข้องกับการเปลี่ยนแปลงระยะยาวของอุณหภูมิและรูปแบบสภาพอากาศ โดยกิจกรรมของมนุษย์เป็นปัจจัยสำคัญในยุคปัจจุบัน</p>
-  <div class="grid">
-   <div class="card"><b>🌡️ อุณหภูมิ</b><p>ติดตามแนวโน้มอุณหภูมิระยะยาว</p></div>
-   <div class="card"><b>🌧️ ปริมาณฝน</b><p>ศึกษาแนวโน้มฝนและความเสี่ยงน้ำท่วม/ภัยแล้ง</p></div>
-   <div class="card"><b>🌊 ระดับน้ำทะเล</b><p>เรียนรู้ผลกระทบต่อพื้นที่ชายฝั่ง</p></div>
-  </div>
+  <button class="btn" id="calcWaste" style="margin-top:12px">คำนวณ</button><p id="wasteResult" class="status"></p>
  </div>
 </section>
 
 <section class="section" id="challenge">
- <h2 class="section-title">Eco Challenge</h2>
- <p class="section-desc">กิจกรรมเล็ก ๆ เพื่อสร้างพฤติกรรมที่เป็นมิตรต่อสิ่งแวดล้อม</p>
+ <h2 class="section-title">Eco Challenge</h2><p class="desc">กิจกรรมรักษ์โลกที่บันทึกไว้ในเบราว์เซอร์</p>
  <div class="panel">
-  <div id="challengeList">
-   <label><input type="checkbox" class="eco-task"> พกขวดน้ำที่ใช้ซ้ำได้</label><br><br>
-   <label><input type="checkbox" class="eco-task"> แยกขยะก่อนทิ้ง</label><br><br>
-   <label><input type="checkbox" class="eco-task"> ปิดไฟเมื่อไม่ใช้งาน</label><br><br>
-   <label><input type="checkbox" class="eco-task"> ใช้ถุงหรือภาชนะที่นำกลับมาใช้ซ้ำ</label><br><br>
-   <label><input type="checkbox" class="eco-task"> ตรวจสอบแหล่งข้อมูลก่อนแชร์ข่าวสิ่งแวดล้อม</label>
-  </div>
-  <div class="progress"><span id="ecoProgress"></span></div>
-  <div class="status" id="ecoStatus">ทำกิจกรรมที่ทำได้ แล้วดูความคืบหน้าของตัวเอง</div>
- </div>
-</section>
-
-<section class="section" id="science">
- <h2 class="section-title">Science Corner</h2>
- <p class="section-desc">พื้นฐานวิทยาศาสตร์สิ่งแวดล้อม</p>
- <div class="grid">
-  <div class="card"><h3>🧪 สารหนู</h3><p>สารหนูเป็นธาตุที่พบได้ตามธรรมชาติและจากกิจกรรมบางประเภท การประเมินความเสี่ยงต้องอาศัยชนิดสาร เส้นทางสัมผัส และผลตรวจที่ได้มาตรฐาน</p></div>
-  <div class="card"><h3>🔬 การเก็บตัวอย่าง</h3><p>การเก็บตัวอย่างต้องใช้ภาชนะ วิธีเก็บ การเก็บรักษา และการส่งตรวจที่เหมาะสม เพื่อให้ผลวิเคราะห์น่าเชื่อถือ</p></div>
-  <div class="card"><h3>📊 การอ่านข้อมูล</h3><p>ตรวจสอบหน่วย วันที่เก็บตัวอย่าง สถานที่ วิธีวิเคราะห์ และแหล่งอ้างอิงก่อนนำข้อมูลมาเปรียบเทียบ</p></div>
+  <label><input type="checkbox" class="eco" style="width:auto"> พกขวดน้ำใช้ซ้ำ</label><br>
+  <label><input type="checkbox" class="eco" style="width:auto"> แยกขยะรีไซเคิล</label><br>
+  <label><input type="checkbox" class="eco" style="width:auto"> ปิดไฟเมื่อไม่ใช้งาน</label><br>
+  <label><input type="checkbox" class="eco" style="width:auto"> ลดพลาสติกใช้ครั้งเดียว</label>
+  <div class="progress"><span id="ecoBar"></span></div><div class="status" id="ecoStatus">ทำแล้ว 0/4</div>
  </div>
 </section>
 
 <section class="section" id="database">
- <h2 class="section-title">Environmental Data Records</h2>
- <p class="section-desc">บันทึกข้อมูลผลตรวจที่มีเอกสารอ้างอิง</p>
- <div class="panel">
-  <div class="filters">
-   <div><label for="filterProvince">จังหวัด</label><select id="filterProvince"><option value="">ทุกจังหวัด</option></select></div>
-   <div><label for="filterType">ประเภทตัวอย่าง</label><select id="filterType"><option value="">ทุกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
-  </div>
-  <div class="table-wrap">
-   <table>
-    <thead><tr><th>วันที่เก็บ</th><th>จังหวัด</th><th>ประเภท</th><th>ผลตรวจ</th><th>แหล่งอ้างอิง</th></tr></thead>
-    <tbody id="databaseBody"><tr><td colspan="5" class="empty">ยังไม่มีข้อมูล</td></tr></tbody>
-   </table>
-  </div>
- </div>
-</section>
-
-<section class="section">
- <h2 class="section-title">Data Management</h2>
- <p class="section-desc">เพิ่มข้อมูลผลตรวจพร้อมแหล่งอ้างอิง</p>
+ <h2 class="section-title">Environmental Data Records</h2><p class="desc">บันทึกข้อมูลพร้อมแหล่งอ้างอิงในเบราว์เซอร์นี้</p>
  <div class="panel">
   <form id="recordForm">
-   <div class="form-grid">
-    <div class="form-field"><label for="sampleDate">วันที่เก็บตัวอย่าง</label><input type="date" id="sampleDate" required></div>
-    <div class="form-field"><label for="recordProvince">จังหวัด</label><select id="recordProvince" required></select></div>
-    <div class="form-field"><label for="recordType">ประเภทตัวอย่าง</label><select id="recordType" required><option value="">เลือกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
-    <div class="form-field"><label for="recordValue">ผลตรวจ</label><input type="number" id="recordValue" min="0" step="any" required></div>
+   <div class="formgrid">
+    <div><label for="recordDate">วันที่เก็บตัวอย่าง</label><input type="date" id="recordDate" required></div>
+    <div><label for="recordProvince">จังหวัด</label><select id="recordProvince" required></select></div>
+    <div><label for="recordType">ประเภทตัวอย่าง</label><select id="recordType"><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+    <div><label for="recordValue">ผลตรวจ</label><input id="recordValue" type="number" min="0" step="any" required></div>
    </div>
-   <div class="form-field" style="margin-top:10px"><label for="recordUnit">หน่วย</label><select id="recordUnit"><option>mg/L</option><option>mg/kg</option></select></div>
-   <div class="form-field" style="margin-top:10px"><label for="recordSource">ลิงก์เอกสารอ้างอิง</label><input type="url" id="recordSource" placeholder="https://..." required></div>
-   <button class="btn" type="submit" style="margin-top:13px">บันทึกข้อมูล</button>
-   <p class="note">ข้อมูลจะบันทึกใน Local Storage ของเบราว์เซอร์นี้เท่านั้น การเพิ่มข้อมูลไม่ได้แปลว่าผ่านการตรวจสอบเอกสารโดยระบบ</p>
+   <div style="margin-top:10px"><label for="recordSource">ลิงก์เอกสารอ้างอิง</label><input id="recordSource" type="url" placeholder="https://..." required></div>
+   <button class="btn" style="margin-top:12px">บันทึกข้อมูล</button>
   </form>
+  <div class="rows" id="records"></div>
+  <p class="note">ข้อมูลอยู่ในเบราว์เซอร์นี้ ไม่ได้ส่งเข้าฐานข้อมูลกลาง</p>
  </div>
 </section>
 
 <section class="section" id="sources">
- <h2 class="section-title">Official Research Sources</h2>
- <p class="section-desc">แหล่งข้อมูลทางการสำหรับตรวจสอบข้อมูลต้นฉบับ</p>
+ <h2 class="section-title">Official Sources</h2>
  <div class="grid">
-  <div class="card"><h3>กรมควบคุมมลพิษ</h3><p>ข้อมูลคุณภาพสิ่งแวดล้อมและมลพิษ</p><a href="https://www.pcd.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
-  <div class="card"><h3>กรมทรัพยากรน้ำ</h3><p>ข้อมูลทรัพยากรน้ำ</p><a href="https://www.dwr.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
-  <div class="card"><h3>กรมทรัพยากรน้ำบาดาล</h3><p>ข้อมูลน้ำบาดาล</p><a href="https://www.dgr.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
-  <div class="card"><h3>กรมอุตุนิยมวิทยา</h3><p>ข้อมูลสภาพอากาศและภูมิอากาศ</p><a href="https://www.tmd.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
-  <div class="card"><h3>กรมป่าไม้</h3><p>ข้อมูลด้านป่าไม้</p><a href="https://www.forest.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
-  <div class="card"><h3>กรมอนามัย</h3><p>ข้อมูลด้านสุขภาพสิ่งแวดล้อม</p><a href="https://www.anamai.moph.go.th/" target="_blank" rel="noopener noreferrer">เว็บไซต์ทางการ ↗</a></div>
+  <div class="card"><h3>กรมอุตุนิยมวิทยา</h3><p>ตรวจวัดและพยากรณ์อากาศ</p><a href="https://www.tmd.go.th/" target="_blank">เว็บไซต์ ↗</a></div>
+  <div class="card"><h3>SWOC กรมชลประทาน</h3><p>ข้อมูลน้ำและฝน</p><a href="https://swoc-api-service.rid.go.th/api/docs/" target="_blank">API Docs ↗</a></div>
+  <div class="card"><h3>กรมควบคุมมลพิษ</h3><p>ข้อมูลคุณภาพสิ่งแวดล้อม</p><a href="https://www.pcd.go.th/" target="_blank">เว็บไซต์ ↗</a></div>
+  <div class="card"><h3>Open-Meteo</h3><p>ข้อมูลสภาพอากาศแบบจำลอง</p><a href="https://open-meteo.com/" target="_blank">เว็บไซต์ ↗</a></div>
  </div>
 </section>
 </main>
+<footer><b>KT GREEN HUB</b><p>Thailand Environmental Hub · Environmental Information · Education · Research</p><p>© 2026 KT Green Hub</p></footer>
 
-<footer>
- <b>KT GREEN HUB</b>
- <p>Thailand Environmental Hub</p>
- <p>Environmental Information · Education · Research</p>
- <p>© 2026 KT Green Hub</p>
-</footer>
-
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-/* CONFIGURATION */
-const NEWS_API_URL =
- "https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev/api/news";
+"use strict";
+const $=id=>document.getElementById(id);
+const NEWS_API_URL="https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev/api/news";
 
-const PROVINCES = [
-"กรุงเทพมหานคร","กระบี่","กาญจนบุรี","กาฬสินธุ์","กำแพงเพชร","ขอนแก่น",
-"จันทบุรี","ฉะเชิงเทรา","ชลบุรี","ชัยนาท","ชัยภูมิ","ชุมพร","เชียงราย",
-"เชียงใหม่","ตรัง","ตราด","ตาก","นครนายก","นครปฐม","นครพนม","นครราชสีมา",
-"นครศรีธรรมราช","นครสวรรค์","นนทบุรี","นราธิวาส","น่าน","บึงกาฬ","บุรีรัมย์",
-"ปทุมธานี","ประจวบคีรีขันธ์","ปราจีนบุรี","ปัตตานี","พระนครศรีอยุธยา",
-"พะเยา","พังงา","พิจิตร","พิษณุโลก","เพชรบุรี","เพชรบูรณ์","แพร่","ภูเก็ต",
-"มหาสารคาม","มุกดาหาร","แม่ฮ่องสอน","ยโสธร","ยะลา","ร้อยเอ็ด","ระนอง",
-"ระยอง","ราชบุรี","ลพบุรี","ลำปาง","ลำพูน","เลย","ศรีสะเกษ","สกลนคร",
-"สงขลา","สตูล","สมุทรปราการ","สมุทรสงคราม","สมุทรสาคร","สระแก้ว","สระบุรี",
-"สิงห์บุรี","สุโขทัย","สุพรรณบุรี","สุราษฎร์ธานี","สุรินทร์","หนองคาย",
-"หนองบัวลำภู","อ่างทอง","อำนาจเจริญ","อุดรธานี","อุตรดิตถ์","อุทัยธานี",
-"อุบลราชธานี"
-];
+const PROVINCES={
+"กรุงเทพมหานคร":[13.7563,100.5018],"กระบี่":[8.0863,98.9063],"กาญจนบุรี":[14.0228,99.5328],"กาฬสินธุ์":[16.4322,103.5061],"กำแพงเพชร":[16.4828,99.5227],"ขอนแก่น":[16.4419,102.835],"จันทบุรี":[12.6113,102.1039],"ฉะเชิงเทรา":[13.6904,101.0779],"ชลบุรี":[13.3611,100.9847],"ชัยนาท":[15.1852,100.1251],"ชัยภูมิ":[15.8068,102.0315],"ชุมพร":[10.493,99.180],"เชียงราย":[19.9105,99.8406],"เชียงใหม่":[18.7883,98.9853],"ตรัง":[7.5594,99.6114],"ตราด":[12.2428,102.5175],"ตาก":[16.8839,99.1259],"นครนายก":[14.2069,101.2131],"นครปฐม":[13.8199,100.0622],"นครพนม":[17.392,104.769],"นครราชสีมา":[14.9799,102.0978],"นครศรีธรรมราช":[8.4304,99.9631],"นครสวรรค์":[15.7047,100.1372],"นนทบุรี":[13.8621,100.5144],"นราธิวาส":[6.4255,101.8253],"น่าน":[18.7756,100.773],"บึงกาฬ":[18.3609,103.6465],"บุรีรัมย์":[14.993,103.102],"ปทุมธานี":[14.0208,100.525],"ประจวบคีรีขันธ์":[11.8126,99.797],"ปราจีนบุรี":[14.0509,101.372],"ปัตตานี":[6.868,101.25],"พระนครศรีอยุธยา":[14.3532,100.5689],"พะเยา":[19.1664,99.9019],"พังงา":[8.4509,98.5255],"พิจิตร":[16.4419,100.3488],"พิษณุโลก":[16.8211,100.2659],"เพชรบุรี":[13.1119,99.939],"เพชรบูรณ์":[16.4189,101.155],"แพร่":[18.1446,100.1403],"ภูเก็ต":[7.8804,98.3923],"มหาสารคาม":[16.1851,103.302],"มุกดาหาร":[16.5424,104.7235],"แม่ฮ่องสอน":[19.302,97.965],"ยโสธร":[15.7926,104.145],"ยะลา":[6.5411,101.2803],"ร้อยเอ็ด":[16.0567,103.653],"ระนอง":[9.9658,98.6348],"ระยอง":[12.6814,101.2816],"ราชบุรี":[13.5283,99.8134],"ลพบุรี":[14.7995,100.653],"ลำปาง":[18.2888,99.4909],"ลำพูน":[18.5745,99.0087],"เลย":[17.486,101.7223],"ศรีสะเกษ":[15.1186,104.322],"สกลนคร":[17.1546,104.134],"สงขลา":[7.1898,100.5954],"สตูล":[6.6238,100.067],"สมุทรปราการ":[13.5991,100.5998],"สมุทรสงคราม":[13.4098,100.0023],"สมุทรสาคร":[13.5475,100.274],"สระแก้ว":[13.824,102.064],"สระบุรี":[14.5289,100.91],"สิงห์บุรี":[14.8936,100.396],"สุโขทัย":[17.0078,99.823],"สุพรรณบุรี":[14.4745,100.1177],"สุราษฎร์ธานี":[9.1382,99.3217],"สุรินทร์":[14.8818,103.4936],"หนองคาย":[17.8783,102.7413],"หนองบัวลำภู":[17.2041,102.44],"อ่างทอง":[14.5896,100.455],"อำนาจเจริญ":[15.8657,104.625],"อุดรธานี":[17.4138,102.787],"อุตรดิตถ์":[17.6201,100.099],"อุทัยธานี":[15.3835,100.024],"อุบลราชธานี":[15.2287,104.8564]
+};
 
-let newsItems = [];
-let records = [];
+Object.keys(PROVINCES).forEach(name=>{
+ $("province").add(new Option(name,name));
+ $("recordProvince").add(new Option(name,name));
+});
 
-const $ = id => document.getElementById(id);
-
-/* THEME */
-(function initTheme(){
- let theme = "light";
- try { theme = localStorage.getItem("ktGreenTheme") || "light"; } catch(e){}
- applyTheme(theme);
- $("themeToggle").addEventListener("click",()=>{
-  const next = document.body.dataset.theme === "dark" ? "light" : "dark";
-  applyTheme(next);
-  try { localStorage.setItem("ktGreenTheme",next); } catch(e){}
- });
-})();
-function applyTheme(theme){
- document.body.dataset.theme = theme;
- $("themeToggle").textContent = theme === "dark" ? "☀ Light" : "☾ Dark";
+let map=null,marker=null;
+function initMap(){
+ if(!window.L){$("map").textContent="โหลดแผนที่ไม่ได้";return;}
+ map=L.map("map").setView([15.2,101],5.7);
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  maxZoom:18,attribution:'&copy; OpenStreetMap contributors'
+ }).addTo(map);
+ marker=L.marker(PROVINCES[$("province").value]).addTo(map);
+}
+function badge(id,text,kind=""){
+ const el=$(id);el.textContent=text;el.className="badge "+kind;
+}
+function num(v,unit=""){
+ return v===null||v===undefined||!Number.isFinite(Number(v))?"—":Number(v).toFixed(1)+unit;
+}
+function weatherText(code){
+ if(code===0)return"ท้องฟ้าแจ่มใส";
+ if([1,2,3].includes(code))return"มีเมฆ";
+ if([45,48].includes(code))return"มีหมอก";
+ if([51,53,55,61,63,65,80,81,82].includes(code))return"มีฝน";
+ if([95,96,99].includes(code))return"พายุฝนฟ้าคะนอง";
+ return"สภาพอากาศแปรปรวน";
 }
 
-/* PROVINCE SELECTS */
-function fillProvinceSelect(id, firstLabel){
- const select = $(id);
- select.innerHTML = "";
- select.add(new Option(firstLabel,""));
- PROVINCES.forEach(p=>select.add(new Option(p,p)));
-}
-fillProvinceSelect("recordProvince","เลือกจังหวัด");
-fillProvinceSelect("filterProvince","ทุกจังหวัด");
+async function loadWeather(){
+ const name=$("province").value;
+ const [lat,lon]=PROVINCES[name];
+ $("provinceName").textContent=name;
+ if(map){
+  marker.setLatLng([lat,lon]).setPopupContent(name).openPopup();
+  map.setView([lat,lon],7);
+ }
+ badge("weatherBadge","กำลังโหลด","warn");
+ const url=`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m&hourly=temperature_2m,precipitation_probability,precipitation,weather_code&forecast_days=2&timezone=Asia%2FBangkok`;
+ const response=await fetch(url,{cache:"no-store"});
+ if(!response.ok)throw Error("Weather API HTTP "+response.status);
+ const data=await response.json();
+ const c=data.current||{},h=data.hourly||{};
+ $("temp").textContent=num(c.temperature_2m,"°C");
+ $("humidity").textContent=num(c.relative_humidity_2m,"%");
+ $("wind").textContent=num(c.wind_speed_10m);
+ $("weatherText").textContent=weatherText(Number(c.weather_code));
+ const rain=(h.precipitation||[]).slice(0,24).reduce((a,b)=>a+(Number(b)||0),0);
+ $("rain").textContent=num(rain," mm");
 
-/* NEWS ENGINE */
-function safeText(value){
- return String(value ?? "").trim();
+ const hours=$("hours");hours.replaceChildren();
+ let start=Math.max(0,(h.time||[]).findIndex(t=>t>=c.time));
+ if(start<0)start=0;
+ for(let i=start;i<Math.min(start+12,(h.time||[]).length);i+=2){
+  const box=document.createElement("div");box.className="hour";
+  const time=document.createElement("small");
+  time.textContent=new Date(h.time[i]).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"});
+  const temp=document.createElement("b");temp.textContent=num(h.temperature_2m?.[i],"°C");
+  const rainText=document.createElement("small");
+  rainText.textContent="โอกาสฝน "+(h.precipitation_probability?.[i]??"—")+"%";
+  box.append(time,temp,rainText);hours.append(box);
+ }
+ $("weatherSource").textContent="Open-Meteo · เวลาข้อมูล "+(c.time||"ไม่ระบุ")+" · ค่าจากแบบจำลอง ไม่ใช่สถานีตรวจวัดภาคพื้นดิน";
+ $("lastWeather").textContent=c.time?new Date(c.time).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"}):"—";
+ badge("weatherBadge","MODEL / FORECAST",""); 
 }
-function formatDate(value){
- if(!value) return "ไม่ระบุวันที่";
- const date = new Date(value);
- if(Number.isNaN(date.getTime())) return safeText(value);
- return date.toLocaleString("th-TH",{dateStyle:"medium",timeStyle:"short"});
-}
-function validHttpUrl(value){
- try{
-  const u = new URL(value);
-  return u.protocol === "https:" || u.protocol === "http:";
- }catch(e){ return false; }
-}
-function getNewsCategory(item){
- return item.category || item.topic?.id || "environment";
-}
-function getNewsSearchText(item){
- return [
-  item.title,item.description,item.snippet,item.summary,
-  item.source,item.categoryLabel,item.category
- ].join(" ").toLowerCase();
-}
-function renderNews(){
- const category = $("newsCategory").value;
- const search = $("newsSearch").value.trim().toLowerCase();
- const filtered = newsItems.filter(item=>{
-  const matchCategory = !category || getNewsCategory(item) === category;
-  const matchSearch = !search || getNewsSearchText(item).includes(search);
-  return matchCategory && matchSearch;
- });
- const grid = $("newsGrid");
- grid.replaceChildren();
 
- if(!filtered.length){
-  const empty = document.createElement("div");
-  empty.className = "empty";
-  empty.textContent = newsItems.length
-   ? "ไม่พบข่าวที่ตรงกับตัวกรอง ลองเปลี่ยนคำค้นหรือหมวดข่าว"
-   : "ยังไม่มีข่าวที่ได้รับจาก API";
-  grid.appendChild(empty);
+function deepValue(obj,keys,depth=0){
+ if(!obj||typeof obj!=="object"||depth>5)return null;
+ for(const [key,value] of Object.entries(obj)){
+  if(keys.some(k=>key.toLowerCase().includes(k))&&(typeof value==="number"||typeof value==="string"))return value;
+ }
+ for(const value of Object.values(obj)){
+  if(value&&typeof value==="object"){
+   const found=deepValue(value,keys,depth+1);
+   if(found!==null)return found;
+  }
+ }
+ return null;
+}
+
+async function loadWater(){
+ const endpoints=[
+  ["ฝนสะสม 1 ชั่วโมง","https://swoc-api-service.rid.go.th/api/rainfall-hii-1hr/"],
+  ["ฝนสะสม 24 ชั่วโมง","https://swoc-api-service.rid.go.th/api/rainfall-hii-24hr/"],
+  ["ข้อมูลน้ำท่า","https://swoc-api-service.rid.go.th/api/pier-hii-data/"]
+ ];
+ $("waterStatus").textContent="กำลังร้องขอข้อมูล SWOC...";
+ const results=await Promise.allSettled(endpoints.map(async([label,url])=>{
+  const r=await fetch(url,{headers:{Accept:"application/json"},cache:"no-store"});
+  if(!r.ok)throw Error(label+" HTTP "+r.status);
+  return{label,data:await r.json()};
+ }));
+ const ok=results.filter(x=>x.status==="fulfilled").map(x=>x.value);
+ $("waterRows").replaceChildren();
+ if(!ok.length){
+  $("waterStatus").textContent="API ไม่ตอบกลับหรือจำเป็นต้องยืนยันตัวตน";
+  badge("waterBadge","UNAVAILABLE","err");
+  $("waterRows").textContent="ไม่สามารถดึงข้อมูลจากต้นทางได้ จึงไม่แสดงตัวเลขที่คาดเดา";
   return;
  }
-
- filtered.forEach(item=>{
-  const card = document.createElement("article");
-  card.className = "news-card";
-
-  const meta = document.createElement("div");
-  meta.className = "news-meta";
-  meta.textContent =
-   safeText(item.source || item.domain || "แหล่งข่าวไม่ระบุ") +
-   " · " + formatDate(item.publishedAt || item.date || item.seendate);
-
-  const title = document.createElement("h3");
-  title.textContent = safeText(item.title) || "ไม่มีหัวข้อข่าว";
-
-  const categoryLabel = document.createElement("span");
-  categoryLabel.className = "tag";
-  categoryLabel.textContent = safeText(item.categoryLabel) || "สิ่งแวดล้อม";
-
-  const snippet = document.createElement("p");
-  snippet.className = "news-snippet";
-  snippet.textContent = safeText(item.description || item.snippet || item.summary) ||
-   "แหล่งข่าวไม่ได้ส่งรายละเอียดเพิ่มเติม โปรดอ่านจากต้นฉบับ";
-
-  const bottom = document.createElement("div");
-  bottom.className = "news-bottom";
-
-  const score = document.createElement("span");
-  score.className = "score";
-  score.textContent = "Relevance: " +
-   (Number.isFinite(Number(item.relevance)) ? item.relevance : "N/A");
-
-  const link = document.createElement("a");
-  link.className = "news-link";
-  const target = item.url || item.link;
-  if(validHttpUrl(target)){
-   link.href = target;
-   link.target = "_blank";
-   link.rel = "noopener noreferrer";
-   link.textContent = "อ่านข่าวต้นฉบับ ↗";
-  }else{
-   link.textContent = "ไม่มีลิงก์ต้นฉบับ";
-  }
-
-  bottom.append(score,link);
-  card.append(meta,categoryLabel,title,snippet,bottom);
-  grid.appendChild(card);
+ const a=ok.find(x=>x.label.includes("1 ชั่วโมง"));
+ const b=ok.find(x=>x.label.includes("24 ชั่วโมง"));
+ $("rain1").textContent=a?(deepValue(a.data,["rain","rainfall","value"])??"มีข้อมูล"):"—";
+ $("rain24").textContent=b?(deepValue(b.data,["rain","rainfall","value"])??"มีข้อมูล"):"—";
+ ok.forEach(item=>{
+  const row=document.createElement("div");row.className="rowitem";
+  const title=document.createElement("b");title.textContent=item.label;
+  const value=document.createElement("span");
+  const count=Array.isArray(item.data)?item.data.length:Array.isArray(item.data?.data)?item.data.data.length:null;
+  value.textContent=count===null?"API ตอบกลับ":count+" รายการ";
+  row.append(title,value);$("waterRows").append(row);
  });
+ $("waterStatus").textContent="API ตอบกลับ "+ok.length+"/"+endpoints.length+" รายการ · ตรวจสอบหน่วยและเวลาในต้นทางก่อนอ้างอิง";
+ badge("waterBadge","API RESPONSE","");
 }
 
-function renderOfficialSources(sources){
- const container = $("officialSources");
- container.replaceChildren();
- if(!Array.isArray(sources) || !sources.length) return;
-
- const heading = document.createElement("h3");
- heading.textContent = "แหล่งข้อมูลทางการ";
- container.appendChild(heading);
-
- sources.forEach(source=>{
-  if(!validHttpUrl(source.url)) return;
-  const row = document.createElement("div");
-  row.className = "source-item";
-  const link = document.createElement("a");
-  link.href = source.url;
-  link.target = "_blank";
-  link.rel = "noopener noreferrer";
-  link.textContent = safeText(source.name || "หน่วยงาน") + " ↗";
-  const note = document.createElement("p");
-  note.textContent = safeText(source.note || source.title || "");
-  row.append(link,note);
-  container.appendChild(row);
- });
-}
-
-function renderNewsErrors(data){
- const errors = data.sourceErrors || data.errors || [];
- const target = $("newsErrors");
- target.textContent = "";
- if(Array.isArray(errors) && errors.length){
-  target.textContent = "แหล่งข้อมูลบางแห่งมีปัญหา: " +
-   errors.map(e=>[e.source,e.error || e.message].filter(Boolean).join(" - ")).join(" | ");
- }
-}
-
-async function loadNews(){
- const button = $("refreshNews");
- if(button.disabled) return;
- button.disabled = true;
- $("newsStatus").textContent = "กำลังรวบรวมข่าวจากแหล่งข้อมูล...";
- $("newsGrid").innerHTML = '<div class="empty">กำลังโหลดข่าว...</div>';
- $("newsErrors").textContent = "";
-
- const controller = new AbortController();
- const timeout = setTimeout(()=>controller.abort(),25000);
-
+async function refreshLive(){
+ $("refresh").disabled=true;
+ badge("overallStatus","กำลังอัปเดต","warn");
  try{
-  const response = await fetch(NEWS_API_URL,{
-   method:"GET",
-   cache:"no-store",
-   signal:controller.signal,
-   headers:{"Accept":"application/json"}
-  });
-
-  if(!response.ok) throw new Error("HTTP " + response.status);
-
-  const data = await response.json();
-  newsItems = Array.isArray(data.news) ? data.news : [];
-  renderOfficialSources(data.officialSources);
-  renderNewsErrors(data);
-  $("newsTotal").textContent = String(newsItems.length);
-
-  if(data.success === false || data.dataStatus === "SOURCE_UNAVAILABLE"){
-   $("newsStatus").textContent =
-    "ระบบ API ตอบกลับ แต่แหล่งค้นหาข่าวบางส่วนหรือทั้งหมดใช้งานไม่ได้";
-  }else{
-   $("newsStatus").textContent =
-    "รับข้อมูล " + newsItems.length + " ข่าว · อัปเดต " +
-    formatDate(data.updatedAt || data.generatedAt || data.timestamp);
-  }
-  renderNews();
-
+  await loadWeather();
+  badge("overallStatus","อากาศอัปเดตแล้ว","");
  }catch(error){
-  newsItems = [];
-  $("newsTotal").textContent = "0";
-  $("newsStatus").textContent =
-   "เชื่อมต่อระบบข่าวไม่สำเร็จ: " +
-   (error.name === "AbortError" ? "หมดเวลารอ API" : error.message);
+  ["temp","humidity","wind","rain"].forEach(id=>$(id).textContent="—");
+  $("weatherText").textContent="ข้อมูลไม่พร้อม";
+  $("hours").textContent="เชื่อมต่อ API ไม่สำเร็จ";
+  badge("weatherBadge","UNAVAILABLE","err");
+  badge("overallStatus","ข้อมูลขัดข้อง","err");
+ }finally{$("refresh").disabled=false;}
+}
+$("province").addEventListener("change",refreshLive);
+$("refresh").addEventListener("click",async()=>{await refreshLive();await loadWater();});
+initMap();refreshLive();loadWater();
+setInterval(refreshLive,15*60*1000);
+setInterval(loadWater,30*60*1000);
+
+/* NEWS */
+let allNews=[];
+function validUrl(s){
+ try{const u=new URL(s);return["http:","https:"].includes(u.protocol)}
+ catch{return false}
+}
+function renderNews(){
+ const category=$("newsCategory").value;
+ const term=$("newsSearch").value.trim().toLowerCase();
+ const grid=$("newsGrid");grid.replaceChildren();
+ const list=allNews.filter(n=>
+  (!category||n.category===category)&&
+  (!term||[n.title,n.description,n.source,n.categoryLabel].join(" ").toLowerCase().includes(term))
+ );
+ if(!list.length){grid.textContent="ไม่พบข่าวในตัวกรองนี้";return;}
+ list.forEach(n=>{
+  const card=document.createElement("article");card.className="news";
+  const meta=document.createElement("small");meta.textContent=(n.source||"ไม่ระบุแหล่งข่าว")+" · "+(n.publishedAt||"");
+  const title=document.createElement("h3");title.textContent=n.title||"ไม่มีหัวข้อ";
+  const desc=document.createElement("p");desc.textContent=n.description||"อ่านรายละเอียดจากต้นฉบับ";
+  card.append(meta,title,desc);
+  if(validUrl(n.url)){
+   const link=document.createElement("a");link.href=n.url;link.target="_blank";link.rel="noopener";link.textContent="อ่านข่าวต้นฉบับ ↗";card.append(link);
+  }
+  grid.append(card);
+ });
+}
+async function loadNews(){
+ $("newsStatus").textContent="กำลังรวบรวมข่าว...";
+ try{
+  const response=await fetch(NEWS_API_URL,{cache:"no-store"});
+  if(!response.ok)throw Error("HTTP "+response.status);
+  const data=await response.json();
+  allNews=Array.isArray(data.news)?data.news:[];
+  $("newsTotal").textContent=allNews.length;
+  $("newsStatus").textContent="ข่าว "+allNews.length+" รายการ · อัปเดต "+(data.updatedAt||"ไม่ระบุ");
   renderNews();
- }finally{
-  clearTimeout(timeout);
-  button.disabled = false;
+ }catch(error){
+  $("newsStatus").textContent="โหลดข่าวไม่สำเร็จ: "+error.message;
+  $("newsGrid").textContent="ระบบข่าวยังไม่พร้อมใช้งาน";
  }
 }
-
 $("refreshNews").addEventListener("click",loadNews);
 $("newsCategory").addEventListener("change",renderNews);
 $("newsSearch").addEventListener("input",renderNews);
-loadNews();
-setInterval(loadNews,30*60*1000);
+loadNews();setInterval(loadNews,30*60*1000);
 
 /* WASTE CALCULATOR */
-$("calculateWaste").addEventListener("click",()=>{
- const weight = Number($("wasteWeight").value);
- const days = Number($("wasteDays").value);
- const result = $("wasteResult");
-
- if(!Number.isFinite(weight) || weight < 0 || !Number.isInteger(days) || days < 1){
-  result.textContent = "กรุณากรอกน้ำหนักตั้งแต่ 0 ขึ้นไป และจำนวนวันเป็นจำนวนเต็มตั้งแต่ 1";
-  return;
- }
- const average = weight / days;
- result.textContent =
-  "ปริมาณเฉลี่ยประมาณ " + average.toFixed(2) +
-  " กิโลกรัมต่อวัน จากข้อมูลที่กรอก";
+$("calcWaste").addEventListener("click",()=>{
+ const weight=Number($("wasteWeight").value);
+ const days=Number($("wasteDays").value);
+ $("wasteResult").textContent=weight>=0&&Number.isInteger(days)&&days>0?
+ "เฉลี่ย "+(weight/days).toFixed(2)+" กิโลกรัมต่อวัน":
+ "กรุณาตรวจสอบน้ำหนักและจำนวนวัน";
 });
 
 /* ECO CHALLENGE */
+const eco=[...document.querySelectorAll(".eco")];
+try{
+ const saved=JSON.parse(localStorage.getItem("ktEco")||"[]");
+ eco.forEach((e,i)=>e.checked=!!saved[i]);
+}catch{}
 function updateEco(){
- const tasks = [...document.querySelectorAll(".eco-task")];
- const done = tasks.filter(t=>t.checked).length;
- const percent = tasks.length ? done / tasks.length * 100 : 0;
- $("ecoProgress").style.width = percent + "%";
- $("ecoStatus").textContent = "ทำแล้ว " + done + " จาก " + tasks.length + " กิจกรรม";
- try{
-  localStorage.setItem("ktEcoTasks",JSON.stringify(tasks.map(t=>t.checked)));
- }catch(e){}
+ const done=eco.filter(e=>e.checked).length;
+ $("ecoBar").style.width=(done/eco.length*100)+"%";
+ $("ecoStatus").textContent="ทำแล้ว "+done+"/"+eco.length;
+ try{localStorage.setItem("ktEco",JSON.stringify(eco.map(e=>e.checked)))}catch{}
 }
-try{
- const saved = JSON.parse(localStorage.getItem("ktEcoTasks") || "[]");
- document.querySelectorAll(".eco-task").forEach((task,i)=>task.checked = !!saved[i]);
-}catch(e){}
-document.querySelectorAll(".eco-task").forEach(task=>task.addEventListener("change",updateEco));
-updateEco();
+eco.forEach(e=>e.addEventListener("change",updateEco));updateEco();
 
-/* ENVIRONMENTAL RECORDS */
-try{
- records = JSON.parse(localStorage.getItem("ktGreenRecords") || "[]");
- if(!Array.isArray(records)) records = [];
-}catch(e){records=[];}
-
+/* LOCAL ENVIRONMENT DATABASE */
+let records=[];
+try{records=JSON.parse(localStorage.getItem("ktRecords")||"[]");if(!Array.isArray(records))records=[]}catch{records=[]}
 function renderRecords(){
- $("totalRecords").textContent = records.length;
- const province = $("filterProvince").value;
- const type = $("filterType").value;
- const rows = records.filter(r=>
-  (!province || r.province === province) &&
-  (!type || r.type === type)
- );
- const body = $("databaseBody");
- body.replaceChildren();
-
- if(!rows.length){
-  const tr = document.createElement("tr");
-  const td = document.createElement("td");
-  td.colSpan = 5;
-  td.className = "empty";
-  td.textContent = "ไม่พบข้อมูลที่ตรงกับเงื่อนไข";
-  tr.appendChild(td);
-  body.appendChild(tr);
-  return;
- }
-
- rows.forEach(record=>{
-  const tr = document.createElement("tr");
-  [record.date,record.province,record.type,
-   record.value + " " + record.unit].forEach(value=>{
-    const td = document.createElement("td");
-    td.textContent = value;
-    tr.appendChild(td);
-   });
-  const td = document.createElement("td");
-  const a = document.createElement("a");
-  if(validHttpUrl(record.source)){
-   a.href = record.source;
-   a.target = "_blank";
-   a.rel = "noopener noreferrer";
-   a.textContent = "เปิดเอกสาร ↗";
-  }else{
-   a.textContent = "ไม่มีลิงก์";
-  }
-  td.appendChild(a);
-  tr.appendChild(td);
-  body.appendChild(tr);
+ $("recordTotal").textContent=records.length;
+ $("records").replaceChildren();
+ records.forEach(r=>{
+  const row=document.createElement("div");row.className="rowitem";
+  const text=document.createElement("span");
+  text.textContent=r.date+" · "+r.province+" · "+r.type+" · "+r.value;
+  const link=document.createElement("a");link.href=r.source;link.target="_blank";link.rel="noopener";link.textContent="เอกสาร ↗";
+  row.append(text,link);$("records").append(row);
  });
 }
-$("filterProvince").addEventListener("change",renderRecords);
-$("filterType").addEventListener("change",renderRecords);
-
-$("recordForm").addEventListener("submit",event=>{
- event.preventDefault();
- const source = $("recordSource").value.trim();
- if(!validHttpUrl(source)){
-  alert("กรุณาใส่ลิงก์เอกสารที่ขึ้นต้นด้วย http:// หรือ https://");
-  return;
- }
-
- const record = {
-  date:$("sampleDate").value,
+$("recordForm").addEventListener("submit",e=>{
+ e.preventDefault();
+ const source=$("recordSource").value;
+ if(!validUrl(source)){alert("กรุณาใส่ลิงก์ http หรือ https");return;}
+ records.push({
+  date:$("recordDate").value,
   province:$("recordProvince").value,
   type:$("recordType").value,
   value:Number($("recordValue").value),
-  unit:$("recordUnit").value,
   source
- };
- if(!record.date || !record.province || !record.type ||
-    !Number.isFinite(record.value) || record.value < 0){
-  alert("กรุณาตรวจสอบข้อมูลให้ครบถ้วน");
-  return;
- }
-
- records.push(record);
+ });
  try{
-  localStorage.setItem("ktGreenRecords",JSON.stringify(records));
- }catch(error){
-  records.pop();
-  alert("เบราว์เซอร์ไม่สามารถบันทึกข้อมูลได้");
-  return;
- }
- event.target.reset();
- renderRecords();
- alert("บันทึกข้อมูลในเบราว์เซอร์นี้แล้ว");
+  localStorage.setItem("ktRecords",JSON.stringify(records));
+  e.target.reset();renderRecords();
+ }catch{alert("บันทึกไม่สำเร็จ")}
 });
-
 renderRecords();
 </script>
 </body>
