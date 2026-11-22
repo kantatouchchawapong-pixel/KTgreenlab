@@ -12,83 +12,116 @@
 :root{--green:#176b45;--dark:#123d2b;--light:#eaf5ed;--bg:#f5f8f5;--text:#20352a;--muted:#708176;--border:#e1eae2}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Prompt',sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}a{color:var(--green);text-decoration:none}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:var(--green);text-decoration:none}
 .topbar{background:var(--dark);color:white;padding:10px 5%;font-size:12px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 header{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:500}
 .header-inner{max-width:1200px;margin:auto;padding:15px 20px;display:flex;align-items:center;justify-content:space-between;gap:20px}
-.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:43px;height:43px;border-radius:14px;background:var(--green);color:white;display:grid;place-items:center;font-size:23px}
-.brand-name{font-size:19px;font-weight:700;color:var(--dark)}.brand-sub{font-size:10px;color:var(--muted)}
-nav{display:flex;gap:5px;flex-wrap:wrap}nav button{border:0;background:transparent;padding:9px 12px;border-radius:9px;color:#52665a;font-size:13px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{width:43px;height:43px;border-radius:14px;background:var(--green);color:white;display:grid;place-items:center;font-size:23px}
+.brand-name{font-size:19px;font-weight:700;color:var(--dark)}
+.brand-sub{font-size:10px;color:var(--muted)}
+nav{display:flex;gap:5px;flex-wrap:wrap}
+nav button{border:0;background:transparent;padding:9px 12px;border-radius:9px;color:#52665a;font-size:13px}
 nav button:hover,nav button.active{background:var(--light);color:var(--green)}
 .menu-toggle{display:none;background:var(--light);border:0;padding:9px 13px;border-radius:9px;color:var(--green)}
 main{max-width:1200px;margin:auto;padding:25px 20px 60px}
-.page{display:none}.page.active{display:block}
+.page{display:none}
+.page.active{display:block}
 .hero{background:linear-gradient(120deg,#123d2b,#20744b);color:white;padding:38px;border-radius:22px}
-.hero h1{font-size:clamp(25px,4vw,39px);line-height:1.3;margin:10px 0}.hero p{max-width:650px;color:#d5e9dc;line-height:1.8;font-size:14px}
-.eyebrow{font-size:12px;letter-spacing:1px;color:#b9e5c7}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.hero h1{font-size:clamp(25px,4vw,39px);line-height:1.3;margin:10px 0}
+.hero p{max-width:650px;color:#d5e9dc;line-height:1.8;font-size:14px}
+.eyebrow{font-size:12px;letter-spacing:1px;color:#b9e5c7}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .btn{border:0;padding:11px 17px;border-radius:10px;font-size:13px;font-weight:600}
-.btn-primary{background:white;color:var(--dark)}.btn-green{background:var(--green);color:white}.btn-soft{background:var(--light);color:var(--green)}.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn-primary{background:white;color:var(--dark)}
+.btn-green{background:var(--green);color:white}
+.btn-soft{background:var(--light);color:var(--green)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--text)}
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:30px 0 15px;flex-wrap:wrap}
-.section-head h2{font-size:20px;margin:0;color:var(--dark)}.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.section-head h2{font-size:20px;margin:0;color:var(--dark)}
+.section-head p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
 .card{background:white;border:1px solid var(--border);border-radius:16px;padding:19px;min-width:0}
-.feature{cursor:pointer;transition:.2s}.feature:hover{transform:translateY(-3px);border-color:#a9d2b5;box-shadow:0 8px 24px #183d2910}
+.feature{cursor:pointer;transition:.2s}
+.feature:hover{transform:translateY(-3px);border-color:#a9d2b5;box-shadow:0 8px 24px #183d2910}
 .feature-icon{width:43px;height:43px;border-radius:13px;background:var(--light);display:grid;place-items:center;font-size:22px;margin-bottom:12px}
-.card h3{font-size:15px;margin:0 0 6px;color:var(--dark)}.card p{font-size:12px;color:var(--muted);line-height:1.75;margin:0}
+.card h3{font-size:15px;margin:0 0 6px;color:var(--dark)}
+.card p{font-size:12px;color:var(--muted);line-height:1.75;margin:0}
 .card-link{display:inline-block;margin-top:13px;font-size:12px;font-weight:600;color:var(--green)}
 .notice,.info{padding:13px 15px;border-radius:12px;font-size:12px;line-height:1.7;margin:15px 0}
-.notice{background:#fff8e9;border:1px solid #f4e3bb;color:#76551c}.info{background:#edf6ff;border:1px solid #d9e9fa;color:#315b7d}
+.notice{background:#fff8e9;border:1px solid #f4e3bb;color:#76551c}
+.info{background:#edf6ff;border:1px solid #d9e9fa;color:#315b7d}
 .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
 input,select{padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:white;color:var(--text);min-width:0}
-input:focus,select:focus{outline:2px solid #b9ddc4;border-color:var(--green)}.toolbar input{flex:1;min-width:180px}
+input:focus,select:focus{outline:2px solid #b9ddc4;border-color:var(--green)}
+.toolbar input{flex:1;min-width:180px}
 .status{font-size:12px;color:var(--muted);padding:10px 0}
 .metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:15px 0}
 .metric{background:white;border:1px solid var(--border);border-radius:14px;padding:15px}
-.metric small{font-size:11px;color:var(--muted)}.metric strong{display:block;font-size:24px;color:var(--dark);margin:6px 0}.metric span{font-size:11px;color:var(--muted)}
-.news-item{padding:17px 0;border-bottom:1px solid var(--border)}.news-item:last-child{border:0}
-.news-item h3{font-size:14px;line-height:1.6}.news-item p{margin:6px 0;font-size:12px;color:var(--muted)}
+.metric small{font-size:11px;color:var(--muted)}
+.metric strong{display:block;font-size:24px;color:var(--dark);margin:6px 0}
+.metric span{font-size:11px;color:var(--muted)}
+.news-item{padding:17px 0;border-bottom:1px solid var(--border)}
+.news-item:last-child{border:0}
+.news-item h3{font-size:14px;line-height:1.6}
+.news-item p{margin:6px 0;font-size:12px;color:var(--muted)}
 .tag{display:inline-block;padding:4px 8px;background:var(--light);color:var(--green);font-size:10px;border-radius:20px;margin-right:5px}
 .guide-step{display:flex;gap:13px;padding:14px 0;border-bottom:1px solid var(--border)}
 .guide-number{width:28px;height:28px;flex:none;border-radius:50%;background:var(--light);color:var(--green);display:grid;place-items:center;font-weight:700;font-size:12px}
-.guide-step strong{font-size:13px}.guide-step p{margin:3px 0 0}
-.result{background:var(--light);border-radius:13px;padding:18px;margin-top:15px}.result strong{font-size:23px;color:var(--green)}
+.guide-step strong{font-size:13px}
+.guide-step p{margin:3px 0 0}
+.result{background:var(--light);border-radius:13px;padding:18px;margin-top:15px}
+.result strong{font-size:23px;color:var(--green)}
 .check-row{display:flex;align-items:flex-start;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13px}
 .check-row input{margin-top:4px;accent-color:var(--green)}
-.progress{height:9px;background:#e8eee9;border-radius:20px;overflow:hidden;margin:12px 0}.progress div{height:100%;background:var(--green);width:0;transition:.2s}
+.progress{height:9px;background:#e8eee9;border-radius:20px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;background:var(--green);width:0;transition:.2s}
 footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font-size:12px;line-height:1.8}
-.small{font-size:11px;color:var(--muted)}.empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}
+.small{font-size:11px;color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted);font-size:13px}
 .weather-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(310px,.85fr);gap:15px;align-items:start}
-.weather-map-card{padding:14px}.weather-map-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.weather-map-head strong{font-size:14px;color:var(--dark)}.weather-map-head span{font-size:11px;color:var(--muted)}
+.weather-map-card{padding:14px;position:relative}
+.weather-map-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.weather-map-head strong{font-size:14px;color:var(--dark)}
+.weather-map-head span{font-size:11px;color:var(--muted)}
 .weather-map-controls{display:flex;gap:7px;flex-wrap:wrap}
 .weather-map-controls button{border:1px solid var(--border);background:white;color:var(--text);padding:7px 10px;border-radius:8px;font-size:11px}
 .weather-map-controls button.active{background:var(--light);border-color:#a9d2b5;color:var(--green)}
-#weatherMap{height:510px;width:100%;border-radius:12px;overflow:hidden;background:#e8f0eb}
-.map-search{display:flex;gap:8px;margin:10px 0 8px}
-.map-search input{flex:1;width:100%;min-width:0}
-.map-search button{flex:none}
-.map-search-results{display:none;background:white;border:1px solid var(--border);border-radius:11px;margin:0 0 10px;overflow:hidden;box-shadow:0 5px 18px #183d2912;max-height:260px;overflow-y:auto}
+#weatherMap{height:510px;width:100%;border-radius:12px;overflow:hidden;background:#e8f0eb;position:relative;z-index:1}
+.map-search{display:flex;gap:8px;margin:10px 0 8px;position:relative;z-index:1000}
+.map-search input{flex:1;width:100%;min-width:0;position:relative;z-index:1001;pointer-events:auto}
+.map-search button{flex:none;position:relative;z-index:1001}
+.map-search-results{display:none;background:white;border:1px solid var(--border);border-radius:11px;margin:0 0 10px;overflow:hidden;box-shadow:0 5px 18px #183d2912;max-height:260px;overflow-y:auto;position:relative;z-index:1002}
 .map-search-results.show{display:block}
 .map-search-result{display:block;width:100%;text-align:left;padding:11px 13px;background:white;border:0;border-bottom:1px solid var(--border);color:var(--text);font-size:12px;line-height:1.6}
 .map-search-result:last-child{border-bottom:0}
 .map-search-result:hover{background:var(--light);color:var(--green)}
 .map-search-message{padding:11px 13px;font-size:12px;color:var(--muted)}
-.map-legend{display:flex;gap:12px;flex-wrap:wrap;padding:10px 2px 0;font-size:10px;color:var(--muted)}
-.legend-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}
-.weather-side{display:grid;gap:13px}.weather-current{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
-.weather-current .metric{padding:12px}.weather-current .metric strong{font-size:21px}
+.weather-side{display:grid;gap:13px}
+.weather-current{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.weather-current .metric{padding:12px}
+.weather-current .metric strong{font-size:21px}
 .weather-condition{background:linear-gradient(130deg,#123d2b,#20744b);color:white;border-radius:14px;padding:17px}
-.weather-condition .condition-label{font-size:11px;color:#c4e5cf}.weather-condition strong{display:block;font-size:22px;margin:5px 0}
+.weather-condition .condition-label{font-size:11px;color:#c4e5cf}
+.weather-condition strong{display:block;font-size:22px;margin:5px 0}
 .weather-condition p{font-size:12px;color:#e0f0e5;line-height:1.7;margin:0}
 .weather-insight{background:#f2f8f3;border:1px solid #dcecdf;border-radius:12px;padding:13px}
-.weather-insight h3{font-size:13px;margin:0 0 7px;color:var(--dark)}.weather-insight p{font-size:12px;line-height:1.7;color:#53685a;margin:0}
+.weather-insight h3{font-size:13px;margin:0 0 7px;color:var(--dark)}
+.weather-insight p{font-size:12px;line-height:1.7;color:#53685a;margin:0}
 .forecast-scroll{display:grid;grid-template-columns:repeat(7,minmax(105px,1fr));gap:8px;overflow-x:auto;padding-bottom:5px}
 .forecast-day{background:#f8faf8;border:1px solid var(--border);border-radius:11px;padding:11px;text-align:center}
-.forecast-day strong{display:block;font-size:11px;color:var(--dark)}.forecast-day .forecast-icon{font-size:21px;margin:7px 0}
-.forecast-day b{font-size:13px;color:var(--dark)}.forecast-day small{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5}
-.hourly-scroll{overflow-x:auto}.hourly-strip{display:flex;gap:8px;min-width:max-content;padding:4px 0}
+.forecast-day strong{display:block;font-size:11px;color:var(--dark)}
+.forecast-day .forecast-icon{font-size:21px;margin:7px 0}
+.forecast-day b{font-size:13px;color:var(--dark)}
+.forecast-day small{display:block;font-size:10px;color:var(--muted);margin-top:5px;line-height:1.5}
+.hourly-scroll{overflow-x:auto}
+.hourly-strip{display:flex;gap:8px;min-width:max-content;padding:4px 0}
 .hour-item{background:#f8faf8;border:1px solid var(--border);border-radius:10px;padding:10px;min-width:82px;text-align:center}
-.hour-item strong{display:block;font-size:12px;color:var(--dark)}.hour-item span{display:block;font-size:11px;color:var(--muted);margin-top:5px}
+.hour-item strong{display:block;font-size:12px;color:var(--dark)}
+.hour-item span{display:block;font-size:11px;color:var(--muted);margin-top:5px}
 .weather-source{font-size:10px;color:var(--muted);line-height:1.6;margin-top:10px}
 .leaflet-popup-content{font-family:'Prompt',sans-serif;font-size:12px}
 @media(max-width:900px){.weather-layout{grid-template-columns:1fr}#weatherMap{height:420px}}
@@ -128,14 +161,13 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
 </section>
 
 <section class="page" id="weather">
-  <div class="section-head"><div><h2>🌦️ แผนที่อากาศแบบเจาะพื้นที่</h2><p>ค้นหาถนน ซูมแผนที่ คลิกตำแหน่ง และดูความแตกต่างของอากาศแต่ละบริเวณ</p></div></div>
-  <div class="info">ค้นหาถนนหรือสถานที่จากช่องค้นหา หรือคลิกบนแผนที่เพื่อดูพยากรณ์ของพิกัดนั้น วงสีแสดงค่าพยากรณ์โดยประมาณ ไม่ใช่ข้อมูลตรวจวัดจริงระดับถนน</div>
+  <div class="section-head"><div><h2>🌦️ แผนที่อากาศแบบเจาะพื้นที่</h2><p>ค้นหาถนน ซูมแผนที่ คลิกตำแหน่ง และดูพยากรณ์อากาศของพื้นที่ที่เลือก</p></div></div>
+  <div class="info">ค้นหาถนนหรือสถานที่จากช่องค้นหา หรือคลิกบนแผนที่เพื่อดูพยากรณ์ของพิกัดนั้น ข้อมูลเป็นค่าพยากรณ์จากแบบจำลอง ไม่ใช่ข้อมูลตรวจวัดจริงระดับถนน</div>
   <div class="weather-layout">
     <div class="card weather-map-card">
       <div class="weather-map-head">
         <div><strong>แผนที่อากาศประเทศไทย</strong><br><span id="weatherMapStatus">กำลังเตรียมแผนที่...</span></div>
         <div class="weather-map-controls">
-          <button id="areaToggle" class="active" onclick="toggleAreas()">พื้นที่อากาศ: เปิด</button>
           <button id="radarToggle" class="active" onclick="toggleRadar()">เรดาร์ฝน: เปิด</button>
           <button onclick="refreshWeatherMap()">รีเฟรช</button>
         </div>
@@ -148,13 +180,6 @@ footer{background:#102f23;color:#d6e7dc;padding:28px 20px;text-align:center;font
       <div id="mapSearchResults" class="map-search-results"></div>
       <div id="weatherMap"></div>
       <p class="small">ค้นหาด้วย OpenStreetMap · ผลการค้นหาอาจไม่ครอบคลุมทุกซอย</p>
-
-      <div class="map-legend">
-        <span><i class="legend-dot" style="background:#269b62"></i>อากาศทั่วไป</span>
-        <span><i class="legend-dot" style="background:#e99b38"></i>อากาศร้อน</span>
-        <span><i class="legend-dot" style="background:#1686d9"></i>มีโอกาสฝน</span>
-        <span><i class="legend-dot" style="background:#8b55c7"></i>ฝนสูง</span>
-      </div>
       <div class="weather-source">แผนที่ถนน: OpenStreetMap · เรดาร์ฝน: RainViewer · พยากรณ์: Open-Meteo</div>
     </div>
     <div class="weather-side">
@@ -243,7 +268,8 @@ const safeText=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;","
 function showPage(name){
  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- $(name).classList.add("active");$("nav").classList.remove("open");
+ $(name).classList.add("active");
+ $("nav").classList.remove("open");
  window.scrollTo({top:0,behavior:"smooth"});
  if(name==="news"&&!$("newsList").dataset.loaded)loadNews();
  if(name==="weather"){
@@ -279,20 +305,14 @@ function weatherEmoji(code){
  if([95,96,99].includes(code))return"⛈️";
  return"☁️";
 }
-function weatherColor(code,temp,rainProb=0){
- if([95,96,99].includes(code)||rainProb>=75)return"#8b55c7";
- if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)||rainProb>=45)return"#1686d9";
- if(Number(temp)>=35)return"#e99b38";
- return"#269b62";
-}
 function weatherDirection(deg){
  if(!Number.isFinite(Number(deg)))return"—";
  return["เหนือ","ตะวันออกเฉียงเหนือ","ตะวันออก","ตะวันออกเฉียงใต้","ใต้","ตะวันตกเฉียงใต้","ตะวันตก","ตะวันตกเฉียงเหนือ"][Math.round(Number(deg)/45)%8];
 }
 
 /* MAP STATE */
-let weatherMap=null,radarLayer=null,radarEnabled=true,areasEnabled=true;
-let areaCircles=[],selectedMarker=null,radarRefreshTimer=null;
+let weatherMap=null,radarLayer=null,radarEnabled=true;
+let selectedMarker=null,radarRefreshTimer=null;
 let selectedLocation={lat:13.7563,lon:100.5018,name:"กรุงเทพมหานคร"};
 
 function initWeatherMap(){
@@ -310,7 +330,6 @@ function initWeatherMap(){
  });
 
  loadRadar();
- loadAreaWeather();
  radarRefreshTimer=setInterval(loadRadar,10*60*1000);
  setTimeout(()=>weatherMap.invalidateSize(),200);
 }
@@ -338,6 +357,7 @@ async function searchMapPlace(){
 
  if(searchAbortController)searchAbortController.abort();
  searchAbortController=new AbortController();
+ const controller=searchAbortController;
 
  results.innerHTML='<div class="map-search-message">กำลังค้นหาสถานที่...</div>';
  results.classList.add("show");
@@ -346,6 +366,7 @@ async function searchMapPlace(){
   const now=Date.now();
   const wait=Math.max(0,1100-(now-lastSearchTime));
   if(wait)await new Promise(resolve=>setTimeout(resolve,wait));
+  if(controller.signal.aborted)return;
   lastSearchTime=Date.now();
 
   const params=new URLSearchParams({
@@ -360,14 +381,14 @@ async function searchMapPlace(){
   const response=await fetch(
    "https://nominatim.openstreetmap.org/search?"+params.toString(),
    {
-    signal:searchAbortController.signal,
+    signal:controller.signal,
     headers:{"Accept":"application/json"}
    }
   );
 
   if(!response.ok)throw Error("HTTP "+response.status);
-
   const places=await response.json();
+  if(controller.signal.aborted)return;
 
   if(!places.length){
    results.innerHTML='<div class="map-search-message">ไม่พบสถานที่ ลองใช้ชื่อถนนหรือชื่อเขตอื่น</div>';
@@ -375,7 +396,6 @@ async function searchMapPlace(){
   }
 
   results.innerHTML="";
-
   places.forEach(place=>{
    const button=document.createElement("button");
    button.type="button";
@@ -403,19 +423,17 @@ async function searchMapPlace(){
 function selectMapSearchResult(place){
  const lat=Number(place.lat);
  const lon=Number(place.lon);
-
  if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
 
  const name=place.name||place.display_name||"สถานที่ที่ค้นหา";
-
  selectedLocation={lat:lat,lon:lon,name:name};
 
+ initWeatherMap();
  weatherMap.setView([lat,lon],17,{animate:true});
  setSelectedMarker(lat,lon);
 
  $("mapSearchInput").value=name;
  $("mapSearchResults").classList.remove("show");
-
  loadWeatherAt(lat,lon,name);
 }
 
@@ -434,18 +452,16 @@ document.addEventListener("click",e=>{
  }
 });
 
-function toggleAreas(){
- areasEnabled=!areasEnabled;
- $("areaToggle").textContent="พื้นที่อากาศ: "+(areasEnabled?"เปิด":"ปิด");
- $("areaToggle").classList.toggle("active",areasEnabled);
- areaCircles.forEach(layer=>{if(areasEnabled)layer.addTo(weatherMap);else weatherMap.removeLayer(layer)});
-}
 function toggleRadar(){
  radarEnabled=!radarEnabled;
  $("radarToggle").textContent="เรดาร์ฝน: "+(radarEnabled?"เปิด":"ปิด");
  $("radarToggle").classList.toggle("active",radarEnabled);
- if(radarLayer){if(radarEnabled)radarLayer.addTo(weatherMap);else weatherMap.removeLayer(radarLayer)}
+ if(radarLayer){
+  if(radarEnabled)radarLayer.addTo(weatherMap);
+  else weatherMap.removeLayer(radarLayer);
+ }
 }
+
 async function loadRadar(){
  if(!weatherMap)return;
  try{
@@ -459,68 +475,13 @@ async function loadRadar(){
    tileSize:256,opacity:.55,maxNativeZoom:7,maxZoom:20
   });
   if(radarEnabled)radarLayer.addTo(weatherMap);
-  $("weatherMapStatus").textContent="เรดาร์ล่าสุด "+new Date(frame.time*1000).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})+" น. · พื้นที่สีอัปเดตแยกต่างหาก";
+  $("weatherMapStatus").textContent="เรดาร์ล่าสุด "+new Date(frame.time*1000).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})+" น.";
  }catch(e){
-  $("weatherMapStatus").textContent="เรดาร์ไม่พร้อมใช้งาน แต่แผนที่ถนนและข้อมูลพื้นที่ยังใช้ได้";
+  $("weatherMapStatus").textContent="เรดาร์ไม่พร้อมใช้งาน แต่แผนที่ถนนและข้อมูลพยากรณ์ยังใช้ได้";
  }
 }
 
-/* GRID WEATHER */
-function makeWeatherGrid(){
- const points=[];
- for(let lat=6.5;lat<=20.3;lat+=0.65){
-  for(let lon=97.3;lon<=105.8;lon+=0.65){
-   points.push({lat:Number(lat.toFixed(3)),lon:Number(lon.toFixed(3))});
-  }
- }
- return points;
-}
-async function loadAreaWeather(){
- if(!weatherMap)return;
- $("weatherMapStatus").textContent="กำลังโหลดพยากรณ์รายพื้นที่ทั่วประเทศไทย...";
- const points=makeWeatherGrid();
- const batchSize=35;
- try{
-  for(let start=0;start<points.length;start+=batchSize){
-   const batch=points.slice(start,start+batchSize);
-   const lat=batch.map(p=>p.lat).join(",");
-   const lon=batch.map(p=>p.lon).join(",");
-   const url="https://api.open-meteo.com/v1/forecast?latitude="+lat+"&longitude="+lon+
-    "&current=temperature_2m,precipitation,weather_code&hourly=precipitation_probability&forecast_days=1&timezone=Asia%2FBangkok";
-   const r=await fetch(url);
-   if(!r.ok)throw Error("HTTP "+r.status);
-   const data=await r.json();
-   const rows=Array.isArray(data)?data:[data];
-   rows.forEach((item,i)=>{
-    const c=item.current||{};
-    const probs=item.hourly?.precipitation_probability||[];
-    const rainProb=Number(probs[0]??0);
-    if(!Number.isFinite(Number(c.temperature_2m)))return;
-    const color=weatherColor(Number(c.weather_code),Number(c.temperature_2m),rainProb);
-    const circle=L.circle([batch[i].lat,batch[i].lon],{
-     radius:26000,color:color,weight:0,fillColor:color,fillOpacity:.20,interactive:true
-    });
-    circle.bindPopup(
-     "<strong>พยากรณ์บริเวณนี้</strong><br>"+
-     weatherEmoji(Number(c.weather_code))+" "+weatherText(Number(c.weather_code))+"<br>"+
-     "อุณหภูมิ: "+c.temperature_2m+" °C<br>"+
-     "ฝนขณะนี้: "+(c.precipitation??"—")+" มม.<br>"+
-     "โอกาสฝนรายชั่วโมง: "+rainProb+"%<br>"+
-     "<small>แบบจำลอง Open-Meteo · ไม่ใช่สถานีตรวจวัด</small>"
-    );
-    areaCircles.push(circle);
-    if(areasEnabled)circle.addTo(weatherMap);
-   });
-  }
-  $("weatherMapStatus").textContent="แสดงพยากรณ์พื้นที่ตัวอย่าง "+areaCircles.length+" จุด · คลิกแผนที่เพื่อเจาะพิกัด";
- }catch(e){
-  $("weatherMapStatus").textContent="โหลดพื้นที่พยากรณ์ไม่ครบ: "+e.message+" · ยังคลิกแผนที่เพื่อดูอากาศเฉพาะจุดได้";
- }
-}
 function refreshWeatherMap(){
- areaCircles.forEach(x=>weatherMap.removeLayer(x));
- areaCircles=[];
- loadAreaWeather();
  loadRadar();
  loadWeatherAt(selectedLocation.lat,selectedLocation.lon,selectedLocation.name);
 }
@@ -528,7 +489,8 @@ function refreshWeatherMap(){
 /* WEATHER DETAIL */
 function analyseWeather(d){
  const c=d.current||{},h=d.hourly||{},day=d.daily||{};
- let nowIndex=(h.time||[]).findIndex(t=>t>=c.time);if(nowIndex<0)nowIndex=0;
+ let nowIndex=(h.time||[]).findIndex(t=>t>=c.time);
+ if(nowIndex<0)nowIndex=0;
  const rain=(h.precipitation_probability||[]).slice(nowIndex,nowIndex+6).map(Number).filter(Number.isFinite);
  const rainMax=rain.length?Math.max(...rain):0;
  const maxTemp=Number(day.temperature_2m_max?.[0]??c.temperature_2m);
@@ -540,6 +502,7 @@ function analyseWeather(d){
  if(uv>=8)notes.push("ดัชนี UV คาดว่าสูง ควรป้องกันแสงแดด");
  return notes.length?notes.join(" · "):"ยังไม่พบสัญญาณเด่นจากตัวแปรที่ใช้วิเคราะห์ โปรดติดตามสภาพอากาศเป็นระยะ";
 }
+
 async function loadWeatherAt(lat,lon,name){
  $("weatherStatus").textContent="กำลังโหลดพยากรณ์ที่ "+lat.toFixed(3)+", "+lon.toFixed(3)+"...";
  $("weatherInsight").textContent="กำลังวิเคราะห์ข้อมูล...";
@@ -554,6 +517,7 @@ async function loadWeatherAt(lat,lon,name){
   const r=await fetch("https://api.open-meteo.com/v1/forecast?"+params);
   if(!r.ok)throw Error("HTTP "+r.status);
   const d=await r.json(),c=d.current||{};
+
   $("temp").textContent=c.temperature_2m??"—";
   $("feels").textContent=c.apparent_temperature??"—";
   $("humidity").textContent=c.relative_humidity_2m??"—";
@@ -571,7 +535,8 @@ async function loadWeatherAt(lat,lon,name){
   }
 
   const h=d.hourly||{},times=h.time||[];
-  let start=times.findIndex(t=>t>=c.time);if(start<0)start=0;
+  let start=times.findIndex(t=>t>=c.time);
+  if(start<0)start=0;
   $("hourly").innerHTML='<div class="hourly-strip">'+times.slice(start,start+12).map((t,n)=>{
    const i=start+n;
    return '<div class="hour-item"><strong>'+t.slice(11,16)+'</strong><div style="font-size:19px;margin:5px 0">'+weatherEmoji(Number(h.weather_code?.[i]))+'</div><b>'+(h.temperature_2m?.[i]??"—")+'°</b><span>ฝน '+(h.precipitation_probability?.[i]??"—")+'%</span></div>';
@@ -587,6 +552,7 @@ async function loadWeatherAt(lat,lon,name){
   $("weatherInsight").textContent="ยังวิเคราะห์ข้อมูลไม่ได้ กรุณาลองอีกครั้ง";
  }
 }
+
 function loadWeather(){
  const index=Number($("province").value),p=provinces[index];
  if(!p)return;
@@ -605,15 +571,19 @@ const waterEndpoints=[
  ["ปริมาณฝน 24 ชั่วโมง","https://swoc-api-service.rid.go.th/api/rainfall-hii-24hr/"],
  ["ข้อมูลท่าเรือ/สถานี","https://swoc-api-service.rid.go.th/api/pier-hii-data/"]
 ];
+
 async function checkWater(){
- $("waterStatus").textContent="กำลังตรวจสอบแหล่งข้อมูล...";$("waterResults").innerHTML="";
+ $("waterStatus").textContent="กำลังตรวจสอบแหล่งข้อมูล...";
+ $("waterResults").innerHTML="";
  const results=await Promise.all(waterEndpoints.map(async item=>{
   try{
    const r=await fetch(item[1],{signal:AbortSignal.timeout(10000)});
    if(!r.ok)throw Error("HTTP "+r.status);
    await r.json();
    return{name:item[0],ok:true,detail:"ได้รับการตอบกลับจาก API"};
-  }catch(e){return{name:item[0],ok:false,detail:e.message}}
+  }catch(e){
+   return{name:item[0],ok:false,detail:e.message};
+  }
  }));
  const good=results.filter(x=>x.ok).length;
  $("waterStatus").textContent="ตรวจสอบแล้ว "+good+"/"+results.length+" แหล่งข้อมูลตอบกลับ";
@@ -634,25 +604,36 @@ function matchesNewsCategory(item,category){
  };
  return(keywords[category]||[]).some(word=>text.includes(word.toLowerCase()));
 }
+
 async function loadNews(force=false){
  const status=$("newsStatus"),list=$("newsList");
  status.textContent="กำลังดึงข่าวจากระบบ...";
  list.innerHTML='<div class="empty">กำลังโหลดข่าว...</div>';
  const category=$("newsCategory").value,search=$("newsSearch").value.trim().toLowerCase();
  try{
-  const url=new URL(WORKER+"/api/news");if(force)url.searchParams.set("refresh","1");
-  const response=await fetch(url,{cache:"no-store"});if(!response.ok)throw Error("HTTP "+response.status);
+  const url=new URL(WORKER+"/api/news");
+  if(force)url.searchParams.set("refresh","1");
+  const response=await fetch(url,{cache:"no-store"});
+  if(!response.ok)throw Error("HTTP "+response.status);
   const data=await response.json();
   if(data.success===false)throw Error(data.dataStatus||"SOURCE_UNAVAILABLE");
   const allItems=Array.isArray(data)?data:data.news||data.articles||data.results||[];
   list.dataset.loaded="1";
-  if(!allItems.length){status.textContent="ไม่มีข่าวส่งมา";list.innerHTML='<div class="empty">ขณะนี้ระบบต้นทางยังไม่มีข่าวให้แสดง</div>';return}
+  if(!allItems.length){
+   status.textContent="ไม่มีข่าวส่งมา";
+   list.innerHTML='<div class="empty">ขณะนี้ระบบต้นทางยังไม่มีข่าวให้แสดง</div>';
+   return;
+  }
   const items=allItems.filter(item=>{
    const categoryMatch=matchesNewsCategory(item,category);
    const searchable=[item.title,item.description,item.summary,item.snippet,item.source,item.publisher].join(" ").toLowerCase();
    return categoryMatch&&(!search||searchable.includes(search));
   });
-  if(!items.length){status.textContent="ไม่พบข่าวที่ตรงกับตัวกรอง";list.innerHTML='<div class="empty">ลองเปลี่ยนหมวดหมู่หรือคำค้นหา</div>';return}
+  if(!items.length){
+   status.textContent="ไม่พบข่าวที่ตรงกับตัวกรอง";
+   list.innerHTML='<div class="empty">ลองเปลี่ยนหมวดหมู่หรือคำค้นหา</div>';
+   return;
+  }
   status.textContent="พบข่าว "+items.length+" รายการ";
   list.innerHTML=items.map(item=>{
    const title=item.title||item.name||"ไม่มีชื่อข่าว";
@@ -674,24 +655,36 @@ $("newsCategory").addEventListener("change",()=>{if($("newsList").dataset.loaded
 /* WASTE CALCULATOR */
 function calculateWaste(){
  const n=Number($("wasteInput").value);
- if(!Number.isFinite(n)||n<0){$("wasteResult").innerHTML='<p class="small">กรุณากรอกตัวเลขตั้งแต่ 0 ขึ้นไป</p>';return}
+ if(!Number.isFinite(n)||n<0){
+  $("wasteResult").innerHTML='<p class="small">กรุณากรอกตัวเลขตั้งแต่ 0 ขึ้นไป</p>';
+  return;
+ }
  $("wasteResult").innerHTML='<div class="result">ปริมาณขยะโดยประมาณใน 7 วัน<strong>'+(n*7).toFixed(2)+' กิโลกรัม</strong><p class="small">คำนวณจากปริมาณต่อวัน × 7 วัน</p></div>';
 }
 
 /* ECO CHALLENGE */
 const tasks=["พกขวดน้ำหรือแก้วส่วนตัว","แยกขยะก่อนทิ้ง","ปิดไฟเมื่อไม่ใช้งาน","ใช้ถุงผ้าหรือใช้ถุงซ้ำ","ลดการใช้พลาสติกแบบใช้ครั้งเดียว"];
+
 function renderChallenges(){
- let done=[];try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
+ let done=[];
+ try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
  $("challengeList").innerHTML=tasks.map((t,i)=>'<label class="check-row"><input type="checkbox" '+(done.includes(i)?"checked":"")+' onchange="toggleChallenge('+i+',this.checked)"><span>'+t+'</span></label>').join("");
  $("challengeProgress").style.width=(done.length/tasks.length*100)+"%";
  $("challengeCount").textContent="ทำสำเร็จ "+done.length+" จาก "+tasks.length+" ภารกิจ";
 }
+
 function toggleChallenge(i,checked){
- let done=[];try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
+ let done=[];
+ try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
  done=checked?[...new Set([...done,i])]:done.filter(x=>x!==i);
- localStorage.setItem("ktEcoDone",JSON.stringify(done));renderChallenges();
+ localStorage.setItem("ktEcoDone",JSON.stringify(done));
+ renderChallenges();
 }
-function resetChallenges(){localStorage.removeItem("ktEcoDone");renderChallenges()}
+
+function resetChallenges(){
+ localStorage.removeItem("ktEcoDone");
+ renderChallenges();
+}
 renderChallenges();
 </script>
 </body>
