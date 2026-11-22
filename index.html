@@ -77,13 +77,52 @@ th{color:var(--muted);font-weight:500}
 .source-item{padding:12px;border:1px solid var(--line);border-radius:7px}
 .source-item p{font-size:11px;color:var(--muted);margin:5px 0}
 footer{background:white;border-top:1px solid var(--line);padding:30px 6%;margin-top:60px;color:var(--muted);font-size:12px;text-align:center}
+
+/* Smooth mobile interactions */
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+button,a,select,input,.region,.card{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+button,.btn{min-height:44px;transition:background .2s ease,transform .18s ease,box-shadow .2s ease}
+button:active,.btn:active,.region:active,.card:active{transform:scale(.985)}
+a,button,.region,.card,select{-webkit-user-select:none;user-select:none}
+:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 55%,transparent);outline-offset:3px}
+body,header,footer,.hero,.card,.panel,.news-card,.source-item,.hero-art{transition:background-color .25s ease,color .25s ease,border-color .25s ease}
+.theme-toggle{background:var(--blue2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 13px;min-height:44px;font-weight:700;cursor:pointer;white-space:nowrap}
+
+/* Dark Mode */
+body[data-theme="dark"]{
+ --bg:#101418;--white:#191f25;--ink:#edf2f5;
+ --muted:#a3afb8;--line:#303a42;
+ --blue:#69b9d2;--blue2:#203640;
+ --green:#65b995;--yellow:#e0b45e;--red:#e17b7b;
+ color-scheme:dark
+}
+body[data-theme="dark"] header,
+body[data-theme="dark"] footer,
+body[data-theme="dark"] .hero,
+body[data-theme="dark"] .card,
+body[data-theme="dark"] .panel,
+body[data-theme="dark"] .news-card,
+body[data-theme="dark"] .source-item{background:var(--white);color:var(--ink)}
+body[data-theme="dark"] .hero-art{background:#1b3038}
+body[data-theme="dark"] .hero-art svg{filter:brightness(.62) saturate(.78)}
+body[data-theme="dark"] select,
+body[data-theme="dark"] input{background:#151b20;color:var(--ink);border-color:var(--line);color-scheme:dark}
+body[data-theme="dark"] .region:hover,
+body[data-theme="dark"] .region.active{background:#203640}
+body[data-theme="dark"] .tag{background:var(--blue2);color:var(--blue)}
+body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-color:#43515b}
+
 @media(max-width:750px){
- header{align-items:flex-start;flex-direction:column}
+ header{align-items:flex-start;flex-direction:column;gap:12px}
+ nav{width:100%;padding-bottom:3px;scrollbar-width:none}
+ nav::-webkit-scrollbar{display:none}
+ .theme-toggle{align-self:flex-start}
  .hero{grid-template-columns:1fr}
  .hero-text{padding:27px}
  h1{font-size:27px}
  .hero-art{min-height:210px}
  .filters,.two{grid-template-columns:1fr}
+ .btn{padding:12px 16px}
 }
 </style>
 </head>
@@ -100,6 +139,7 @@ footer{background:white;border-top:1px solid var(--line);padding:30px 6%;margin-
   <a href="#forecast">Forecast</a>
   <a href="#sources">Sources</a>
  </nav>
+ <button class="theme-toggle" id="themeToggle" type="button" aria-label="สลับโหมดสี">☾ Dark</button>
 </header>
 
 <main>
@@ -389,6 +429,30 @@ document.getElementById("recordForm").onsubmit=e=>{
  render();
  alert("บันทึกข้อมูลในเบราว์เซอร์แล้ว");
 };
+
+/* Theme preference: light / dark */
+(function(){
+ const toggle=document.getElementById("themeToggle");
+ const metaTheme=document.querySelector('meta[name="theme-color"]');
+ let saved="light";
+ try{saved=localStorage.getItem("arsenicTheme")||"light"}catch(error){}
+
+ function applyTheme(theme){
+  const dark=theme==="dark";
+  document.body.dataset.theme=dark?"dark":"light";
+  toggle.textContent=dark?"☀ Light":"☾ Dark";
+  toggle.setAttribute("aria-pressed",String(dark));
+  if(metaTheme)metaTheme.setAttribute("content",dark?"#101418":"#f5f7f8");
+ }
+
+ applyTheme(saved);
+
+ toggle.addEventListener("click",()=>{
+  const next=document.body.dataset.theme==="dark"?"light":"dark";
+  applyTheme(next);
+  try{localStorage.setItem("arsenicTheme",next)}catch(error){}
+ });
+})();
 
 /* =====================================
    ARSENIC THAILAND - NEWS API
