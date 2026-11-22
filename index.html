@@ -16,6 +16,7 @@
  --green:#378b70;--yellow:#bd8b36;--red:#bd5959;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Thai",sans-serif}
 header{background:white;border-bottom:1px solid var(--line);padding:17px 6%;display:flex;align-items:center;justify-content:space-between;gap:15px;position:sticky;top:0;z-index:10}
 .brand{font-size:19px;font-weight:800;letter-spacing:1px}
@@ -78,13 +79,13 @@ th{color:var(--muted);font-weight:500}
 .source-item p{font-size:11px;color:var(--muted);margin:5px 0}
 footer{background:white;border-top:1px solid var(--line);padding:30px 6%;margin-top:60px;color:var(--muted);font-size:12px;text-align:center}
 
-/* Smooth mobile interactions */
-html{scroll-behavior:smooth;scroll-padding-top:90px}
+/* Mobile interactions */
 button,a,select,input,.region,.card{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 button,.btn{min-height:44px;transition:background .2s ease,transform .18s ease,box-shadow .2s ease}
 button:active,.btn:active,.region:active,.card:active{transform:scale(.985)}
 a,button,.region,.card,select{-webkit-user-select:none;user-select:none}
-:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 55%,transparent);outline-offset:3px}
+:focus{outline-color:var(--blue)}
+:focus-visible{outline:3px solid rgba(38,124,157,.55);outline-offset:3px}
 body,header,footer,.hero,.card,.panel,.news-card,.source-item,.hero-art{transition:background-color .25s ease,color .25s ease,border-color .25s ease}
 .theme-toggle{background:var(--blue2);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:9px 13px;min-height:44px;font-weight:700;cursor:pointer;white-space:nowrap}
 
@@ -122,7 +123,13 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
  h1{font-size:27px}
  .hero-art{min-height:210px}
  .filters,.two{grid-template-columns:1fr}
+ .form-grid{grid-template-columns:1fr}
  .btn{padding:12px 16px}
+ main{padding:25px 4%}
+}
+@supports(padding:max(0px)){
+ header{padding-left:max(4%,env(safe-area-inset-left));padding-right:max(4%,env(safe-area-inset-right))}
+ main{padding-left:max(4%,env(safe-area-inset-left));padding-right:max(4%,env(safe-area-inset-right))}
 }
 </style>
 </head>
@@ -143,14 +150,13 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
 </header>
 
 <main>
-
 <section class="hero" id="overview">
  <div class="hero-text">
   <div class="eyebrow">THAILAND ENVIRONMENTAL RESEARCH</div>
   <h1>Understanding<br>Arsenic in Thailand</h1>
   <p class="muted">แพลตฟอร์มรวบรวมข้อมูลสารหนู วิเคราะห์สถานการณ์ และประเมินแนวโน้มสิ่งแวดล้อมในประเทศไทย</p>
   <p><span class="tag">RESEARCH & DATA ANALYSIS</span></p>
-  <a href="#regions"><button class="btn">Explore Data →</button></a>
+  <p><a href="#regions"><button class="btn" type="button">Explore Data →</button></a></p>
  </div>
  <div class="hero-art">
   <svg viewBox="0 0 600 360" xmlns="http://www.w3.org/2000/svg">
@@ -198,9 +204,7 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
    </div>
    <button class="btn" id="refreshNews" type="button">↻ Refresh News</button>
   </div>
-  <div class="news-grid" id="newsGrid">
-   <div class="empty">กำลังโหลดข้อมูล...</div>
-  </div>
+  <div class="news-grid" id="newsGrid"><div class="empty">กำลังโหลดข้อมูล...</div></div>
   <div class="news-note" id="officialSources"></div>
   <p class="news-note">ข่าวจาก GDELT เป็นเพียงระบบค้นหาข่าว ไม่ใช่ผลตรวจคุณภาพน้ำหรือข้อมูลสารหนูแบบเรียลไทม์ ส่วนผลตรวจต้องยืนยันจากเอกสารต้นฉบับของหน่วยงานที่รับผิดชอบ</p>
  </div>
@@ -213,7 +217,7 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
  <div class="panel">
   <h3 id="selectedRegion">Thailand</h3>
   <p class="muted" id="regionDescription">เลือกภูมิภาคเพื่อเริ่มสำรวจข้อมูล</p>
-  <label>เลือกจังหวัด</label>
+  <label for="provinceSelect">เลือกจังหวัด</label>
   <select id="provinceSelect"><option value="">เลือกจังหวัด</option></select>
   <div id="provinceInfo" class="muted" style="font-size:13px;margin-top:12px">ยังไม่ได้เลือกจังหวัด</div>
  </div>
@@ -224,9 +228,9 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
  <p class="section-desc">ฐานข้อมูลผลตรวจจริงและข้อมูลย้อนหลัง</p>
  <div class="panel">
   <div class="filters">
-   <div><label>ภูมิภาค</label><select id="filterRegion"><option value="">ทุกภูมิภาค</option></select></div>
-   <div><label>ประเภทตัวอย่าง</label><select id="filterType"><option value="">ทุกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
-   <div><label>ค้นหาจังหวัด</label><input id="searchProvince" placeholder="ค้นหาจังหวัด..."></div>
+   <div><label for="filterRegion">ภูมิภาค</label><select id="filterRegion"><option value="">ทุกภูมิภาค</option></select></div>
+   <div><label for="filterType">ประเภทตัวอย่าง</label><select id="filterType"><option value="">ทุกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+   <div><label for="searchProvince">ค้นหาจังหวัด</label><input id="searchProvince" placeholder="ค้นหาจังหวัด..."></div>
   </div>
   <div class="table-wrap">
    <table>
@@ -281,21 +285,20 @@ body[data-theme="dark"] .theme-toggle{background:#26343d;color:#f1f5f7;border-co
  <div class="panel">
   <form id="recordForm">
    <div class="form-grid">
-    <div><label>วันที่เก็บตัวอย่าง</label><input type="date" id="sampleDate" required></div>
-    <div><label>จังหวัด</label><select id="recordProvince" required></select></div>
-    <div><label>ประเภทตัวอย่าง</label><select id="recordType" required><option value="">เลือกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
-    <div><label>ผลตรวจ</label><input type="number" id="recordValue" step="any" min="0" placeholder="ค่าที่ตรวจพบ" required></div>
+    <div><label for="sampleDate">วันที่เก็บตัวอย่าง</label><input type="date" id="sampleDate" required></div>
+    <div><label for="recordProvince">จังหวัด</label><select id="recordProvince" required></select></div>
+    <div><label for="recordType">ประเภทตัวอย่าง</label><select id="recordType" required><option value="">เลือกประเภท</option><option>น้ำผิวดิน</option><option>น้ำบาดาล</option><option>ตะกอนดิน</option><option>ดิน</option></select></div>
+    <div><label for="recordValue">ผลตรวจ</label><input type="number" id="recordValue" step="any" min="0" placeholder="ค่าที่ตรวจพบ" required></div>
    </div>
-   <label>หน่วย</label>
+   <label for="recordUnit">หน่วย</label>
    <select id="recordUnit"><option value="mg/L">mg/L</option><option value="mg/kg">mg/kg</option></select>
-   <label>ลิงก์แหล่งอ้างอิง</label>
+   <label for="recordSource">ลิงก์แหล่งอ้างอิง</label>
    <input type="url" id="recordSource" placeholder="https://..." required>
    <button class="btn" type="submit">Add Verified Record</button>
    <p class="muted" style="font-size:11px">บันทึกใน Local Storage ของเบราว์เซอร์นี้เท่านั้น ยังไม่มีระบบตรวจสอบเอกสารหรือฐานข้อมูลกลาง</p>
   </form>
  </div>
 </section>
-
 </main>
 
 <footer>
@@ -330,19 +333,25 @@ const provinceSelect=document.getElementById("provinceSelect");
 const filterRegion=document.getElementById("filterRegion");
 const recordProvince=document.getElementById("recordProvince");
 
-Object.entries(regions).forEach(([name,provinces],i)=>{
- const card=document.createElement("div");
- card.className="card region";
- card.innerHTML=`<div class="region-icon">${icons[i]}</div><div class="region-name">${name}</div><div class="region-count">${provinces.length} จังหวัด</div>`;
- card.onclick=()=>selectRegion(name,card);
- regionGrid.appendChild(card);
- filterRegion.add(new Option(name,name));
-});
-
 function fillProvinces(select,list){
  select.innerHTML='<option value="">เลือกจังหวัด</option>';
  list.forEach(p=>select.add(new Option(p,p)));
 }
+
+const allProvinces=Object.values(regions).flat();
+
+/* แก้ไข: แสดงจังหวัดทั้งหมดทันทีเมื่อเปิดหน้าเว็บ */
+fillProvinces(provinceSelect,allProvinces);
+fillProvinces(recordProvince,allProvinces);
+
+Object.entries(regions).forEach(([name,provinces],i)=>{
+ const card=document.createElement("div");
+ card.className="card region";
+ card.innerHTML=`<div class="region-icon">${icons[i]}</div><div class="region-name">${name}</div><div class="region-count">${provinces.length} จังหวัด</div>`;
+ card.addEventListener("click",()=>selectRegion(name,card));
+ regionGrid.appendChild(card);
+ filterRegion.add(new Option(name,name));
+});
 
 function selectRegion(name,card){
  document.querySelectorAll(".region").forEach(x=>x.classList.remove("active"));
@@ -352,9 +361,6 @@ function selectRegion(name,card){
  fillProvinces(provinceSelect,regions[name]);
  provinceSelect.focus();
 }
-
-const allProvinces=Object.values(regions).flat();
-fillProvinces(recordProvince,allProvinces);
 
 provinceSelect.onchange=()=>{
  const p=provinceSelect.value;
@@ -373,9 +379,9 @@ function render(){
  const search=document.getElementById("searchProvince").value.trim();
 
  const filtered=records.filter(r=>
- (!region||getRegion(r.province)===region)&&
- (!type||r.type===type)&&
- (!search||r.province.includes(search))
+  (!region||getRegion(r.province)===region)&&
+  (!type||r.type===type)&&
+  (!search||r.province.includes(search))
  );
 
  body.innerHTML="";
@@ -454,12 +460,8 @@ document.getElementById("recordForm").onsubmit=e=>{
  });
 })();
 
-/* =====================================
-   ARSENIC THAILAND - NEWS API
-===================================== */
-
-const NEWS_API_URL =
- "https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev/api/news";
+/* ARSENIC THAILAND - NEWS API */
+const NEWS_API_URL="https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev/api/news";
 
 const newsGrid=document.getElementById("newsGrid");
 const newsStatus=document.getElementById("newsStatus");
@@ -556,7 +558,6 @@ async function loadNews(){
   }
 
   const data=await response.json();
-
   renderOfficialSources(data.officialSources);
 
   const items=Array.isArray(data.news)?data.news:[];
