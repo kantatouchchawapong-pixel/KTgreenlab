@@ -1,976 +1,153 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#123d2b">
-<title>KT Green Hub 3.0 | Thailand Environmental Intelligence</title>
+<title>ลอยกระทงออนไลน์ | KT Green Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-:root{
- --green:#176b45;--dark:#123d2b;--light:#eaf5ed;
- --bg:#f5f8f5;--text:#20352a;--muted:#708176;
- --border:#e1eae2;--blue:#2563a6;--orange:#b66a19;--red:#b93838;
-}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Prompt',sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-a{color:var(--green);text-decoration:none}
-.topbar{background:var(--dark);color:white;padding:9px 5%;font-size:11px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
-header{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:500}
-.header-inner{max-width:1250px;margin:auto;padding:13px 20px;display:flex;align-items:center;justify-content:space-between;gap:15px}
-.brand{display:flex;align-items:center;gap:10px}
-.brand-mark{width:42px;height:42px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center;font-size:22px}
-.brand-name{font-size:18px;font-weight:700;color:var(--dark)}
-.brand-sub{font-size:9px;color:var(--muted);letter-spacing:.5px}
-nav{display:flex;gap:3px;flex-wrap:wrap}
-nav button{border:0;background:transparent;padding:8px 10px;border-radius:8px;color:#52665a;font-size:12px}
-nav button.active,nav button:hover{background:var(--light);color:var(--green)}
-.menu-toggle{display:none;background:var(--light);border:0;padding:9px 12px;border-radius:9px;color:var(--green)}
-main{max-width:1250px;margin:auto;padding:23px 20px 55px}
-.page{display:none}
-.page.active{display:block}
-.hero{background:linear-gradient(120deg,#123d2b,#20744b);color:white;padding:35px;border-radius:21px}
-.hero h1{font-size:clamp(26px,4vw,40px);line-height:1.3;margin:10px 0}
-.hero p{max-width:700px;color:#d5e9dc;line-height:1.8;font-size:13px}
-.eyebrow{font-size:11px;letter-spacing:1px;color:#b9e5c7}
-.hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:20px}
-.btn{border:0;padding:10px 15px;border-radius:9px;font-size:12px;font-weight:600}
-.btn-green{background:var(--green);color:white}
-.btn-white{background:white;color:var(--dark)}
-.btn-soft{background:var(--light);color:var(--green)}
-.btn-outline{background:white;border:1px solid var(--border);color:var(--text)}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:26px 0 13px;flex-wrap:wrap}
-.section-head h2{font-size:19px;margin:0;color:var(--dark)}
-.section-head p{margin:4px 0 0;color:var(--muted);font-size:11px}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
-.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
-.card{background:white;border:1px solid var(--border);border-radius:15px;padding:17px;min-width:0}
-.card h3{font-size:14px;margin:0 0 7px;color:var(--dark)}
-.card p{font-size:11px;color:var(--muted);line-height:1.75;margin:0}
-.feature{cursor:pointer;transition:.2s}
-.feature:hover{transform:translateY(-2px);border-color:#a9d2b5}
-.feature-icon{width:40px;height:40px;border-radius:12px;background:var(--light);display:grid;place-items:center;font-size:21px;margin-bottom:10px}
-.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:13px 0}
-.metric{background:white;border:1px solid var(--border);border-radius:12px;padding:13px;min-width:0}
-.metric small{font-size:10px;color:var(--muted)}
-.metric strong{display:block;font-size:23px;color:var(--dark);margin:5px 0}
-.metric span{font-size:10px;color:var(--muted)}
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-input,select{padding:10px 11px;border:1px solid var(--border);border-radius:9px;background:white;color:var(--text);min-width:0}
-input:focus,select:focus{outline:2px solid #b9ddc4;border-color:var(--green)}
-.toolbar input{flex:1;min-width:150px}
-.status{font-size:11px;color:var(--muted);padding:8px 0;line-height:1.7}
-.info,.notice{padding:12px 14px;border-radius:11px;font-size:11px;line-height:1.8;margin:12px 0}
-.info{background:#edf6ff;border:1px solid #d9e9fa;color:#315b7d}
-.notice{background:#fff8e9;border:1px solid #f4e3bb;color:#76551c}
-.tag{display:inline-block;padding:3px 8px;background:var(--light);color:var(--green);font-size:9px;border-radius:20px}
-.small{font-size:10px;color:var(--muted);line-height:1.7}
-.empty{padding:25px;text-align:center;color:var(--muted);font-size:12px}
-.weather-layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.8fr);gap:13px;align-items:start}
-#weatherMap{height:450px;width:100%;border-radius:12px;overflow:hidden;background:#e8f0eb;position:relative;z-index:1}
-.map-search{display:flex;gap:7px;margin:10px 0;position:relative;z-index:1000}
-.map-search input{flex:1;width:100%;position:relative;z-index:1001}
-.map-search-results{display:none;background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:9px;overflow:hidden;max-height:220px;overflow-y:auto;position:relative;z-index:1002}
-.map-search-results.show{display:block}
-.map-search-result{display:block;width:100%;text-align:left;padding:10px 12px;background:white;border:0;border-bottom:1px solid var(--border);font-size:11px;color:var(--text)}
-.map-search-result:hover{background:var(--light)}
-.map-controls{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
-.map-controls button{background:white;border:1px solid var(--border);border-radius:8px;padding:7px 9px;font-size:10px}
-.map-controls button.active{background:var(--light);color:var(--green)}
-.weather-condition{background:linear-gradient(130deg,#123d2b,#20744b);color:white;border-radius:12px;padding:15px}
-.weather-condition small{color:#c4e5cf}
-.weather-condition strong{display:block;font-size:22px;margin:5px 0}
-.weather-condition p{color:#e0f0e5;font-size:11px}
-.weather-current{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
-.weather-current .metric{padding:10px}
-.weather-current .metric strong{font-size:19px}
-.forecast-scroll{display:grid;grid-auto-columns:110px;grid-auto-flow:column;gap:8px;overflow-x:auto;padding-bottom:5px}
-.forecast-day{background:#f8faf8;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center}
-.forecast-day strong{font-size:10px;color:var(--dark)}
-.forecast-day .forecast-icon{font-size:20px;margin:6px 0}
-.forecast-day b{font-size:12px}
-.forecast-day small{display:block;font-size:9px;color:var(--muted);margin-top:5px}
-.hourly-scroll{overflow-x:auto}
-.hourly-strip{display:flex;gap:8px;min-width:max-content}
-.hour-item{background:#f8faf8;border:1px solid var(--border);border-radius:9px;padding:9px;min-width:76px;text-align:center}
-.hour-item strong{font-size:11px}
-.hour-item span{display:block;font-size:10px;color:var(--muted);margin-top:5px}
-.news-item{padding:14px 0;border-bottom:1px solid var(--border)}
-.news-item h3{font-size:13px;line-height:1.6}
-.news-item p{margin:5px 0;font-size:11px;color:var(--muted)}
-.guide-step{display:flex;gap:11px;padding:12px 0;border-bottom:1px solid var(--border)}
-.guide-number{width:27px;height:27px;flex:none;border-radius:50%;background:var(--light);color:var(--green);display:grid;place-items:center;font-weight:700;font-size:11px}
-.check-row{display:flex;align-items:flex-start;gap:9px;padding:10px 0;border-bottom:1px solid var(--border);font-size:12px}
-.check-row input{margin-top:4px;accent-color:var(--green)}
-.progress{height:8px;background:#e8eee9;border-radius:20px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;background:var(--green);width:0}
-.chart-wrap{height:240px;position:relative}
-canvas{width:100%;height:100%}
-footer{background:#102f23;color:#d6e7dc;padding:25px 18px;text-align:center;font-size:11px;line-height:1.8}
-@media(max-width:950px){.weather-layout{grid-template-columns:1fr}}
-@media(max-width:850px){
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- nav{display:none;position:absolute;left:0;right:0;top:100%;background:white;padding:12px 16px;border-bottom:1px solid var(--border)}
- nav.open{display:grid;grid-template-columns:repeat(2,1fr)}
- .menu-toggle{display:block}
+body{
+ margin:0;font-family:Prompt,sans-serif;
+ background:linear-gradient(#071d2b,#123d45);
+ color:#fff;min-height:100vh;
 }
-@media(max-width:600px){
- main{padding:15px 12px 35px}
- .hero{padding:24px 19px}
- .grid,.grid.two{grid-template-columns:1fr}
- .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .header-inner{padding:11px 13px}
- #weatherMap{height:350px}
+header{
+ padding:18px;text-align:center;
+ background:#092b30;border-bottom:1px solid #ffffff22;
 }
+header h1{margin:0;font-size:25px}
+header p{font-size:12px;color:#c5e5d8;margin:5px}
+main{max-width:850px;margin:auto;padding:22px 15px}
+.panel{
+ background:#ffffff12;border:1px solid #ffffff25;
+ border-radius:18px;padding:20px;margin-bottom:16px;
+}
+h2{font-size:18px;margin-top:0}
+label{font-size:13px}
+input,textarea,select{
+ width:100%;padding:12px;margin:7px 0 14px;
+ border:1px solid #ffffff44;border-radius:10px;
+ background:#092b30;color:white;font:inherit;
+}
+textarea{min-height:85px;resize:vertical}
+button{
+ border:0;border-radius:10px;padding:12px 18px;
+ background:#f3c969;color:#26352b;
+ font:600 14px Prompt;cursor:pointer;
+}
+button:disabled{opacity:.6;cursor:not-allowed}
+.choices{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 15px}
+.choice{
+ flex:1;min-width:100px;padding:15px 8px;
+ border:1px solid #ffffff44;border-radius:12px;
+ text-align:center;cursor:pointer;background:#ffffff0c;
+}
+.choice.active{border:2px solid #f3c969;background:#ffffff20}
+#pond{
+ height:330px;position:relative;overflow:hidden;
+ border-radius:18px;
+ background:linear-gradient(#164c56,#092c3d);
+ border:1px solid #ffffff33;
+}
+.waterline{
+ position:absolute;left:-20%;width:140%;height:2px;
+ background:#a6e8df55;animation:wave 5s linear infinite;
+}
+.waterline:nth-child(2){top:40%;animation-delay:-2s}
+.waterline:nth-child(3){top:70%;animation-delay:-3s}
+@keyframes wave{
+ from{transform:translateX(-5%)}
+ to{transform:translateX(5%)}
+}
+.krathong{
+ position:absolute;bottom:45px;left:50%;
+ transform:translateX(-50%);
+ font-size:55px;filter:drop-shadow(0 0 12px #ffd66b);
+ animation:float 5s ease-in-out forwards;
+}
+@keyframes float{
+ 0%{left:50%;bottom:35px;opacity:1;transform:translateX(-50%) scale(1)}
+ 100%{left:90%;bottom:230px;opacity:0;transform:translateX(-50%) scale(.45)}
+}
+#message{text-align:center;color:#f8df9c;font-size:13px;min-height:25px;margin-top:12px}
+footer{text-align:center;padding:22px;color:#b7d4cb;font-size:11px}
 </style>
 </head>
 <body>
 
-<div class="topbar">
- <span>KT GREEN HUB · THAILAND ENVIRONMENTAL INTELLIGENCE</span>
- <span id="today"></span>
-</div>
-
 <header>
- <div class="header-inner">
-  <div class="brand">
-   <div class="brand-mark">♧</div>
-   <div>
-    <div class="brand-name">KT Green Hub</div>
-    <div class="brand-sub">NATIONAL ENVIRONMENTAL PLATFORM 3.0</div>
-   </div>
-  </div>
-  <button class="menu-toggle" onclick="toggleMenu()">☰ เมนู</button>
-  <nav id="nav">
-   <button class="active" data-page="home">หน้าแรก</button>
-   <button data-page="weather">สภาพอากาศ</button>
-   <button data-page="air">คุณภาพอากาศ</button>
-   <button data-page="water">ข้อมูลน้ำ</button>
-   <button data-page="disaster">ภัยพิบัติ</button>
-   <button data-page="lab">Data Lab</button>
-   <button data-page="news">ข่าว</button>
-   <button data-page="tools">เครื่องมือ</button>
-   <button data-page="guide">เกี่ยวกับ</button>
-  </nav>
- </div>
+ <h1>🌕 ลอยกระทงออนไลน์</h1>
+ <p>KT Green Hub · ร่วมสืบสานประเพณีไทยอย่างเป็นมิตรต่อสิ่งแวดล้อม</p>
 </header>
 
 <main>
-
-<!-- HOME -->
-<section class="page active" id="home">
- <div class="hero">
-  <div class="eyebrow">WELCOME TO KT GREEN HUB 3.0</div>
-  <h1>ข้อมูลสิ่งแวดล้อม<br>เพื่อเข้าใจประเทศไทย</h1>
-  <p>แพลตฟอร์มรวบรวมข้อมูลสภาพอากาศ คุณภาพอากาศ น้ำ และสถานการณ์สิ่งแวดล้อม พร้อมแสดงแหล่งที่มาและเวลาที่อัปเดต</p>
-  <div class="hero-actions">
-   <button class="btn btn-white" onclick="showPage('weather')">เปิดแผนที่อากาศ</button>
-   <button class="btn btn-outline" style="background:transparent;color:white;border-color:#ffffff80" onclick="showPage('air')">ตรวจสอบ PM2.5</button>
-  </div>
- </div>
-
- <div class="section-head">
-  <div><h2>Environmental Dashboard</h2><p>ภาพรวมข้อมูล ณ ตำแหน่งเริ่มต้นกรุงเทพมหานคร</p></div>
-  <span class="tag">ข้อมูลแบบจำลองและ API</span>
- </div>
-
- <div class="metric-grid">
-  <div class="metric"><small>อุณหภูมิ</small><strong id="homeTemp">—</strong><span>°C · Open-Meteo</span></div>
-  <div class="metric"><small>PM2.5</small><strong id="homePM">—</strong><span>µg/m³ · แบบจำลอง</span></div>
-  <div class="metric"><small>ความชื้น</small><strong id="homeHumidity">—</strong><span>% · แบบจำลอง</span></div>
-  <div class="metric"><small>โอกาสฝน</small><strong id="homeRain">—</strong><span>% · พยากรณ์</span></div>
- </div>
- <div class="status" id="homeUpdated">กำลังเชื่อมต่อแหล่งข้อมูล...</div>
-
- <div class="section-head"><div><h2>ระบบของ KT Green Hub</h2><p>เลือกหมวดข้อมูลที่ต้องการ</p></div></div>
- <div class="grid">
-  <div class="card feature" onclick="showPage('weather')"><div class="feature-icon">🌦️</div><h3>Weather Intelligence</h3><p>แผนที่อากาศ เรดาร์ฝน พยากรณ์รายชั่วโมงและรายวัน</p></div>
-  <div class="card feature" onclick="showPage('air')"><div class="feature-icon">🌫️</div><h3>Air Quality Monitor</h3><p>PM2.5, PM10, AQI และแนวโน้มคุณภาพอากาศ</p></div>
-  <div class="card feature" onclick="showPage('water')"><div class="feature-icon">💧</div><h3>Water Watch</h3><p>ตรวจสอบการเชื่อมต่อแหล่งข้อมูลน้ำและปริมาณฝน</p></div>
-  <div class="card feature" onclick="showPage('disaster')"><div class="feature-icon">⚠️</div><h3>Disaster Monitor</h3><p>ติดตามแหล่งประกาศเตือนภัยและสถานการณ์เสี่ยง</p></div>
-  <div class="card feature" onclick="showPage('lab')"><div class="feature-icon">📊</div><h3>Historical Data Lab</h3><p>ดูข้อมูลย้อนหลังและเปรียบเทียบแนวโน้มอุณหภูมิ</p></div>
-  <div class="card feature" onclick="showPage('news')"><div class="feature-icon">📰</div><h3>Environmental News</h3><p>ติดตามข่าวสารสิ่งแวดล้อมจากระบบข่าวเดิม</p></div>
- </div>
- <div class="notice">หมายเหตุ: ข้อมูลจากแบบจำลองไม่ใช่ผลตรวจวัดจริงจากสถานีภาคสนาม โปรดดูประเภทข้อมูล แหล่งที่มา และเวลาอัปเดตทุกครั้ง</div>
-</section>
-
-<!-- WEATHER -->
-<section class="page" id="weather">
- <div class="section-head">
-  <div><h2>🌦️ Weather Intelligence</h2><p>แผนที่อากาศและพยากรณ์แบบเจาะพื้นที่</p></div>
- </div>
- <div class="info">พยากรณ์อากาศใช้แบบจำลอง Open-Meteo ส่วนเรดาร์ฝนใช้ RainViewer ข้อมูลทั้งสองประเภทไม่ใช่การตรวจวัดจากสถานีอากาศทุกจุด</div>
-
- <div class="weather-layout">
-  <div class="card">
-   <h3>แผนที่ประเทศไทย</h3>
-   <div class="map-search">
-    <input id="mapSearchInput" type="search" placeholder="ค้นหาถนน เขต จังหวัด หรือสถานที่..." autocomplete="off">
-    <button class="btn btn-green" onclick="searchMapPlace()">ค้นหา</button>
-   </div>
-   <div id="mapSearchResults" class="map-search-results"></div>
-   <div class="map-controls">
-    <button id="radarToggle" class="active" onclick="toggleRadar()">เรดาร์ฝน: เปิด</button>
-    <button id="areaToggle" class="active" onclick="toggleAreas()">วงพื้นที่: เปิด</button>
-    <button onclick="refreshWeatherMap()">รีเฟรช</button>
-   </div>
-   <div id="weatherMap"></div>
-   <div class="status" id="weatherMapStatus">กำลังเตรียมแผนที่...</div>
-   <p class="small">แผนที่: OpenStreetMap · เรดาร์: RainViewer · พยากรณ์: Open-Meteo</p>
+ <section class="panel">
+  <h2>🪷 เลือกกระทงของคุณ</h2>
+  <div class="choices" id="choices">
+   <div class="choice active" data-symbol="🪷">🪷<br>กระทงดอกบัว</div>
+   <div class="choice" data-symbol="🌸">🌸<br>กระทงดอกไม้</div>
+   <div class="choice" data-symbol="🍃">🍃<br>กระทงใบตอง</div>
   </div>
 
-  <div class="card">
-   <h3>พยากรณ์ตำแหน่งที่เลือก</h3>
-   <div class="toolbar">
-    <select id="province">
-     <option value="13.7563,100.5018,กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-     <option value="18.7883,98.9853,เชียงใหม่">เชียงใหม่</option>
-     <option value="19.9105,99.8406,เชียงราย">เชียงราย</option>
-     <option value="16.4419,102.835,ขอนแก่น">ขอนแก่น</option>
-     <option value="14.9799,102.0978,นครราชสีมา">นครราชสีมา</option>
-     <option value="13.3611,100.9847,ชลบุรี">ชลบุรี</option>
-     <option value="7.8804,98.3923,ภูเก็ต">ภูเก็ต</option>
-     <option value="8.4304,99.9631,นครศรีธรรมราช">นครศรีธรรมราช</option>
-     <option value="6.8695,101.2505,ปัตตานี">ปัตตานี</option>
-     <option value="16.8211,100.2659,พิษณุโลก">พิษณุโลก</option>
-    </select>
-    <button class="btn btn-green" onclick="loadWeather()">ดูจังหวัด</button>
-   </div>
-   <div class="status" id="weatherStatus">เลือกจังหวัดหรือคลิกบนแผนที่</div>
-   <div class="weather-condition">
-    <small>สภาพอากาศจากแบบจำลอง</small>
-    <strong id="weatherCondition">—</strong>
-    <p id="weatherConditionDetail">เลือกพื้นที่เพื่อดูรายละเอียด</p>
-   </div>
-   <div class="weather-current">
-    <div class="metric"><small>อุณหภูมิ</small><strong id="temp">—</strong><span>°C</span></div>
-    <div class="metric"><small>รู้สึกเหมือน</small><strong id="feels">—</strong><span>°C</span></div>
-    <div class="metric"><small>ความชื้น</small><strong id="humidity">—</strong><span>%</span></div>
-    <div class="metric"><small>ความเร็วลม</small><strong id="wind">—</strong><span>กม./ชม.</span></div>
-    <div class="metric"><small>ปริมาณฝน</small><strong id="rain">—</strong><span>มม.</span></div>
-    <div class="metric"><small>UV</small><strong id="uv">—</strong><span>ดัชนี</span></div>
-   </div>
-   <div class="info" id="weatherInsight">รอข้อมูลตำแหน่ง...</div>
+  <label for="wish">คำอธิษฐาน (ไม่บังคับ)</label>
+  <textarea id="wish" maxlength="180" placeholder="เขียนคำอธิษฐานของคุณ..."></textarea>
+
+  <button id="floatButton" onclick="floatKrathong()">ลอยกระทงของฉัน</button>
+  <div id="message"></div>
+ </section>
+
+ <section class="panel">
+  <h2>🌊 สายน้ำแห่งคำอธิษฐาน</h2>
+  <div id="pond">
+   <div class="waterline" style="top:20%"></div>
+   <div class="waterline"></div>
+   <div class="waterline"></div>
   </div>
- </div>
-
- <div class="card" style="margin-top:13px">
-  <h3>พยากรณ์รายชั่วโมง</h3>
-  <div class="hourly-scroll" id="hourly"><div class="empty">รอข้อมูล...</div></div>
- </div>
- <div class="card" style="margin-top:13px">
-  <h3>พยากรณ์ 7 วัน</h3>
-  <div class="forecast-scroll" id="dailyForecast"><div class="empty">รอข้อมูล...</div></div>
- </div>
-</section>
-
-<!-- AIR QUALITY -->
-<section class="page" id="air">
- <div class="section-head">
-  <div><h2>🌫️ Air Quality Intelligence</h2><p>ติดตามค่าฝุ่นและตัวแปรคุณภาพอากาศ</p></div>
- </div>
- <div class="info">ข้อมูลหน้านี้ใช้ Open-Meteo Air Quality ซึ่งเป็นข้อมูลจากแบบจำลอง ไม่ใช่ค่าตรวจวัดโดยตรงจากสถานีของกรมควบคุมมลพิษ และไม่ควรใช้แทนประกาศเตือนภัยอย่างเป็นทางการ</div>
- <div class="card">
-  <h3>เลือกพื้นที่</h3>
-  <div class="toolbar">
-   <select id="airProvince">
-    <option value="13.7563,100.5018,กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-    <option value="18.7883,98.9853,เชียงใหม่">เชียงใหม่</option>
-    <option value="19.9105,99.8406,เชียงราย">เชียงราย</option>
-    <option value="16.4419,102.835,ขอนแก่น">ขอนแก่น</option>
-    <option value="14.9799,102.0978,นครราชสีมา">นครราชสีมา</option>
-    <option value="13.3611,100.9847,ชลบุรี">ชลบุรี</option>
-    <option value="7.8804,98.3923,ภูเก็ต">ภูเก็ต</option>
-    <option value="8.4304,99.9631,นครศรีธรรมราช">นครศรีธรรมราช</option>
-   </select>
-   <button class="btn btn-green" onclick="loadAir()">ตรวจสอบ</button>
-  </div>
-  <div id="airStatus" class="status">รอการตรวจสอบ</div>
-  <div class="metric-grid">
-   <div class="metric"><small>PM2.5</small><strong id="pm25">—</strong><span>µg/m³</span></div>
-   <div class="metric"><small>PM10</small><strong id="pm10">—</strong><span>µg/m³</span></div>
-   <div class="metric"><small>US AQI</small><strong id="aqi">—</strong><span>ดัชนี</span></div>
-   <div class="metric"><small>โอโซน</small><strong id="ozone">—</strong><span>µg/m³</span></div>
-  </div>
-  <div class="weather-condition">
-   <small>การแปลผลเบื้องต้น</small>
-   <strong id="airLevel">—</strong>
-   <p id="airAdvice">รอข้อมูล...</p>
-  </div>
- </div>
- <div class="card" style="margin-top:13px">
-  <h3>แนวโน้ม PM2.5 รายชั่วโมง</h3>
-  <div class="chart-wrap"><canvas id="airChart"></canvas></div>
-  <p class="small" id="airChartNote">กราฟจากข้อมูลแบบจำลอง Open-Meteo</p>
- </div>
-</section>
-
-<!-- WATER -->
-<section class="page" id="water">
- <div class="section-head">
-  <div><h2>💧 Water Watch</h2><p>ตรวจสอบการเชื่อมต่อแหล่งข้อมูลด้านน้ำ</p></div>
- </div>
- <div class="notice">ระบบนี้ตรวจสอบการตอบกลับของ API ไม่ได้ยืนยันว่าค่าที่ได้รับเป็นค่าตรวจวัดล่าสุดหรือมีความครบถ้วนทุกสถานี</div>
- <div class="card">
-  <h3>สถานะแหล่งข้อมูล</h3>
-  <div class="status" id="waterStatus">ยังไม่ได้ตรวจสอบ</div>
-  <div id="waterResults"></div>
-  <button class="btn btn-green" onclick="checkWater()">ตรวจสอบแหล่งข้อมูลอีกครั้ง</button>
- </div>
- <div class="card" style="margin-top:13px">
-  <h3>แหล่งข้อมูลเพิ่มเติม</h3>
-  <div class="guide-step"><div class="guide-number">1</div><div><strong>ThaiWater</strong><p>ข้อมูลสถานการณ์น้ำและแหล่งน้ำทั่วประเทศ</p><a href="https://www.thaiwater.net/" target="_blank" rel="noopener">เปิดเว็บไซต์ ThaiWater ↗</a></div></div>
-  <div class="guide-step"><div class="guide-number">2</div><div><strong>กรมชลประทาน</strong><p>ข้อมูลน้ำฝนและข้อมูลด้านชลประทาน</p><a href="https://www.rid.go.th/" target="_blank" rel="noopener">เปิดเว็บไซต์กรมชลประทาน ↗</a></div></div>
- </div>
-</section>
-
-<!-- DISASTER -->
-<section class="page" id="disaster">
- <div class="section-head">
-  <div><h2>⚠️ Disaster Monitor</h2><p>ศูนย์รวมแหล่งติดตามภัยพิบัติและประกาศเตือนภัย</p></div>
- </div>
- <div class="notice">หน้านี้เป็นศูนย์รวมช่องทางติดตามประกาศ ไม่ใช่ระบบแจ้งเตือนภัยแบบเรียลไทม์ของหน่วยงานรัฐ โปรดตรวจสอบประกาศล่าสุดจากหน่วยงานต้นทางโดยตรง</div>
- <div class="grid two">
-  <div class="card"><div class="feature-icon">🌊</div><h3>น้ำท่วมและสถานการณ์น้ำ</h3><p>ติดตามสถานการณ์น้ำและข้อมูลพื้นที่เสี่ยง</p><a href="https://www.thaiwater.net/" target="_blank" rel="noopener" class="card-link">ThaiWater ↗</a></div>
-  <div class="card"><div class="feature-icon">🔥</div><h3>ไฟป่าและจุดความร้อน</h3><p>ติดตามข้อมูลจุดความร้อนและสถานการณ์ไฟป่า</p><a href="https://fire.gistda.or.th/" target="_blank" rel="noopener" class="card-link">GISTDA Fire ↗</a></div>
-  <div class="card"><div class="feature-icon">🌪️</div><h3>ประกาศเตือนภัย</h3><p>ติดตามประกาศเตือนภัยจากหน่วยงานป้องกันและบรรเทาสาธารณภัย</p><a href="https://www.disaster.go.th/" target="_blank" rel="noopener" class="card-link">กรมป้องกันและบรรเทาสาธารณภัย ↗</a></div>
-  <div class="card"><div class="feature-icon">🛰️</div><h3>ข้อมูลดาวเทียม</h3><p>ข้อมูลภูมิสารสนเทศและสถานการณ์จากดาวเทียม</p><a href="https://www.gistda.or.th/" target="_blank" rel="noopener" class="card-link">GISTDA ↗</a></div>
- </div>
-</section>
-
-<!-- DATA LAB -->
-<section class="page" id="lab">
- <div class="section-head">
-  <div><h2>📊 Historical Data Lab</h2><p>ดูข้อมูลย้อนหลังและแนวโน้มอุณหภูมิ</p></div>
- </div>
- <div class="info">ข้อมูลย้อนหลังจาก Open-Meteo Archive เป็นข้อมูลแบบจำลองย้อนหลัง ไม่ใช่ข้อมูลตรวจวัดจากสถานีภาคสนาม</div>
- <div class="card">
-  <h3>เลือกพื้นที่และช่วงเวลา</h3>
-  <div class="toolbar">
-   <select id="labProvince">
-    <option value="13.7563,100.5018,กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-    <option value="18.7883,98.9853,เชียงใหม่">เชียงใหม่</option>
-    <option value="19.9105,99.8406,เชียงราย">เชียงราย</option>
-    <option value="16.4419,102.835,ขอนแก่น">ขอนแก่น</option>
-    <option value="13.3611,100.9847,ชลบุรี">ชลบุรี</option>
-   </select>
-   <input type="date" id="labDate">
-   <button class="btn btn-green" onclick="loadHistory()">ค้นหาข้อมูล</button>
-  </div>
-  <div id="labStatus" class="status">เลือกวันที่เพื่อดูข้อมูลย้อนหลัง</div>
-  <div class="chart-wrap"><canvas id="historyChart"></canvas></div>
- </div>
-</section>
-
-<!-- NEWS -->
-<section class="page" id="news">
- <div class="section-head">
-  <div><h2>📰 Environmental News</h2><p>ข่าวสารสิ่งแวดล้อมจากระบบข่าวเดิม</p></div>
- </div>
- <div class="card">
-  <div class="toolbar">
-   <input id="newsSearch" type="search" placeholder="ค้นหาข่าว...">
-   <select id="newsCategory">
-    <option value="">ทุกหมวด</option>
-    <option value="arsenic">สารหนู</option>
-    <option value="water">น้ำ</option>
-    <option value="air">อากาศ</option>
-    <option value="waste">ขยะ</option>
-    <option value="forest">ป่าไม้</option>
-    <option value="climate">ภูมิอากาศ</option>
-   </select>
-   <button class="btn btn-green" onclick="loadNews(true)">รีเฟรชข่าว</button>
-  </div>
-  <div id="newsStatus" class="status">กดรีเฟรชข่าวเพื่อโหลดข้อมูล</div>
-  <div id="newsList"><div class="empty">ยังไม่ได้โหลดข่าว</div></div>
- </div>
-</section>
-
-<!-- TOOLS -->
-<section class="page" id="tools">
- <div class="section-head">
-  <div><h2>♻️ Environmental Tools</h2><p>เครื่องมือและกิจกรรมเพื่อสิ่งแวดล้อม</p></div>
- </div>
- <div class="grid two">
-  <div class="card">
-   <h3>เครื่องคำนวณปริมาณขยะ</h3>
-   <p>กรอกปริมาณขยะที่เกิดขึ้นต่อวัน</p>
-   <div class="toolbar"><input id="wasteInput" type="number" min="0" step=".1" placeholder="กิโลกรัมต่อวัน"><button class="btn btn-green" onclick="calculateWaste()">คำนวณ</button></div>
-   <div id="wasteResult" class="status">ผลลัพธ์จะแสดงตรงนี้</div>
-  </div>
-  <div class="card">
-   <h3>Eco Challenge</h3>
-   <p>ภารกิจเล็ก ๆ เพื่อช่วยลดผลกระทบต่อสิ่งแวดล้อม</p>
-   <div id="challengeList"></div>
-   <div class="progress"><div id="challengeProgress"></div></div>
-   <div id="challengeCount" class="status"></div>
-   <button class="btn btn-soft" onclick="resetChallenges()">รีเซ็ตภารกิจ</button>
-  </div>
- </div>
-</section>
-
-<!-- GUIDE -->
-<section class="page" id="guide">
- <div class="section-head">
-  <div><h2>เกี่ยวกับ KT Green Hub</h2><p>National Environmental Intelligence Platform</p></div>
- </div>
- <div class="card">
-  <h3>Easy to learn, hard to master.</h3>
-  <p>ออกแบบให้ประชาชนทั่วไปเข้าถึงข้อมูลได้ง่าย ขณะเดียวกันก็สามารถใช้ข้อมูลเชิงลึกและเครื่องมือวิเคราะห์สำหรับผู้ที่ต้องการศึกษารายละเอียดเพิ่มเติม</p>
-  <div class="guide-step"><div class="guide-number">1</div><div><strong>Weather Intelligence</strong><p>ข้อมูลพยากรณ์อากาศและเรดาร์ฝน</p></div></div>
-  <div class="guide-step"><div class="guide-number">2</div><div><strong>Air Quality</strong><p>ข้อมูล PM2.5 และตัวแปรคุณภาพอากาศจากแบบจำลอง</p></div></div>
-  <div class="guide-step"><div class="guide-number">3</div><div><strong>Water Watch</strong><p>ตรวจสอบการเชื่อมต่อแหล่งข้อมูลน้ำ</p></div></div>
-  <div class="guide-step"><div class="guide-number">4</div><div><strong>Disaster Monitor</strong><p>รวมช่องทางติดตามประกาศภัยพิบัติจากหน่วยงานต้นทาง</p></div></div>
-  <div class="guide-step"><div class="guide-number">5</div><div><strong>Historical Data Lab</strong><p>ศึกษาข้อมูลย้อนหลังและแนวโน้ม</p></div></div>
- </div>
- <div class="card" style="margin-top:13px">
-  <h3>แหล่งข้อมูลหลัก</h3>
-  <p>Open-Meteo · RainViewer · OpenStreetMap · กรมชลประทาน · ThaiWater · GISTDA · กรมป้องกันและบรรเทาสาธารณภัย</p>
-  <p style="margin-top:10px">ข้อมูลอาจมีความล่าช้า ข้อจำกัดของ API หรือความแตกต่างระหว่างแบบจำลองและการตรวจวัดจริง โปรดตรวจสอบจากหน่วยงานต้นทางก่อนใช้อ้างอิงในเรื่องสำคัญ</p>
- </div>
-</section>
-
+  <p style="font-size:11px;color:#c5e5d8">
+   กระทงจะแสดงเป็นภาพเคลื่อนไหวบนหน้าจอเท่านั้น ไม่มีการบันทึกข้อมูลลงเซิร์ฟเวอร์
+  </p>
+ </section>
 </main>
 
 <footer>
- <strong>KT GREEN HUB 3.0</strong><br>
- Thailand Environmental Intelligence Platform<br>
- Easy to learn, hard to master.
+ KT GREEN HUB · ONLINE LOY KRATHONG
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-"use strict";
+let selected="🪷";
 
-/* CONFIG */
-const WORKER="https://cool-cell-66b7arsenic-news.kantatouchchawapong.workers.dev";
-const $=id=>document.getElementById(id);
-const safeText=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-$("today").textContent=new Intl.DateTimeFormat("th-TH",{dateStyle:"full"}).format(new Date());
-
-/* NAVIGATION */
-function showPage(name){
- document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
- document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===name));
- $(name).classList.add("active");
- $("nav").classList.remove("open");
- window.scrollTo({top:0,behavior:"smooth"});
-
- if(name==="weather"){
-  initWeatherMap();
-  setTimeout(()=>{if(weatherMap)weatherMap.invalidateSize()},180);
-  if(!$("weatherStatus").dataset.loaded)loadWeather();
- }
- if(name==="air"&&!airLoaded)loadAir();
- if(name==="water"&&!waterLoaded)checkWater();
- if(name==="news"&&!newsLoaded)loadNews();
-}
-document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
-function toggleMenu(){$("nav").classList.toggle("open")}
-
-/* WEATHER */
-const provincePoints=[
- ["กรุงเทพมหานคร",13.7563,100.5018],
- ["เชียงใหม่",18.7883,98.9853],
- ["เชียงราย",19.9105,99.8406],
- ["ขอนแก่น",16.4419,102.835],
- ["นครราชสีมา",14.9799,102.0978],
- ["ชลบุรี",13.3611,100.9847],
- ["ภูเก็ต",7.8804,98.3923],
- ["นครศรีธรรมราช",8.4304,99.9631],
- ["ปัตตานี",6.8695,101.2505],
- ["พิษณุโลก",16.8211,100.2659]
-];
-
-let weatherMap=null,radarLayer=null,radarEnabled=true;
-let areaLayer=null,areasEnabled=true,selectedMarker=null;
-let selectedLocation={lat:13.7563,lon:100.5018,name:"กรุงเทพมหานคร"};
-let searchAbortController=null,lastSearchTime=0;
-
-function weatherText(code){
- if(code===0)return"ท้องฟ้าแจ่มใส";
- if([1,2,3].includes(code))return"มีเมฆบางส่วน";
- if([45,48].includes(code))return"มีหมอก";
- if([51,53,55,56,57].includes(code))return"ฝนละออง";
- if([61,63,65,66,67,80,81,82].includes(code))return"มีฝน";
- if([95,96,99].includes(code))return"พายุฝนฟ้าคะนอง";
- return"มีเมฆ";
-}
-function weatherEmoji(code){
- if(code===0)return"☀️";
- if([1,2,3].includes(code))return"⛅";
- if([45,48].includes(code))return"🌫️";
- if([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code))return"🌧️";
- if([95,96,99].includes(code))return"⛈️";
- return"☁️";
-}
-function weatherDirection(deg){
- if(!Number.isFinite(Number(deg)))return"—";
- return["เหนือ","ตะวันออกเฉียงเหนือ","ตะวันออก","ตะวันออกเฉียงใต้","ใต้","ตะวันตกเฉียงใต้","ตะวันตก","ตะวันตกเฉียงเหนือ"][Math.round(Number(deg)/45)%8];
-}
-
-function initWeatherMap(){
- if(weatherMap||!window.L)return;
- weatherMap=L.map("weatherMap",{scrollWheelZoom:true,minZoom:3,maxZoom:20}).setView([15.2,101],5);
- L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-  maxZoom:19,attribution:"&copy; OpenStreetMap contributors"
- }).addTo(weatherMap);
-
- weatherMap.on("click",e=>{
-  selectedLocation={lat:e.latlng.lat,lon:e.latlng.lng,name:"ตำแหน่งที่เลือก"};
-  setSelectedMarker(e.latlng.lat,e.latlng.lng);
-  loadWeatherAt(e.latlng.lat,e.latlng.lng,"ตำแหน่งที่เลือก");
+document.querySelectorAll(".choice").forEach(choice=>{
+ choice.addEventListener("click",()=>{
+  document.querySelectorAll(".choice").forEach(c=>c.classList.remove("active"));
+  choice.classList.add("active");
+  selected=choice.dataset.symbol;
  });
-
- loadRadar();
- loadAreaWeather();
- setTimeout(()=>weatherMap.invalidateSize(),200);
-}
-
-function setSelectedMarker(lat,lon){
- if(selectedMarker)weatherMap.removeLayer(selectedMarker);
- selectedMarker=L.marker([lat,lon]).addTo(weatherMap);
- selectedMarker.bindPopup("กำลังโหลดข้อมูล...").openPopup();
-}
-
-/* WEATHER SEARCH */
-async function searchMapPlace(){
- const query=$("mapSearchInput").value.trim();
- const results=$("mapSearchResults");
- if(!query){
-  results.innerHTML='<div class="map-search-result">กรุณาพิมพ์ชื่อสถานที่</div>';
-  results.classList.add("show");return;
- }
- if(searchAbortController)searchAbortController.abort();
- searchAbortController=new AbortController();
- const controller=searchAbortController;
- results.innerHTML='<div class="map-search-result">กำลังค้นหา...</div>';
- results.classList.add("show");
-
- try{
-  const wait=Math.max(0,1100-(Date.now()-lastSearchTime));
-  if(wait)await new Promise(resolve=>setTimeout(resolve,wait));
-  if(controller.signal.aborted)return;
-  lastSearchTime=Date.now();
-
-  const params=new URLSearchParams({
-   q:query,format:"jsonv2",addressdetails:"1",limit:"7",
-   countrycodes:"th","accept-language":"th"
-  });
-  const r=await fetch("https://nominatim.openstreetmap.org/search?"+params,{signal:controller.signal});
-  if(!r.ok)throw Error("HTTP "+r.status);
-  const places=await r.json();
-  if(!places.length){
-   results.innerHTML='<div class="map-search-result">ไม่พบสถานที่ที่ค้นหา</div>';return;
-  }
-  results.innerHTML="";
-  places.forEach(place=>{
-   const b=document.createElement("button");
-   b.type="button";b.className="map-search-result";
-   b.textContent=place.display_name||place.name||"สถานที่";
-   b.addEventListener("click",()=>selectMapSearchResult(place));
-   results.appendChild(b);
-  });
- }catch(e){
-  if(e.name==="AbortError")return;
-  results.innerHTML='<div class="map-search-result">ค้นหาไม่สำเร็จ: '+safeText(e.message)+'</div>';
- }
-}
-function selectMapSearchResult(place){
- const lat=Number(place.lat),lon=Number(place.lon);
- if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
- const name=place.name||place.display_name||"สถานที่ที่ค้นหา";
- selectedLocation={lat,lon,name};
- initWeatherMap();
- weatherMap.setView([lat,lon],15,{animate:true});
- setSelectedMarker(lat,lon);
- $("mapSearchInput").value=name;
- $("mapSearchResults").classList.remove("show");
- loadWeatherAt(lat,lon,name);
-}
-$("mapSearchInput").addEventListener("keydown",e=>{
- if(e.key==="Enter"){e.preventDefault();searchMapPlace()}
-});
-document.addEventListener("click",e=>{
- const r=$("mapSearchResults");
- if(r&&!r.contains(e.target)&&e.target!==$("mapSearchInput"))r.classList.remove("show");
 });
 
-/* RADAR */
-function toggleRadar(){
- radarEnabled=!radarEnabled;
- $("radarToggle").textContent="เรดาร์ฝน: "+(radarEnabled?"เปิด":"ปิด");
- $("radarToggle").classList.toggle("active",radarEnabled);
- if(radarLayer){
-  if(radarEnabled)radarLayer.addTo(weatherMap);
-  else weatherMap.removeLayer(radarLayer);
- }
-}
-async function loadRadar(){
- if(!weatherMap)return;
- try{
-  const r=await fetch("https://api.rainviewer.com/public/weather-maps.json",{cache:"no-store"});
-  if(!r.ok)throw Error("HTTP "+r.status);
-  const d=await r.json(),frames=d.radar?.past||[];
-  if(!frames.length)throw Error("ไม่มีภาพเรดาร์");
-  const frame=frames[frames.length-1];
-  if(radarLayer)weatherMap.removeLayer(radarLayer);
-  radarLayer=L.tileLayer(d.host+frame.path+"/256/{z}/{x}/{y}/2/1_0.png",{
-   tileSize:256,opacity:.55,maxNativeZoom:7,maxZoom:20
-  });
-  if(radarEnabled)radarLayer.addTo(weatherMap);
-  $("weatherMapStatus").textContent="เรดาร์ล่าสุด "+new Date(frame.time*1000).toLocaleTimeString("th-TH",{hour:"2-digit",minute:"2-digit"})+" น.";
- }catch(e){
-  $("weatherMapStatus").textContent="เรดาร์ไม่พร้อมใช้งาน แต่แผนที่และพยากรณ์ยังใช้ได้";
- }
-}
+function floatKrathong(){
+ const pond=document.getElementById("pond");
+ const button=document.getElementById("floatButton");
+ const message=document.getElementById("message");
+ const wish=document.getElementById("wish").value.trim();
 
-/* FORECAST AREA CIRCLES — preserve toggle */
-async function loadAreaWeather(){
- if(!weatherMap)return;
- if(areaLayer)weatherMap.removeLayer(areaLayer);
- areaLayer=L.layerGroup();
- for(const p of provincePoints){
-  try{
-   const url="https://api.open-meteo.com/v1/forecast?latitude="+p[1]+"&longitude="+p[2]+"&current=temperature_2m,precipitation,weather_code&timezone=Asia%2FBangkok";
-   const r=await fetch(url);
-   if(!r.ok)continue;
-   const d=await r.json(),c=d.current||{};
-   const color=Number(c.precipitation)>0?"#2786d8":"#278d59";
-   L.circle([p[1],p[2]],{
-    radius:26000,color:color,weight:1,fillColor:color,fillOpacity:.20
-   }).bindPopup("<strong>"+safeText(p[0])+"</strong><br>อุณหภูมิ "+(c.temperature_2m??"—")+" °C<br>ฝน "+(c.precipitation??"—")+" มม.<br><small>ค่าจากแบบจำลอง</small>").addTo(areaLayer);
-  }catch(e){}
- }
- if(areasEnabled)areaLayer.addTo(weatherMap);
-}
-function toggleAreas(){
- areasEnabled=!areasEnabled;
- $("areaToggle").textContent="วงพื้นที่: "+(areasEnabled?"เปิด":"ปิด");
- $("areaToggle").classList.toggle("active",areasEnabled);
- if(areaLayer){
-  if(areasEnabled)areaLayer.addTo(weatherMap);
-  else weatherMap.removeLayer(areaLayer);
- }
-}
-function refreshWeatherMap(){
- loadRadar();loadAreaWeather();
- loadWeatherAt(selectedLocation.lat,selectedLocation.lon,selectedLocation.name);
-}
+ const krathong=document.createElement("div");
+ krathong.className="krathong";
+ krathong.textContent=selected;
+ pond.appendChild(krathong);
 
-/* WEATHER DATA */
-function analyseWeather(d){
- const c=d.current||{},h=d.hourly||{},day=d.daily||{};
- let index=(h.time||[]).findIndex(t=>t>=c.time);
- if(index<0)index=0;
- const rain=(h.precipitation_probability||[]).slice(index,index+6).map(Number).filter(Number.isFinite);
- const rainMax=rain.length?Math.max(...rain):0;
- const maxTemp=Number(day.temperature_2m_max?.[0]??c.temperature_2m);
- const uv=Number(day.uv_index_max?.[0]??0);
- const notes=[];
- if(rainMax>=60)notes.push("มีโอกาสฝนค่อนข้างสูงใน 6 ชั่วโมงข้างหน้า");
- else if(rainMax>=35)notes.push("อาจมีฝนประปรายในช่วง 6 ชั่วโมงข้างหน้า");
- if(maxTemp>=36)notes.push("อากาศอาจร้อนมาก ควรระวังความร้อน");
- if(uv>=8)notes.push("ดัชนี UV คาดว่าสูง");
- return notes.length?notes.join(" · "):"ยังไม่พบสัญญาณเด่นจากตัวแปรที่ใช้วิเคราะห์";
-}
+ button.disabled=true;
+ message.textContent=wish
+  ? "ขอให้คำอธิษฐานของคุณเป็นจริง ✨"
+  : "กระทงของคุณกำลังลอยไปกับสายน้ำ";
 
-async function loadWeatherAt(lat,lon,name){
- $("weatherStatus").textContent="กำลังโหลดพยากรณ์...";
- $("weatherInsight").textContent="กำลังวิเคราะห์...";
- try{
-  const params=new URLSearchParams({
-   latitude:lat,longitude:lon,
-   current:"temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,wind_direction_10m,uv_index",
-   hourly:"temperature_2m,precipitation_probability,precipitation,weather_code",
-   daily:"weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum,uv_index_max",
-   forecast_days:"7",timezone:"Asia/Bangkok",wind_speed_unit:"kmh"
-  });
-  const r=await fetch("https://api.open-meteo.com/v1/forecast?"+params);
-  if(!r.ok)throw Error("HTTP "+r.status);
-  const d=await r.json(),c=d.current||{};
-
-  $("temp").textContent=c.temperature_2m??"—";
-  $("feels").textContent=c.apparent_temperature??"—";
-  $("humidity").textContent=c.relative_humidity_2m??"—";
-  $("wind").textContent=c.wind_speed_10m??"—";
-  $("rain").textContent=c.precipitation??"—";
-  $("uv").textContent=c.uv_index??"—";
-  $("weatherCondition").textContent=weatherEmoji(Number(c.weather_code))+" "+weatherText(Number(c.weather_code));
-  $("weatherConditionDetail").textContent="อุณหภูมิ "+(c.temperature_2m??"—")+"°C · ลม "+(c.wind_speed_10m??"—")+" กม./ชม. · ทิศลม "+weatherDirection(c.wind_direction_10m);
-  $("weatherStatus").textContent=name+" · "+lat.toFixed(4)+", "+lon.toFixed(4)+" · "+String(c.time||"").replace("T"," ")+" น.";
-  $("weatherStatus").dataset.loaded="1";
-  $("weatherInsight").textContent=analyseWeather(d);
-
-  if(selectedMarker)selectedMarker.setPopupContent("<strong>"+safeText(name)+"</strong><br>"+weatherEmoji(Number(c.weather_code))+" "+weatherText(Number(c.weather_code))+"<br>อุณหภูมิ "+(c.temperature_2m??"—")+" °C");
-
-  const h=d.hourly||{},times=h.time||[];
-  let start=times.findIndex(t=>t>=c.time);
-  if(start<0)start=0;
-  $("hourly").innerHTML='<div class="hourly-strip">'+times.slice(start,start+12).map((t,n)=>{
-   const i=start+n;
-   return '<div class="hour-item"><strong>'+t.slice(11,16)+'</strong><div style="font-size:18px;margin:5px 0">'+weatherEmoji(Number(h.weather_code?.[i]))+'</div><b>'+(h.temperature_2m?.[i]??"—")+'°</b><span>ฝน '+(h.precipitation_probability?.[i]??"—")+'%</span></div>';
-  }).join("")+'</div>';
-
-  const daily=d.daily||{};
-  $("dailyForecast").innerHTML=(daily.time||[]).map((date,i)=>{
-   const dayName=new Date(date+"T12:00:00+07:00").toLocaleDateString("th-TH",{weekday:"short",day:"numeric",month:"short"});
-   return '<div class="forecast-day"><strong>'+dayName+'</strong><div class="forecast-icon">'+weatherEmoji(Number(daily.weather_code?.[i]))+'</div><b>'+(daily.temperature_2m_max?.[i]??"—")+'° / '+(daily.temperature_2m_min?.[i]??"—")+'°</b><small>ฝน '+(daily.precipitation_probability_max?.[i]??"—")+'%<br>รวม '+(daily.precipitation_sum?.[i]??"—")+' มม.</small></div>';
-  }).join("");
- }catch(e){
-  $("weatherStatus").textContent="โหลดพยากรณ์ไม่สำเร็จ: "+e.message;
-  $("weatherInsight").textContent="ยังวิเคราะห์ข้อมูลไม่ได้ กรุณาลองอีกครั้ง";
- }
+ setTimeout(()=>{
+  krathong.remove();
+  button.disabled=false;
+ },5200);
 }
-function loadWeather(){
- const v=$("province").value.split(",");
- const lat=Number(v[0]),lon=Number(v[1]),name=v[2];
- selectedLocation={lat,lon,name};
- if(weatherMap){
-  weatherMap.setView([lat,lon],8,{animate:true});
-  setSelectedMarker(lat,lon);
- }
- loadWeatherAt(lat,lon,name);
-}
-
-/* AIR QUALITY */
-let airLoaded=false,airChartValues=[];
-function airLevel(v){
- if(v<=15)return["ดี","ค่าฝุ่นอยู่ในระดับต่ำ"];
- if(v<=25)return["ปานกลาง","ควรติดตามค่าฝุ่นต่อเนื่อง"];
- if(v<=37.5)return["เริ่มมีผลกระทบ","ผู้ที่ไวต่อมลพิษควรระมัดระวัง"];
- if(v<=75)return["มีผลกระทบต่อสุขภาพ","ควรลดกิจกรรมกลางแจ้งที่ใช้แรงมาก"];
- return["สูงมาก","ควรติดตามคำแนะนำจากหน่วยงานสาธารณสุข"];
-}
-async function loadAir(){
- const v=$("airProvince").value.split(",");
- const lat=Number(v[0]),lon=Number(v[1]),name=v[2];
- $("airStatus").textContent="กำลังโหลดข้อมูลคุณภาพอากาศ...";
- try{
-  const params=new URLSearchParams({
-   latitude:lat,longitude:lon,
-   current:"pm10,pm2_5,ozone,us_aqi",
-   hourly:"pm2_5,pm10,us_aqi",
-   timezone:"Asia/Bangkok",forecast_days:"2"
-  });
-  const r=await fetch("https://air-quality-api.open-meteo.com/v1/air-quality?"+params);
-  if(!r.ok)throw Error("HTTP "+r.status);
-  const d=await r.json(),c=d.current||{};
-  $("pm25").textContent=c.pm2_5??"—";
-  $("pm10").textContent=c.pm10??"—";
-  $("aqi").textContent=c.us_aqi??"—";
-  $("ozone").textContent=c.ozone??"—";
-  const level=airLevel(Number(c.pm2_5??0));
-  $("airLevel").textContent=level[0];
-  $("airAdvice").textContent=level[1]+" · "+name;
-  $("airStatus").textContent="อัปเดตตามเวลาจำลอง "+(c.time||"ไม่ระบุ")+" · Open-Meteo Air Quality";
-  $("airStatus").dataset.loaded="1";
-  airLoaded=true;
-
-  const h=d.hourly||{};
-  airChartValues=(h.pm2_5||[]).slice(0,24);
-  drawChart("airChart",airChartValues,"PM2.5 (µg/m³)");
-  $("homePM").textContent=c.pm2_5??"—";
-  $("homeUpdated").textContent="ข้อมูลจาก Open-Meteo · "+(c.time||"ไม่ระบุ");
- }catch(e){
-  $("airStatus").textContent="โหลดข้อมูลไม่สำเร็จ: "+e.message;
-  $("airLevel").textContent="ไม่มีข้อมูล";
-  $("airAdvice").textContent="กรุณาลองใหม่ภายหลัง";
- }
-}
-
-/* HOME SUMMARY */
-async function loadHomeSummary(){
- try{
-  const u="https://api.open-meteo.com/v1/forecast?latitude=13.7563&longitude=100.5018&current=temperature_2m,relative_humidity_2m,precipitation&hourly=precipitation_probability&timezone=Asia%2FBangkok";
-  const r=await fetch(u);if(!r.ok)throw Error("HTTP "+r.status);
-  const d=await r.json(),c=d.current||{};
-  $("homeTemp").textContent=c.temperature_2m??"—";
-  $("homeHumidity").textContent=c.relative_humidity_2m??"—";
-  $("homeRain").textContent=d.hourly?.precipitation_probability?.[0]??"—";
- }catch(e){}
- loadAir();
-}
-
-/* WATER API CHECK */
-let waterLoaded=false;
-const waterEndpoints=[
- ["ปริมาณฝนรายชั่วโมง","https://swoc-api-service.rid.go.th/api/rainfall-hii-1hr/"],
- ["ปริมาณฝน 24 ชั่วโมง","https://swoc-api-service.rid.go.th/api/rainfall-hii-24hr/"],
- ["ข้อมูลท่าเรือ/สถานี","https://swoc-api-service.rid.go.th/api/pier-hii-data/"]
-];
-async function checkWater(){
- $("waterStatus").textContent="กำลังตรวจสอบแหล่งข้อมูล...";
- $("waterResults").innerHTML="";
- const results=await Promise.all(waterEndpoints.map(async item=>{
-  try{
-   const r=await fetch(item[1],{signal:AbortSignal.timeout(10000)});
-   if(!r.ok)throw Error("HTTP "+r.status);
-   await r.json();
-   return{name:item[0],ok:true,detail:"API ตอบกลับสำเร็จ"};
-  }catch(e){
-   return{name:item[0],ok:false,detail:e.message};
-  }
- }));
- const good=results.filter(x=>x.ok).length;
- $("waterStatus").textContent="ตรวจสอบแล้ว "+good+"/"+results.length+" แหล่งข้อมูลตอบกลับ";
- $("waterResults").innerHTML=results.map(x=>'<div class="guide-step"><div class="guide-number">'+(x.ok?"✓":"!")+'</div><div><strong>'+safeText(x.name)+'</strong><p>'+safeText(x.detail)+'</p></div></div>').join("");
- waterLoaded=true;
-}
-
-/* HISTORICAL DATA LAB */
-async function loadHistory(){
- const v=$("labProvince").value.split(",");
- const lat=v[0],lon=v[1],name=v[2],date=$("labDate").value;
- if(!date){$("labStatus").textContent="กรุณาเลือกวันที่";return}
- $("labStatus").textContent="กำลังโหลดข้อมูลย้อนหลัง...";
- try{
-  const url="https://archive-api.open-meteo.com/v1/archive?latitude="+lat+"&longitude="+lon+"&start_date="+date+"&end_date="+date+"&hourly=temperature_2m,precipitation&timezone=Asia%2FBangkok";
-  const r=await fetch(url);if(!r.ok)throw Error("HTTP "+r.status);
-  const d=await r.json();
-  const h=d.hourly||{};
-  const values=h.temperature_2m||[];
-  if(!values.length)throw Error("ไม่พบข้อมูล");
-  drawChart("historyChart",values,"อุณหภูมิ °C");
-  $("labStatus").textContent=name+" · "+date+" · ข้อมูลย้อนหลังจาก Open-Meteo Archive";
- }catch(e){
-  $("labStatus").textContent="โหลดข้อมูลย้อนหลังไม่สำเร็จ: "+e.message;
- }
-}
-function drawChart(id,values,label){
- const canvas=$(id);if(!canvas)return;
- const ctx=canvas.getContext("2d");
- const rect=canvas.getBoundingClientRect();
- const w=Math.max(300,rect.width),h=Math.max(180,rect.height);
- const ratio=window.devicePixelRatio||1;
- canvas.width=w*ratio;canvas.height=h*ratio;
- ctx.scale(ratio,ratio);
- ctx.clearRect(0,0,w,h);
- const nums=values.map(Number).filter(Number.isFinite);
- if(!nums.length){ctx.fillText("ไม่มีข้อมูล",15,25);return}
- const min=Math.min(0,...nums),max=Math.max(...nums)+2;
- const left=38,right=12,top=20,bottom=30;
- const cw=w-left-right,ch=h-top-bottom;
- ctx.font="10px Prompt";
- ctx.strokeStyle="#e1eae2";ctx.fillStyle="#708176";ctx.lineWidth=1;
- for(let i=0;i<=4;i++){
-  const y=top+ch*i/4;
-  ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();
-  const val=max-(max-min)*i/4;
-  ctx.fillText(val.toFixed(0),4,y+3);
- }
- ctx.strokeStyle="#176b45";ctx.lineWidth=2;ctx.beginPath();
- nums.forEach((v,i)=>{
-  const x=left+(nums.length===1?0:i*cw/(nums.length-1));
-  const y=top+ch-(v-min)/(max-min||1)*ch;
-  if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
- });
- ctx.stroke();
- ctx.fillStyle="#708176";
- ctx.fillText("0",left,h-8);
- ctx.fillText(label,w-115,h-8);
-}
-
-/* NEWS — existing Cloudflare Worker route */
-let newsLoaded=false;
-function matchesNewsCategory(item,category){
- if(!category)return true;
- const text=[item.title,item.description,item.summary,item.snippet,item.category,item.topic,item.source].join(" ").toLowerCase();
- const keywords={
-  arsenic:["สารหนู","arsenic","แม่น้ำกก","แม่น้ำสาย"],
-  water:["น้ำ","water","แม่น้ำ","คลอง","คุณภาพน้ำ","น้ำเสีย"],
-  air:["อากาศ","pm2.5","ฝุ่น","มลพิษทางอากาศ"],
-  waste:["ขยะ","รีไซเคิล","waste","พลาสติก"],
-  forest:["ป่า","ป่าไม้","forest","ไฟป่า"],
-  climate:["โลกร้อน","climate","ภูมิอากาศ","ก๊าซเรือนกระจก"]
- };
- return(keywords[category]||[]).some(word=>text.includes(word.toLowerCase()));
-}
-async function loadNews(force=false){
- const status=$("newsStatus"),list=$("newsList");
- status.textContent="กำลังดึงข่าวจากระบบ...";
- list.innerHTML='<div class="empty">กำลังโหลดข่าว...</div>';
- const category=$("newsCategory").value,search=$("newsSearch").value.trim().toLowerCase();
- try{
-  const url=new URL(WORKER+"/api/news");
-  if(force)url.searchParams.set("refresh","1");
-  const response=await fetch(url,{cache:"no-store"});
-  if(!response.ok)throw Error("HTTP "+response.status);
-  const data=await response.json();
-  if(data.success===false)throw Error(data.dataStatus||"SOURCE_UNAVAILABLE");
-  const allItems=Array.isArray(data)?data:data.news||data.articles||data.results||[];
-  newsLoaded=true;
-  if(!allItems.length){
-   status.textContent="ไม่มีข่าวส่งมา";
-   list.innerHTML='<div class="empty">ขณะนี้ระบบต้นทางยังไม่มีข่าว</div>';return;
-  }
-  const items=allItems.filter(item=>{
-   const categoryMatch=matchesNewsCategory(item,category);
-   const searchable=[item.title,item.description,item.summary,item.snippet,item.source,item.publisher].join(" ").toLowerCase();
-   return categoryMatch&&(!search||searchable.includes(search));
-  });
-  if(!items.length){
-   status.textContent="ไม่พบข่าวที่ตรงกับตัวกรอง";
-   list.innerHTML='<div class="empty">ลองเปลี่ยนหมวดหมู่หรือคำค้นหา</div>';return;
-  }
-  status.textContent="พบข่าว "+items.length+" รายการ";
-  list.innerHTML=items.map(item=>{
-   const title=item.title||item.name||"ไม่มีชื่อข่าว";
-   const link=item.url||item.link||item.source_url||"";
-   const desc=item.description||item.summary||item.snippet||"ไม่มีคำอธิบาย";
-   const source=item.source||item.publisher||"แหล่งข่าว";
-   const date=item.publishedAt||item.pubDate||item.date||"";
-   return '<article class="news-item"><span class="tag">'+safeText(item.category||"สิ่งแวดล้อม")+'</span><h3>'+safeText(title)+'</h3><p>'+safeText(desc)+'</p><p>'+safeText(source)+' '+(date?"· "+safeText(date):"")+'</p>'+
-   (link&&/^https?:\/\//i.test(link)?'<a href="'+safeText(link)+'" target="_blank" rel="noopener noreferrer">อ่านข่าวต้นฉบับ ↗</a>':"")+'</article>';
-  }).join("");
- }catch(e){
-  status.textContent="โหลดข่าวไม่สำเร็จ: "+e.message;
-  list.innerHTML='<div class="empty">ระบบข่าวยังไม่พร้อมใช้งาน</div>';
- }
-}
-$("newsSearch").addEventListener("keydown",e=>{if(e.key==="Enter")loadNews()});
-$("newsCategory").addEventListener("change",()=>{if(newsLoaded)loadNews()});
-
-/* WASTE CALCULATOR */
-function calculateWaste(){
- const n=Number($("wasteInput").value);
- if(!Number.isFinite(n)||n<0){
-  $("wasteResult").textContent="กรุณากรอกตัวเลขตั้งแต่ 0 ขึ้นไป";return;
- }
- $("wasteResult").innerHTML="ปริมาณขยะโดยประมาณใน 7 วัน<br><strong>"+(n*7).toFixed(2)+" กิโลกรัม</strong>";
-}
-
-/* ECO CHALLENGE */
-const tasks=["พกขวดน้ำหรือแก้วส่วนตัว","แยกขยะก่อนทิ้ง","ปิดไฟเมื่อไม่ใช้งาน","ใช้ถุงผ้าหรือใช้ถุงซ้ำ","ลดการใช้พลาสติกแบบใช้ครั้งเดียว"];
-function renderChallenges(){
- let done=[];
- try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
- $("challengeList").innerHTML=tasks.map((t,i)=>'<label class="check-row"><input type="checkbox" '+(done.includes(i)?"checked":"")+' onchange="toggleChallenge('+i+',this.checked)"><span>'+t+'</span></label>').join("");
- $("challengeProgress").style.width=(done.length/tasks.length*100)+"%";
- $("challengeCount").textContent="ทำสำเร็จ "+done.length+" จาก "+tasks.length+" ภารกิจ";
-}
-function toggleChallenge(i,checked){
- let done=[];
- try{done=JSON.parse(localStorage.getItem("ktEcoDone")||"[]")}catch(e){}
- done=checked?[...new Set([...done,i])]:done.filter(x=>x!==i);
- localStorage.setItem("ktEcoDone",JSON.stringify(done));
- renderChallenges();
-}
-function resetChallenges(){
- localStorage.removeItem("ktEcoDone");
- renderChallenges();
-}
-
-/* INITIALIZE */
-const yesterday=new Date();
-yesterday.setDate(yesterday.getDate()-1);
-$("labDate").value=yesterday.toISOString().slice(0,10);
-renderChallenges();
-loadHomeSummary();
 </script>
+
 </body>
 </html>
